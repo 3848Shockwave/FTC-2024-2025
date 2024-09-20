@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.ValueProvider;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -42,6 +43,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -66,9 +68,60 @@ public class CurrentDrawTest extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotorEx motorTest = null;
+
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
+    double pidP = 0.0;
+    double pidI = 0.0;
+    double pidD = 0.0;
+    double pidF = 0.0;
+    ValueProvider vpP = new ValueProvider() {
 
+        @Override
+        public Object get() {
+            return pidP;
+        }
+
+        @Override
+        public void set(Object value) {
+            pidP = (double)value;
+        }
+    };
+    ValueProvider vpI = new ValueProvider() {
+
+        @Override
+        public Object get() {
+            return pidI;
+        }
+
+        @Override
+        public void set(Object value) {
+            pidI = (double)value;
+        }
+    };ValueProvider vpD = new ValueProvider() {
+
+        @Override
+        public Object get() {
+            return pidD;
+        }
+
+        @Override
+        public void set(Object value) {
+            pidD = (double)value;
+        }
+    };
+    ValueProvider vpF = new ValueProvider() {
+
+        @Override
+        public Object get() {
+            return pidF;
+        }
+
+        @Override
+        public void set(Object value) {
+            pidF = (double)value;
+        }
+    };
 
 
 
@@ -98,6 +151,8 @@ public class CurrentDrawTest extends LinearOpMode {
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         motorTest.setDirection(DcMotorEx.Direction.REVERSE);
+        PIDFCoefficients pidf = new PIDFCoefficients(pidP,pidI,pidD,pidF);
+
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -106,6 +161,12 @@ public class CurrentDrawTest extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
+            dashboard.addConfigVariable("PID","(P)", vpP);
+            dashboard.addConfigVariable("PID","(I)", vpI);
+            dashboard.addConfigVariable("PID","(D)", vpD);
+            dashboard.addConfigVariable("PID","(F)", vpF);
+            motorTest.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION,pidf );
 
             // Setup a variable for each drive wheel to save power level for telemetry
             double power;
@@ -122,11 +183,18 @@ public class CurrentDrawTest extends LinearOpMode {
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
-
             // Send calculated power to wheels
             motorTest.setPower(power);
             telemetry.addData("CurrentStats","Current Draw: "+motorTest.getCurrent(CurrentUnit.AMPS));
             dashboardTelemetry.addData("Current",motorTest.getCurrent(CurrentUnit.MILLIAMPS) );
+            telemetry.addData("Current Velocity: ", motorTest.getVelocity());
+            dashboardTelemetry.addData("Current Velocity: ", motorTest.getVelocity());
+            telemetry.addData("Current PIDF: ", motorTest.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION));
+            dashboardTelemetry.addData("Current PIDF: ", motorTest.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION));
+            telemetry.addData("Port: ", motorTest.getPortNumber());
+            dashboardTelemetry.addData("Port: ", motorTest.getPortNumber());
+            telemetry.addData("Connect: ", motorTest.getConnectionInfo());
+            dashboardTelemetry.addData("Connect: ", motorTest.getConnectionInfo());
             dashboardTelemetry.setMsTransmissionInterval(100);
             dashboardTelemetry.update();
             // Show the elapsed game time and wheel power.
