@@ -44,6 +44,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -68,6 +71,7 @@ public class CurrentDrawTest extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotorEx motorTest = null;
+    private ServoImplEx servo = null;
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
@@ -145,15 +149,19 @@ public class CurrentDrawTest extends LinearOpMode {
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         motorTest = hardwareMap.get(DcMotorEx.class, "motor");
+        servo = hardwareMap.get(ServoImplEx.class, "servo");
+        servo.setPwmEnable();
 
+      //  servo.setPosition(0.0);
+       // sleep(1000);
+        //servo.setPosition(0.0);
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         motorTest.setDirection(DcMotorEx.Direction.REVERSE);
         PIDFCoefficients pidf = new PIDFCoefficients(pidP,pidI,pidD,pidF);
-
-
+        servo.setPwmRange(new PwmControl.PwmRange(1400,1900));
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -168,6 +176,15 @@ public class CurrentDrawTest extends LinearOpMode {
             dashboard.addConfigVariable("PID","(F)", vpF);
             motorTest.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION,pidf );
 
+
+            if(gamepad1.a==true){
+                servo.setPosition(1.0);
+
+            }
+            if(gamepad1.b==true){
+                servo.setPosition(0.0);
+
+            }
             // Setup a variable for each drive wheel to save power level for telemetry
             double power;
 
@@ -184,7 +201,7 @@ public class CurrentDrawTest extends LinearOpMode {
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
             // Send calculated power to wheels
-            motorTest.setPower(power);
+           // motorTest.setPower(power);
             telemetry.addData("CurrentStats","Current Draw: "+motorTest.getCurrent(CurrentUnit.AMPS));
             dashboardTelemetry.addData("Current",motorTest.getCurrent(CurrentUnit.MILLIAMPS) );
             telemetry.addData("Current Velocity: ", motorTest.getVelocity());
@@ -193,8 +210,8 @@ public class CurrentDrawTest extends LinearOpMode {
             dashboardTelemetry.addData("Current PIDF: ", motorTest.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION));
             telemetry.addData("Port: ", motorTest.getPortNumber());
             dashboardTelemetry.addData("Port: ", motorTest.getPortNumber());
-            telemetry.addData("Connect: ", motorTest.getConnectionInfo());
-            dashboardTelemetry.addData("Connect: ", motorTest.getConnectionInfo());
+            telemetry.addData("ServoRange: ", servo.getPwmRange());
+            dashboardTelemetry.addData("ServoRange: ", "up" +servo.getPwmRange().usPulseUpper +"low"+servo.getPwmRange().usPulseLower);
             dashboardTelemetry.setMsTransmissionInterval(100);
             dashboardTelemetry.update();
             // Show the elapsed game time and wheel power.
