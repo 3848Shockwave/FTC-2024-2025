@@ -33,6 +33,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -50,14 +52,18 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear OpMode")
-@Disabled
+@TeleOp(name = "Basic: Linear OpMode", group = "Linear OpMode")
 public class BasicOpMode_Linear extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
+    private DcMotor leftDrive;
+    private DcMotor rightDrive;
+    private DcMotor arm;
+    private Servo wrist;
+    // continuous rotation servo:
+    // just keeps rotating
+    private CRServo grabber;
 
     @Override
     public void runOpMode() {
@@ -67,14 +73,19 @@ public class BasicOpMode_Linear extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
+        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        arm = hardwareMap.get(DcMotor.class, "arm");
+        wrist = hardwareMap.get(Servo.class, "wrist");
+        grabber = hardwareMap.get(CRServo.class, "grabber");
+
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -85,17 +96,58 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
+            double armPower;
+            double wristPower;
+            double grabberPower;
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
-            leftPower = Range.clip(drive + turn, -1.0, 1.0);
-            rightPower = Range.clip(drive - turn, -1.0, 1.0);
+
+
+            leftPower = Range.clip(drive - turn, -1.0, 1.0);
+            rightPower = Range.clip(drive + turn, -1.0, 1.0);
+
+
+            double armValue = 0.5;
+            if (gamepad1.left_trigger > 0) {
+                armPower = -armValue;
+            } else if (gamepad1.right_trigger > 0) {
+                armPower = armValue;
+            } else {
+                armPower = 0;
+            }
+            //try and errors
+            double intakeAngle = Math.toRadians(0);
+            double dropSampleAngle = Math.toRadians(0);
+            double hangSpecimenAngle = Math.toRadians(90);
+            double wristAngle = 0;
+
+            if (gamepad1.left_bumper) {
+                wristAngle = intakeAngle;
+            } else if (gamepad1.right_bumper) {
+                wristAngle = hangSpecimenAngle;
+            }
+
+
+            // try and error
+            double grabberCollect = 0.8;
+            double grabberRelease = -0.4;
+            if (gamepad1.a) {//assume grab
+                grabberPower = grabberCollect;
+            } else if (gamepad1.y) {//assume release
+                grabberPower = grabberRelease;
+            } else {
+                grabberPower = 0;
+            }
 
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
+            arm.setPower(armPower);
+            wrist.setPosition(wristAngle);
+            grabber.setPower(grabberPower);//???
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
