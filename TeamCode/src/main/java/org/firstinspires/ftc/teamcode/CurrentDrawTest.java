@@ -36,17 +36,21 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -72,6 +76,8 @@ public class CurrentDrawTest extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotorEx motorTest = null;
     private ServoImplEx servo = null;
+    private ColorSensor color = null;
+    private DistanceSensor distSens;
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
@@ -150,6 +156,8 @@ public class CurrentDrawTest extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         motorTest = hardwareMap.get(DcMotorEx.class, "motor");
         servo = hardwareMap.get(ServoImplEx.class, "servo");
+        distSens = hardwareMap.get(DistanceSensor.class, "distSens");
+        color = hardwareMap.get(ColorSensor.class, "color");
         servo.setPwmEnable();
 
       //  servo.setPosition(0.0);
@@ -204,6 +212,11 @@ public class CurrentDrawTest extends LinearOpMode {
            // motorTest.setPower(power);
             telemetry.addData("CurrentStats","Current Draw: "+motorTest.getCurrent(CurrentUnit.AMPS));
             dashboardTelemetry.addData("Current",motorTest.getCurrent(CurrentUnit.MILLIAMPS) );
+            telemetry.addData("CurrentDist",distSens.getDistance(DistanceUnit.MM));
+            dashboardTelemetry.addData("Dist",distSens.getDistance(DistanceUnit.MM) );
+            telemetry.addData("Red", color.red());
+            telemetry.addData("Green", color.green());
+            telemetry.addData("Blue", color.blue());
             telemetry.addData("Current Velocity: ", motorTest.getVelocity());
             dashboardTelemetry.addData("Current Velocity: ", motorTest.getVelocity());
             telemetry.addData("Current PIDF: ", motorTest.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION));
