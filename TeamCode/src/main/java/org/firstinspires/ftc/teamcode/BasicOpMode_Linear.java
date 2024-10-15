@@ -79,6 +79,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
         wrist = hardwareMap.get(Servo.class, "wrist");
         grabber = hardwareMap.get(CRServo.class, "grabber");
 
+        arm.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
+        leftDrive.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -91,14 +93,31 @@ public class BasicOpMode_Linear extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+
+
+
+
+
+
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
+        while (opModeIsActive()) {                               //while loop here !!!!!
+
+
+
+
+
+
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
             double armPower;
             double wristPower;
             double grabberPower;
+
+
+
+
+
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
@@ -118,9 +137,15 @@ public class BasicOpMode_Linear extends LinearOpMode {
             } else {
                 armPower = 0;
             }
+
+
+
+
+
+
+
             //try and errors
-            double intakeAngle = Math.toRadians(0);
-            double dropSampleAngle = Math.toRadians(0);
+            double intakeAngle = Math.toRadians(30);
             double hangSpecimenAngle = Math.toRadians(90);
             double wristAngle = 0;
 
@@ -129,6 +154,12 @@ public class BasicOpMode_Linear extends LinearOpMode {
             } else if (gamepad1.right_bumper) {
                 wristAngle = hangSpecimenAngle;
             }
+
+
+
+
+
+
 
 
             // try and error
@@ -142,12 +173,18 @@ public class BasicOpMode_Linear extends LinearOpMode {
                 grabberPower = 0;
             }
 
+
+
+
+
+
+
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
             arm.setPower(armPower);
             wrist.setPosition(wristAngle);
-            grabber.setPower(grabberPower);//???
+            grabber.setPower(grabberPower);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
