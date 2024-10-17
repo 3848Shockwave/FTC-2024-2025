@@ -119,9 +119,9 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
             // VELOCITY CURVES
             // drive^2
-            drive = Math.signum(drive)*Math.pow(drive, 3);
+            drive = Math.signum(drive)*Math.pow(drive, 4);
             // turn^2
-            turn = Math.signum(turn)*Math.pow(turn, 3);
+            turn = Math.signum(turn)*Math.pow(turn, 4);
 
 
             leftPower = Range.clip(drive - turn, -1.0, 1.0);
