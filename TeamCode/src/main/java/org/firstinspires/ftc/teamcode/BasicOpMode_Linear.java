@@ -94,18 +94,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
         runtime.reset();
 
 
-
-
-
-
-
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {                               //while loop here !!!!!
-
-
-
-
-
 
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
@@ -116,18 +106,20 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
 
 
-
-
-
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
 
+            // VELOCITY CURVES
+            // drive^2
+            drive = Math.signum(drive)*Math.pow(drive, 2);
+            // turn^2
+            turn = Math.signum(drive)*Math.pow(drive, 2);
+
 
             leftPower = Range.clip(drive - turn, -1.0, 1.0);
             rightPower = Range.clip(drive + turn, -1.0, 1.0);
-
 
             double armValue = 0.5;
             if (gamepad1.left_trigger > 0) {
@@ -137,10 +129,6 @@ public class BasicOpMode_Linear extends LinearOpMode {
             } else {
                 armPower = 0;
             }
-
-
-
-
 
 
 
@@ -157,11 +145,6 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
 
 
-
-
-
-
-
             // try and error
             double grabberCollect = 0.8;
             double grabberRelease = -0.4;
@@ -172,11 +155,6 @@ public class BasicOpMode_Linear extends LinearOpMode {
             } else {
                 grabberPower = 0;
             }
-
-
-
-
-
 
 
             // Send calculated power to wheels
