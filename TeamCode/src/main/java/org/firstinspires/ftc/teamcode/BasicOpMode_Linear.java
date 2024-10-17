@@ -65,6 +65,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
     // just keeps rotating
     private CRServo grabber;
 
+     private double wristAngle;
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -106,6 +108,10 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
 
 
+
+
+
+
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
@@ -113,13 +119,18 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
             // VELOCITY CURVES
             // drive^2
-            drive = Math.signum(drive)*Math.pow(drive, 2);
+            drive = Math.signum(drive)*Math.pow(drive, 3);
             // turn^2
-            turn = Math.signum(drive)*Math.pow(drive, 2);
+            turn = Math.signum(turn)*Math.pow(turn, 3);
 
 
             leftPower = Range.clip(drive - turn, -1.0, 1.0);
             rightPower = Range.clip(drive + turn, -1.0, 1.0);
+
+
+
+
+
 
             double armValue = 0.5;
             if (gamepad1.left_trigger > 0) {
@@ -135,13 +146,15 @@ public class BasicOpMode_Linear extends LinearOpMode {
             //try and errors
             double intakeAngle = Math.toRadians(30);
             double hangSpecimenAngle = Math.toRadians(90);
-            double wristAngle = 0;
+
 
             if (gamepad1.left_bumper) {
                 wristAngle = intakeAngle;
-            } else if (gamepad1.right_bumper) {
+            }
+            if (gamepad1.right_bumper) {
                 wristAngle = hangSpecimenAngle;
             }
+
 
 
 
@@ -167,6 +180,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+
         }
     }
 }
