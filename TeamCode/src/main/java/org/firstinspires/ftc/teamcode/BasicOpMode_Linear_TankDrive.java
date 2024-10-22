@@ -29,7 +29,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -53,7 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name = "Basic: Linear OpMode", group = "Linear OpMode")
-public class BasicOpMode_Linear extends LinearOpMode {
+public class BasicOpMode_Linear_TankDrive extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -114,18 +113,18 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
+            double leftWheel = -gamepad1.left_stick_y;
+            double rightWheel = -gamepad1.right_stick_y;
 
             // VELOCITY CURVES
             // drive^2
-            drive = Math.signum(drive)*Math.pow(drive, 4);
+            leftWheel = Math.signum(leftWheel)*Math.pow(leftWheel, 4);
             // turn^2
-            turn = Math.signum(turn)*Math.pow(turn, 4);
+            rightWheel = Math.signum(rightWheel)*Math.pow(rightWheel, 4);
 
 
-            leftPower = Range.clip(drive - turn, -1.0, 1.0);
-            rightPower = Range.clip(drive + turn, -1.0, 1.0);
+            leftPower = Range.clip(rightWheel, -1.0, 1.0);
+            rightPower = Range.clip(leftWheel, -1.0, 1.0);
 
 
 
@@ -158,7 +157,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
 
 
 
-            // try and error
+            // grabber
             double grabberCollect = 0.8;
             double grabberRelease = -0.4;
             if (gamepad1.a) {//assume grab
