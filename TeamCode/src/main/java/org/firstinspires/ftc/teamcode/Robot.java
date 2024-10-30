@@ -29,13 +29,14 @@ public class Robot {
     public void setup(){
         // Setup method
         hardware.setDcMotorZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        hardware.initIMU();
-        hardware.getIMU().resetYaw();
         hardware.DcMotorMap.get("frontRight").setDirection(DcMotor.Direction.FORWARD);
         hardware.DcMotorMap.get("frontLeft").setDirection(DcMotor.Direction.REVERSE);
         hardware.DcMotorMap.get("backRight").setDirection(DcMotor.Direction.FORWARD);
         hardware.DcMotorMap.get("backLeft").setDirection(DcMotor.Direction.REVERSE);
-
+        if (fieldCentric) {
+            hardware.initIMU();
+            hardware.getIMU().resetYaw();
+        }
     }
 
     public ArrayList<Double> driveCalc(){
