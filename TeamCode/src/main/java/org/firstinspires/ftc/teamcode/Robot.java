@@ -8,10 +8,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.Range;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Robot {
 
@@ -41,10 +43,11 @@ public class Robot {
         // Drive method
         if (fieldCentric){
             IMU emu = hardware.getIMU();
+            double rotationCurve = gamepadConfig.getGamepad1RightStickX();
             // Field Centric Drive
             double y = gamepadConfig.getGamepad1LeftStickY(); // Remember, Y stick value is reversed
             double x = gamepadConfig.getGamepad1LeftStickX();
-            double rx = gamepadConfig.getGamepad1RightStickX();
+            double rx = rotationCurve;
 
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
