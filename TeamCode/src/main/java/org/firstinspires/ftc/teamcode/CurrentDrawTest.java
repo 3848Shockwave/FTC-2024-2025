@@ -91,7 +91,6 @@ public class CurrentDrawTest extends LinearOpMode {
         public Object get() {
             return pidP;
         }
-
         @Override
         public void set(Object value) {
             pidP = (double)value;

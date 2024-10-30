@@ -83,6 +83,20 @@ public class Robot {
         }
         else{
             // Robot Centric Drive
+            double y = gamepadConfig.getGamepad1LeftStickY(); // Remember, Y stick value is reversed
+            double x = gamepadConfig.getGamepad1LeftStickX();
+            double rx = gamepadConfig.getGamepad1RightStickX();
+
+            double frontLeftPower = y + x + rx;
+            double backLeftPower = y - x + rx;
+            double frontRightPower = y - x - rx;
+            double backRightPower = y + x - rx;
+
+            powers.add(frontLeftPower);
+            powers.add(backLeftPower);
+            powers.add(frontRightPower);
+            powers.add(backRightPower);
+
         }
     return powers;
     }
