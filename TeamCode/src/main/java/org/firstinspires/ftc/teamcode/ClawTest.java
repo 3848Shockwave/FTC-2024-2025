@@ -64,7 +64,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @TeleOp(name = "Servo Test", group = "BAZ")
-public class ServoTest extends LinearOpMode {
+public class ClawTest extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
@@ -78,7 +78,7 @@ public class ServoTest extends LinearOpMode {
         servo.setPwmEnable();
         servo.setPwmRange(new PwmControl.PwmRange(1400, 1900));
 
-        Claw claw = new Claw(servo, gamepad1, runtime);
+        Claw claw = new Claw(servo, gamepad1);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -95,18 +95,6 @@ public class ServoTest extends LinearOpMode {
             claw.update();
         }
     }
-
-    private double y; // Remember, Y stick value is reversed
-    private double x; // Counteract imperfect strafing
-    private double rx;
-    private double botHeading;
-    private double rotX;
-    private double rotY;
-    private double frontLeftPower;
-    private double backLeftPower;
-    private double frontRightPower;
-    private double backRightPower;
-
 
     public void updateRobot() {
 

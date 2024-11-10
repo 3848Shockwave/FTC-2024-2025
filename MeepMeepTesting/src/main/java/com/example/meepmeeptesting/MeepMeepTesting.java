@@ -29,6 +29,9 @@ public class MeepMeepTesting {
 
     public static int redAngleAdjustment;
     public static int redPoseAdjustment;
+    public static int endHeading;
+
+    public static double waitForSpecimenTime = 0;
 
     public static Function<DriveShim, TrajectorySequence> currentTrajectorySequence;
 
@@ -40,8 +43,9 @@ public class MeepMeepTesting {
 
 
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
-        int endHeading = 0;
+        endHeading = 0;
         String endHeadingInput;
         LinkedList<RoadRunnerBotEntity> bots = new LinkedList<>();
 
@@ -86,7 +90,9 @@ public class MeepMeepTesting {
                 .setBackgroundAlpha(0.95f);
 
         // CHANGE THIS TO CHANGE THE CURRENT TRAJECTORY SEQUENCE
-        currentTrajectorySequence = TrajectorySequences::pushSamplesTS;
+        currentTrajectorySequence = TrajectorySequences::submersibleCycleTS;
+
+        RoadRunnerBotEntity currentBot = null;
 
         while (true) {
 
@@ -96,7 +102,10 @@ public class MeepMeepTesting {
 //                    .followTrajectorySequence(TrajectorySequences::coloredStraysTS);
                     .followTrajectorySequence(currentTrajectorySequence::apply);
 
-            bots.add(newBot);
+//            bots.add(newBot);
+            if (currentBot!=null) {
+                meepMeep.removeEntity(currentBot);
+            }
             meepMeep.addEntity(newBot);
 
             meepMeep.start();
@@ -113,9 +122,10 @@ public class MeepMeepTesting {
 
 
             System.out.println("next cycle");
-            // temp
-            return;
-            //
+//            // temp
+//            return;
+//            //
+            currentBot = newBot;
         }
     }
 
