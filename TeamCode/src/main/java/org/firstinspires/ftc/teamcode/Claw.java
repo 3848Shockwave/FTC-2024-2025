@@ -37,6 +37,7 @@ public class Claw {
 
     public void update() {
 
+
         // open
         if (gamepad.b) {
             servo.setPosition(SERVO_OPENED_POSITION);

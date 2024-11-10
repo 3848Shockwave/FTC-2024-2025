@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 import static org.firstinspires.ftc.teamcode.MainDrive.*;
 
@@ -40,14 +43,16 @@ public class Robot {
     public void update() {
         // https://stackoverflow.com/questions/29945627/java-8-lambda-void-argument
         // might not work
-        updateMovement();
+//        updateMovement();
+        // PID TURN
+        double power = PIDControl(referenceAngle, Hardware.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle);
+        turn(power);
         updateClaw();
     }
 
     private void updateMovement() {
         currentDriveMode.run();
     }
-
 
 
     private void updateMovementFieldCentric() {
@@ -101,7 +106,45 @@ public class Robot {
 
     }
 
+    public void turn(double power) {
+        // negative because the front left and back left motors are in reverse
+        Hardware.frontLeftMotor.setPower(-power);
+        Hardware.backLeftMotor.setPower(-power);
+        Hardware.frontRightMotor.setPower(power);
+        Hardware.backRightMotor.setPower(power);
+    }
+
     private void setDriveMode(Runnable runnable) {
         currentDriveMode = runnable;
+    }
+
+    // PID tutorial video: https://www.youtube.com/watch?v=TvyiyHF2tEM
+    double integralSum = 0;
+    private final double Kp = PIDConstants.Kp;
+    private final double Ki = PIDConstants.Ki;
+    private final double Kd = PIDConstants.Kd;
+    private final ElapsedTime timer = MainDrive.runtime;
+    private double lastError = 0;
+    public final double referenceAngle = Math.toRadians(90);
+
+    public double PIDControl(double reference, double state) {
+        double error = angleWrap(reference - state);
+        telemetry.addData("Error: ", error);
+        integralSum += error * timer.seconds();
+        double derivative = (error - lastError) / (timer.seconds());
+        lastError = error;
+        timer.reset();
+        double output = (error * Kp) + (derivative * Kd) + (integralSum * Ki);
+        return output;
+    }
+
+    public double angleWrap(double radians) {
+        while (radians > Math.PI) {
+            radians -= 2 * Math.PI;
+        }
+        while (radians < -Math.PI) {
+            radians += 2 * Math.PI;
+        }
+        return radians;
     }
 }

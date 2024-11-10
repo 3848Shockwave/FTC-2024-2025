@@ -35,6 +35,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -94,7 +97,6 @@ public class MainDrive extends LinearOpMode {
         Hardware.init(hardwareMap);
 
 
-
         robot = new Robot();
 
         // Wait for the game to start (driver presses PLAY)
@@ -123,6 +125,8 @@ public class MainDrive extends LinearOpMode {
             currentGamepad2.copy(gamepad2);
 
             // Main teleop loop goes here
+            telemetry.addData("Target IMU Angle", robot.referenceAngle);
+            telemetry.addData("Current IMU Angle", Hardware.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
             robot.update();
         }
     }
