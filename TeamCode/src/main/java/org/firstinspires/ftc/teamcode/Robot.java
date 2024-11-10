@@ -7,10 +7,8 @@ import static org.firstinspires.ftc.teamcode.MainDrive.*;
 
 public class Robot {
 
-//    private enum DriveMode {
-//        FIELD_CENTRIC, NORMAL
-//    }
 
+    // void function that returns nothing
     private Runnable currentDriveMode;
 
     private double y; // Remember, Y stick value is reversed
@@ -42,29 +40,25 @@ public class Robot {
     public void update() {
         // https://stackoverflow.com/questions/29945627/java-8-lambda-void-argument
         // might not work
-        currentDriveMode.run();
-//        updateMovementFieldCentric();
+        updateMovement();
         updateClaw();
     }
 
-    private void updateClaw() {
-        claw.update();
+    private void updateMovement() {
+        currentDriveMode.run();
     }
 
-    private void updateMovementNormal() {
-
-    }
 
 
     private void updateMovementFieldCentric() {
-        y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-        x = gamepad1.left_stick_x; // Counteract imperfect strafing
-        rx = gamepad1.right_stick_x;
+        y = -currentGamepad1.left_stick_y; // Remember, Y stick value is reversed
+        x = currentGamepad1.left_stick_x; // Counteract imperfect strafing
+        rx = currentGamepad1.right_stick_x;
 
         // This button choice was made so that it is hard to hit on accident,
         // it can be freely changed based on preference.
         // The equivalent button is start on Xbox-style controllers.
-        if (gamepad1.options) {
+        if (currentGamepad1.options) {
             Hardware.imu.resetYaw();
         }
 
@@ -97,6 +91,14 @@ public class Robot {
         telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
         telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
         telemetry.update();
+    }
+
+    private void updateClaw() {
+        claw.update();
+    }
+
+    private void updateMovementNormal() {
+
     }
 
     private void setDriveMode(Runnable runnable) {

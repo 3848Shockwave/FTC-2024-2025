@@ -72,8 +72,10 @@ public class MainDrive extends LinearOpMode {
     public static Telemetry telemetry;
     public static HardwareMap hardwareMap;
 
-    public static Gamepad gamepad1;
-    public static Gamepad gamepad2;
+    public static Gamepad currentGamepad1;
+    public static Gamepad currentGamepad2;
+    public static Gamepad previousGamepad1;
+    public static Gamepad previousGamepad2;
 
     public Robot robot;
 
@@ -83,10 +85,15 @@ public class MainDrive extends LinearOpMode {
 
         MainDrive.telemetry = telemetry;
         MainDrive.hardwareMap = hardwareMap;
-        MainDrive.gamepad1 = gamepad1;
-        MainDrive.gamepad2 = gamepad2;
+        // gamepad docs: https://gm0.org/en/latest/docs/software/tutorials/gamepad.html
+        // By setting these values to new Gamepad(), they will default to all
+        // boolean values as false and all float values as 0
+        MainDrive.currentGamepad1 = new Gamepad();
+        MainDrive.currentGamepad2 = new Gamepad();
 
         Hardware.init(hardwareMap);
+
+
 
         robot = new Robot();
 
@@ -100,6 +107,22 @@ public class MainDrive extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            // Store the gamepad values from the previous loop iteration in
+            // previousGamepad1/2 to be used in this loop iteration.
+            // This is equivalent to doing this at the end of the previous
+            // loop iteration, as it will run in the same order except for
+            // the first/last iteration of the loop.
+            previousGamepad1.copy(currentGamepad1);
+            previousGamepad2.copy(currentGamepad2);
+
+            // Store the gamepad values from this loop iteration in
+            // currentGamepad1/2 to be used for the entirety of this loop iteration.
+            // This prevents the gamepad values from changing between being
+            // used and stored in previousGamepad1/2.
+            currentGamepad1.copy(gamepad1);
+            currentGamepad2.copy(gamepad2);
+
+            // Main teleop loop goes here
             robot.update();
         }
     }

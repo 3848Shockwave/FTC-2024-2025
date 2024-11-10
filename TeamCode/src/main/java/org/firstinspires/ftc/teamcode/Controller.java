@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-//public class Controller {
+public class Controller {
 //
 //    Gamepad gamepad;
 //
@@ -38,4 +38,4 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 //
 //    }
 //
-//}
+}
