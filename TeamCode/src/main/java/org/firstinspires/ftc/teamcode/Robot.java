@@ -25,7 +25,7 @@ public class Robot {
     private double frontRightPower;
     private double backRightPower;
 
-    private Claw claw;
+//    private Claw claw;
 
     public Robot() {
 
@@ -47,7 +47,7 @@ public class Robot {
         // PID TURN
         double power = PIDControl(referenceAngle, Hardware.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle);
         turn(power);
-        updateClaw();
+//        updateClaw();
     }
 
     private void updateMovement() {
@@ -99,7 +99,7 @@ public class Robot {
     }
 
     private void updateClaw() {
-        claw.update();
+//        claw.update();
     }
 
     private void updateMovementNormal() {
@@ -125,6 +125,7 @@ public class Robot {
     private final double Kd = PIDConstants.Kd;
     private final ElapsedTime timer = MainDrive.runtime;
     private double lastError = 0;
+    // the angle that the robot is supposed to stay at
     public final double referenceAngle = Math.toRadians(90);
 
     public double PIDControl(double reference, double state) {
