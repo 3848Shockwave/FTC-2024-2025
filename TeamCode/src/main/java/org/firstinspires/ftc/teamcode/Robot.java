@@ -107,7 +107,6 @@ public class Robot {
         hardware.setDcMotorPower("backLeft",powers.get(1));
         hardware.setDcMotorPower("frontRight",powers.get(2));
         hardware.setDcMotorPower("backRight",powers.get(3));
-
     }
 
 }

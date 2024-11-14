@@ -27,6 +27,24 @@ public class MainDrive extends LinearOpMode {
         Hardware hw = new Hardware(DcMotorNames,ServoNames,hardwareMap);
         Robot robot = new Robot(true, new GamepadConfig(gamepad1, gamepad2),hw );
         robot.setup();
+        //Oh great Vessel of Honour,
+        //May your servo-motors be guarded,
+        //
+        //Against malfunction,
+        //
+        //As your spirit is guarded from impurity.
+        //
+        //We beseech the Machine God to watch over you.
+        //
+        //Let flow the sacred oils,
+        //
+        //And let not the sorrows of the Seven Perplexities
+        //
+        //trouble thine pistons.
+        //
+        //Let flow the blessed unguents,
+        //
+        //And may thine circuitry remain divinely blessed.
         waitForStart();
         while (opModeIsActive()) {
             robot.setPowers(robot.driveCalc());
