@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -50,9 +50,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Iterative OpMode", group="Iterative OpMode")
-@Disabled
-public class BasicOpMode_Iterative extends OpMode
+@TeleOp(name="Basic test class", group="Iterative OpMode")
+
+public class test extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -83,14 +83,14 @@ public class BasicOpMode_Iterative extends OpMode
     }
 
     /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit START
+     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
     @Override
     public void init_loop() {
     }
 
     /*
-     * Code to run ONCE when the driver hits START
+     * Code to run ONCE when the driver hits PLAY
      */
     @Override
     public void start() {
@@ -98,7 +98,7 @@ public class BasicOpMode_Iterative extends OpMode
     }
 
     /*
-     * Code to run REPEATEDLY after the driver hits START but before they hit STOP
+     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
     @Override
     public void loop() {
