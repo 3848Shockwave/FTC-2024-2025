@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
+import org.firstinspires.ftc.teamcode.util.StateHandler;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -20,11 +21,13 @@ public class Robot {
     boolean fieldCentric = false;
     GamepadConfig gamepadConfig;
     Hardware hardware ;
+    StateHandler handle ;
     public Robot(boolean isFieldCentric, GamepadConfig gpConfig, Hardware hw){
         // Constructor
         this.fieldCentric = isFieldCentric;
         this.gamepadConfig = gpConfig;
         this.hardware=hw;
+        handle = new StateHandler(hw);
     }
     public void setup(){
         // Setup method
@@ -108,5 +111,31 @@ public class Robot {
         hardware.setDcMotorPower("frontRight",powers.get(2));
         hardware.setDcMotorPower("backRight",powers.get(3));
     }
+    public void checkStates(){
+        if (gamepadConfig.getGamepad2RightStickY()>0){
+            handle.extendHorizontal.setState(1);
+        }
+        else if (gamepadConfig.getGamepad2RightStickY()<0){
+            handle.extendHorizontal.setState(2);
+        }
+        else{
+            handle.extendHorizontal.setState(0);
+        }
+        if (gamepadConfig.getGamepad2LeftStickY()>0){
+            handle.extendVertical.setState(1);
+        }
+        else if (gamepadConfig.getGamepad2LeftStickY()<0){
+            handle.extendVertical.setState(2);
+        }
+        else{
+            handle.extendVertical.setState(0);
+        }
+        if (gamepadConfig.getGamepad2A()){
+            handle.gripHorizontal.setState(1);
+        }
+        else {
+            handle.gripHorizontal.setState(2);
+        }
 
+    }
 }

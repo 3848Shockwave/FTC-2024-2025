@@ -20,10 +20,25 @@ public class MainDrive extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        //add all names of stuff
         DcMotorNames.add("frontRight");
         DcMotorNames.add("frontLeft");
         DcMotorNames.add("backRight");
         DcMotorNames.add("backLeft");
+        DcMotorNames.add("spoolLeft");
+        DcMotorNames.add("spoolRight");
+        ServoNames.add("vertClawGrip");
+        ServoNames.add("vertClawPiv");
+        ServoNames.add("vertClawRot");
+        ServoNames.add("vertArmRotL");
+        ServoNames.add("vertArmRotR");
+        ServoNames.add("horzClawGrip");
+        ServoNames.add("horzClawPiv");
+        ServoNames.add("horzClawRot");
+        ServoNames.add("horzArmRotL");
+        ServoNames.add("horzArmRotR");
+        ServoNames.add("horzExtL");
+        ServoNames.add("horzExtR");
         Hardware hw = new Hardware(DcMotorNames,ServoNames,hardwareMap);
         Robot robot = new Robot(true, new GamepadConfig(gamepad1, gamepad2),hw );
         robot.setup();

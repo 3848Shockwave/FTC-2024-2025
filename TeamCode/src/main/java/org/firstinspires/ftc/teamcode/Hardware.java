@@ -26,6 +26,23 @@ public class Hardware {
             DcMotorMap.put(DcMotorNames.get(1), hardwareMap.get(DcMotorEx.class, "frontLeft"));
             DcMotorMap.put(DcMotorNames.get(2), hardwareMap.get(DcMotorEx.class, "backRight"));
             DcMotorMap.put(DcMotorNames.get(3), hardwareMap.get(DcMotorEx.class, "backLeft"));
+            DcMotorMap.put(DcMotorNames.get(4), hardwareMap.get(DcMotorEx.class, "spoolLeft"));
+            DcMotorMap.put(DcMotorNames.get(5), hardwareMap.get(DcMotorEx.class, "spoolRight"));
+        }
+        if (ServoNames!=null){
+            ServoMap.put(ServoNames.get(0), hardwareMap.get(ServoImplEx.class, "vertClawGrip"));
+            ServoMap.put(ServoNames.get(1), hardwareMap.get(ServoImplEx.class, "vertClawPiv"));
+            ServoMap.put(ServoNames.get(2), hardwareMap.get(ServoImplEx.class, "vertClawRot"));
+            ServoMap.put(ServoNames.get(3), hardwareMap.get(ServoImplEx.class, "vertArmRotL"));
+            ServoMap.put(ServoNames.get(4), hardwareMap.get(ServoImplEx.class, "vertArmRotR"));
+            ServoMap.put(ServoNames.get(5), hardwareMap.get(ServoImplEx.class, "horzClawGrip"));
+            ServoMap.put(ServoNames.get(6), hardwareMap.get(ServoImplEx.class, "horzClawPiv"));
+            ServoMap.put(ServoNames.get(7), hardwareMap.get(ServoImplEx.class, "horzClawRot"));
+            ServoMap.put(ServoNames.get(8), hardwareMap.get(ServoImplEx.class, "horzArmRotL"));
+            ServoMap.put(ServoNames.get(9), hardwareMap.get(ServoImplEx.class, "horzArmRotR"));
+            ServoMap.put(ServoNames.get(10), hardwareMap.get(ServoImplEx.class, "horzExtL"));
+            ServoMap.put(ServoNames.get(11), hardwareMap.get(ServoImplEx.class, "horzExtR"));
+
         }
     }
     public DcMotorEx getDcMotor(String motorName) {
@@ -40,11 +57,11 @@ public class Hardware {
     public void setServoPosition(String servoName, double position) {
         ServoMap.get(servoName).setPosition(position);
     }
-    public void getDcMotorPower(String motorName) {
-        DcMotorMap.get(motorName).getPower();
+    public double getDcMotorPower(String motorName) {
+      return  DcMotorMap.get(motorName).getPower();
     }
-    public void getServoPosition(String servoName) {
-        ServoMap.get(servoName).getPosition();
+    public double getServoPosition(String servoName) {
+      return  ServoMap.get(servoName).getPosition();
     }
     public void initIMU(){
         imu = hardwareMap.get(IMU.class, "imu");
