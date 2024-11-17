@@ -8,6 +8,11 @@ import org.rowlandhall.meepmeep.roadrunner.trajectorysequence.TrajectorySequence
 
 import static com.example.meepmeeptesting.MeepMeepTesting.*;
 
+/**
+ * WHEN COPYING THIS CLASS FOR ROADRUNNER IMPLEMENTATION, MAKE SURE TO CHANGE EVERYWHERE YOU SEE:
+ * "DriveShim"
+ * TO THE NAME OF YOUR DRIVE CLASS, E.G. "SampleMechanumDrive"
+ */
 public class TrajectorySequences {
     // reference: https://github.com/technototes/IntoTheDeep2024/blob/main/MeepMeepTesting/src/main/java/com/example/meepmeeptesting/ViggoTesting.java#L19
 
