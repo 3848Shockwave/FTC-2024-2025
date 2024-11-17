@@ -33,8 +33,7 @@ public class Robot {
     public DcMotorEx backRightMotor;
     public IMU imu;
 
-    private Arm arm;
-    private Claw claw;
+    private PitchArm pitchArm;
     private ServoImplEx wristServo;
     private Gamepads gamepads;
 
@@ -84,7 +83,7 @@ public class Robot {
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
 
 //        claw = new Claw(hardwareMap, gamepads);
-//        arm = new Arm(hardwareMap, gamepads);
+        pitchArm = new PitchArm(hardwareMap, gamepads);
 //        wristServo = hardwareMap.get(ServoImplEx.class, "wrist");
 //        wristServo.setPwmEnable();
 //        wristServo.setPwmRange(new PwmControl.PwmRange(1000, 2000));
@@ -100,15 +99,22 @@ public class Robot {
 
     }
 
+
     public void update() {
         // https://stackoverflow.com/questions/29945627/java-8-lambda-void-argument
         // might not work
-        updateMovement();
+//        updateMovement();
+
         // PID TURN
+        if (gamepads.currentGamepad1.dpad_down) {
+            referenceAngle -= Constants.ANGLE_SPEED;
+        } else if (gamepads.currentGamepad1.dpad_up) {
+            referenceAngle += Constants.ANGLE_SPEED;
+        }
+
 //        double power = PIDControl(referenceAngle, imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle);
 //        turn(power);
-//        claw.update();
-//        arm.update();
+        pitchArm.update();
     }
 
     private void updateMovement() {
@@ -193,13 +199,13 @@ public class Robot {
 
     // PID tutorial video: https://www.youtube.com/watch?v=TvyiyHF2tEM
     double integralSum = 0;
-    private double Kp = PIDConstants.Kp;
-    private double Ki = PIDConstants.Ki;
-    private double Kd = PIDConstants.Kd;
+    private double Kp = Constants.Kp;
+    private double Ki = Constants.Ki;
+    private double Kd = Constants.Kd;
     private final ElapsedTime timer = MainDrive.runtime;
     private double lastError = 0;
     // the angle that the robot is supposed to stay at
-    public final double referenceAngle = Math.toRadians(90);
+    public double referenceAngle = Math.toRadians(0);
 
     public double PIDControl(double reference, double state) {
         double error = angleWrap(reference - state);

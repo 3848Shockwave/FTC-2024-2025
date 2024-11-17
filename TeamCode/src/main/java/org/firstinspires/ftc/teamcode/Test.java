@@ -63,13 +63,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "Servo Test", group = "BAZ")
-public class ClawTest extends LinearOpMode {
+@TeleOp(name = "TESTING BAZ BAZ BAZ", group = "BAZ")
+public class Test extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
-    private Claw claw;
     private ServoImplEx wristServo;
+    private PitchArm pitchArm;
     private Gamepads gamepads;
 
 
@@ -82,7 +82,7 @@ public class ClawTest extends LinearOpMode {
         wristServo.setPwmEnable();
         wristServo.setPwmRange(new PwmControl.PwmRange(Constants.PWM_LOW, Constants.PWM_HIGH));
 
-        claw = new Claw(hardwareMap, gamepads);
+        pitchArm = new PitchArm(hardwareMap, gamepads);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -96,31 +96,12 @@ public class ClawTest extends LinearOpMode {
         while (opModeIsActive()) {
             gamepads.update();
 //            updateRobot();
-            claw.update();
+            pitchArm.update();
             // update wrist
-            updateWrist();
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }
     }
-
-    private void updateWrist() {
-        if (gamepads.currentGamepad1.y) {
-            wristServo.setPosition(Constants.UP);
-            telemetry.addLine("I'M GOING UP ON A TUESDAY");
-        }
-        if (gamepads.currentGamepad1.x) {
-            wristServo.setPosition(Constants.DOWN);
-        }
-//        if (gamepads.currentGamepad1.y && !gamepads.previousGamepad1.y) {
-//            wristServo.setPosition(1);
-//            telemetry.addLine("I'M GOING UP ON A TUESDAY");
-//        }
-//        if (gamepads.currentGamepad1.x && !gamepads.previousGamepad1.x) {
-//            wristServo.setPosition(0);
-//        }
-    }
-
 
 
 }
