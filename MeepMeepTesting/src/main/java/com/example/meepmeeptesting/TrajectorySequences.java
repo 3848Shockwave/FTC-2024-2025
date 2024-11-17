@@ -183,7 +183,6 @@ public class TrajectorySequences {
 
     public static TrajectorySequence neutralStraysTS(DriveShim drive) {
         return drive.trajectorySequenceBuilder(bucketStartPose)
-                .waitSeconds(waitForSpecimenTime)
 
                 // drop specimen
                 .lineToSplineHeading(
@@ -243,7 +242,6 @@ public class TrajectorySequences {
 
     public static TrajectorySequence submersibleCycleTS(DriveShim drive) {
         return drive.trajectorySequenceBuilder(bucketStartPose)
-                .waitSeconds(waitForSpecimenTime)
 
                 // drop specimen
                 .lineToSplineHeading(
