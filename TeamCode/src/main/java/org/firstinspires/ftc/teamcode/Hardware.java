@@ -76,4 +76,9 @@ public class Hardware {
             motor.setZeroPowerBehavior(behavior);
         }
     }
+
+    public double getEncoderValue(String motorName) {
+        return DcMotorMap.get(motorName).getCurrentPosition();
+
+    }
 }

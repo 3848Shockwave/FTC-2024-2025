@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 
 @TeleOp(name="fieldCentric", group="Linear Opmode")
@@ -28,9 +30,18 @@ public class fieldCentricTest extends LinearOpMode {
     private DcMotor backRight;
     private DcMotor backLeft;
     private DcMotor armMotor;
+    private double frontLeftPower;
+    private double backLeftPower;
+    private double frontRightPower;
+    private double backRightPower;
     private IMU emu;
 
-
+    private double y; // Remember, Y stick value is reversed
+    private double x; // Counteract imperfect strafing
+    private double rx;
+    private double botHeading;
+    private double rotX;
+    private double rotY;
     @Override
     public void runOpMode() {
 
@@ -44,6 +55,9 @@ public class fieldCentricTest extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -55,39 +69,37 @@ public class fieldCentricTest extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
-            // Setup a variable for each drive wheel to save power level for telemetry
-            double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-            double x = gamepad1.left_stick_x;
-            double rx = gamepad1.right_stick_x;
+            y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
+            x = gamepad1.left_stick_x; // Counteract imperfect strafing
+            rx = gamepad1.right_stick_x;
 
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
             // The equivalent button is start on Xbox-style controllers.
-            if (gamepad1.y) {
+            if (gamepad1.a) {
                 emu.resetYaw();
             }
 
-            double botHeading = emu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            // get bot heading relative to control hub IMU
+            botHeading = emu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
             // Rotate the movement direction counter to the bot's rotation
-            double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-            double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+            rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+            rotX = rotX * 1.1; // counteract imperfect strafing
 
-            rotX = rotX * 1.1;  // Counteract imperfect strafing
+            rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
 
-            // Denominator is the largest motor power (absolute value) or 1
-            // This ensures all the powers maintain the same ratio,
-            // but only if at least one is out of the range [-1, 1]
             double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-            double frontLeftPower = (rotY + rotX + rx) / denominator;
-            double backLeftPower = (rotY - rotX + rx) / denominator;
-            double frontRightPower = (rotY - rotX - rx) / denominator;
-            double backRightPower = (rotY + rotX - rx) / denominator;
 
+            frontLeftPower = (rotY + rotX + rx) / denominator;
+            backLeftPower = (rotY - rotX + rx) / denominator;
+            frontRightPower = (rotY - rotX - rx) / denominator;
+            backRightPower = (rotY + rotX - rx) / denominator;
+
+            // Send calculated power to wheels
             frontLeft.setPower(frontLeftPower);
-            backLeft.setPower(backLeftPower);
             frontRight.setPower(frontRightPower);
+            backLeft.setPower(backLeftPower);
             backRight.setPower(backRightPower);
 
             telemetry.addData("orient", emu.getRobotOrientationAsQuaternion());

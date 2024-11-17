@@ -5,6 +5,7 @@ import android.media.SoundPool;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 import org.firstinspires.ftc.robotcore.external.android.AndroidSoundPool;
@@ -61,10 +62,14 @@ public class MainDrive extends LinearOpMode {
         //
         //And may thine circuitry remain divinely blessed.
         waitForStart();
+
+
         while (opModeIsActive()) {
+
             robot.setPowers(robot.driveCalc());
-
-
+            robot.cope();
+            telemetry.addData("encoders",robot.hardware.getDcMotor("spoolLeft").getCurrentPosition());
+            telemetry.update();
         }
     }
 }
