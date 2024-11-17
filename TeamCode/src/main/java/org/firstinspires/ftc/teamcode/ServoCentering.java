@@ -31,10 +31,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -64,8 +62,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="SERVO TEST", group="SERVO TEST")
-public class ServoTest extends LinearOpMode {
+@TeleOp(name="SERVO CENTERING", group="SERVO CENTERING")
+public class ServoCentering extends LinearOpMode {
 
     ServoImplEx servo;
 
@@ -73,6 +71,8 @@ public class ServoTest extends LinearOpMode {
     public void runOpMode() {
 
         servo = hardwareMap.get(ServoImplEx.class, "servo");
+        servo.setPwmEnable();
+        servo.setPwmRange(new PwmControl.PwmRange(Constants.PWM_LOW, Constants.PWM_HIGH));
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -86,7 +86,7 @@ public class ServoTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             servo.setPosition(0);
-            sleep(10000);
+            sleep(100000000);
 
 
             // Show the elapsed game time and wheel power.

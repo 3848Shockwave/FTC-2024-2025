@@ -68,17 +68,21 @@ public class ClawTest extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
-    private ServoImplEx servo = null;
+    private Claw claw;
+    private ServoImplEx wristServo;
+    private Gamepads gamepads;
 
 
     @Override
     public void runOpMode() {
 
-        servo = hardwareMap.get(ServoImplEx.class, "servo");
-        servo.setPwmEnable();
-        servo.setPwmRange(new PwmControl.PwmRange(1400, 1900));
+        gamepads = new Gamepads(gamepad1, gamepad2);
 
-        Claw claw = new Claw(servo, gamepad1);
+        wristServo = hardwareMap.get(ServoImplEx.class, "wrist");
+        wristServo.setPwmEnable();
+        wristServo.setPwmRange(new PwmControl.PwmRange(Constants.PWM_LOW, Constants.PWM_HIGH));
+
+        claw = new Claw(hardwareMap, gamepads);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -88,18 +92,35 @@ public class ClawTest extends LinearOpMode {
         runtime.reset();
 
 
-
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            updateRobot();
+            gamepads.update();
+//            updateRobot();
             claw.update();
+            // update wrist
+            updateWrist();
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.update();
         }
     }
 
-    public void updateRobot() {
-
-        // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.update();
+    private void updateWrist() {
+        if (gamepads.currentGamepad1.y) {
+            wristServo.setPosition(Constants.UP);
+            telemetry.addLine("I'M GOING UP ON A TUESDAY");
+        }
+        if (gamepads.currentGamepad1.x) {
+            wristServo.setPosition(Constants.DOWN);
+        }
+//        if (gamepads.currentGamepad1.y && !gamepads.previousGamepad1.y) {
+//            wristServo.setPosition(1);
+//            telemetry.addLine("I'M GOING UP ON A TUESDAY");
+//        }
+//        if (gamepads.currentGamepad1.x && !gamepads.previousGamepad1.x) {
+//            wristServo.setPosition(0);
+//        }
     }
+
+
+
 }

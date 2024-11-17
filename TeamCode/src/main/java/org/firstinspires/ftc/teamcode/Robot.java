@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -25,29 +27,88 @@ public class Robot {
     private double frontRightPower;
     private double backRightPower;
 
-//    private Claw claw;
+    public DcMotorEx frontLeftMotor;
+    public DcMotorEx frontRightMotor;
+    public DcMotorEx backLeftMotor;
+    public DcMotorEx backRightMotor;
+    public IMU imu;
 
-    public Robot() {
+    private Arm arm;
+    private Claw claw;
+    private ServoImplEx wristServo;
+    private Gamepads gamepads;
+
+    public Robot(HardwareMap hardwareMap, Gamepads gamepads) {
+
+        this.gamepads = gamepads;
+
+        frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeft");
+        frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRight");
+        backLeftMotor = hardwareMap.get(DcMotorEx.class, "backLeft");
+        backRightMotor = hardwareMap.get(DcMotorEx.class, "backRight");
+
+        // Initialize the hardware variables. Note that the strings used here must correspond
+        // to the names assigned during the robot configuration step on the DS or RC devices.
+
+        imu = hardwareMap.get(IMU.class, "imu");
+        // this is the issue. the Rev Hub is not facing a normal direction
+//        // Adjust the orientation parameters to match your robot
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+        imu.initialize(parameters);
+        imu.resetYaw();
+
+        // set motor braking
+        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // no encoders for pid and such
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // stop motors so they don't move
+        frontLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        backRightMotor.setPower(0);
+
+        // reverse right motor direction bc its flipped
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        //
+        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+
+//        claw = new Claw(hardwareMap, gamepads);
+//        arm = new Arm(hardwareMap, gamepads);
+//        wristServo = hardwareMap.get(ServoImplEx.class, "wrist");
+//        wristServo.setPwmEnable();
+//        wristServo.setPwmRange(new PwmControl.PwmRange(1000, 2000));
 
         // https://www.youtube.com/watch?v=QEZO5e2zUcY
 
         // https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#field-centric
-//        driveMode = DriveMode.FIELD_CENTRIC;
 
-        setDriveMode(this::updateMovementFieldCentric);
 
-        Hardware.imu.resetYaw();
+        setDriveMode(this::fieldCentricDrive);
+//        setDriveMode(this::normalDrive);
+
 
     }
 
     public void update() {
         // https://stackoverflow.com/questions/29945627/java-8-lambda-void-argument
         // might not work
-//        updateMovement();
+        updateMovement();
         // PID TURN
-        double power = PIDControl(referenceAngle, Hardware.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle);
-        turn(power);
-//        updateClaw();
+//        double power = PIDControl(referenceAngle, imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle);
+//        turn(power);
+//        claw.update();
+//        arm.update();
     }
 
     private void updateMovement() {
@@ -55,21 +116,21 @@ public class Robot {
     }
 
 
-    private void updateMovementFieldCentric() {
-        y = -currentGamepad1.left_stick_y; // Remember, Y stick value is reversed
-        x = currentGamepad1.left_stick_x; // Counteract imperfect strafing
-        rx = currentGamepad1.right_stick_x;
+    private void fieldCentricDrive() {
+        y = -gamepads.currentGamepad1.left_stick_y; // Remember, Y stick value is reversed
+        x = gamepads.currentGamepad1.left_stick_x; // Counteract imperfect strafing
+        rx = gamepads.currentGamepad1.right_stick_x;
 
         // This button choice was made so that it is hard to hit on accident,
         // it can be freely changed based on preference.
         // The equivalent button is start on Xbox-style controllers.
-        if (currentGamepad1.options) {
-            Hardware.imu.resetYaw();
+        if (gamepads.currentGamepad1.options) {
+            imu.resetYaw();
         }
-
+        globalTelemetry.addData("Current IMU Angle", imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
 
         // get bot heading relative to control hub IMU
-        botHeading = Hardware.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
         // Rotate the movement direction counter to the bot's rotation
         rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -85,33 +146,45 @@ public class Robot {
         backRightPower = (rotY + rotX - rx) / denominator;
 
         // Send calculated power to wheels
-        Hardware.frontLeftMotor.setPower(frontLeftPower);
-        Hardware.frontRightMotor.setPower(frontRightPower);
-        Hardware.backLeftMotor.setPower(backLeftPower);
-        Hardware.backRightMotor.setPower(backRightPower);
+        frontLeftMotor.setPower(frontLeftPower);
+        frontRightMotor.setPower(frontRightPower);
+        backLeftMotor.setPower(backLeftPower);
+        backRightMotor.setPower(backRightPower);
 
         // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("bot heading: ", botHeading);
-        telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
-        telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
-        telemetry.update();
+        globalTelemetry.addData("Status", "Run Time: " + runtime.toString());
+        globalTelemetry.addData("bot heading: ", botHeading);
+        globalTelemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
+        globalTelemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
+        globalTelemetry.update();
     }
 
-    private void updateClaw() {
-//        claw.update();
-    }
+    private void normalDrive() {
+        y = -gamepads.currentGamepad1.left_stick_y; // Remember, Y stick value is reversed
+        x = gamepads.currentGamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+        rx = gamepads.currentGamepad1.right_stick_x;
 
-    private void updateMovementNormal() {
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio,
+        // but only if at least one is out of the range [-1, 1]
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
 
+        frontLeftMotor.setPower(frontLeftPower);
+        backLeftMotor.setPower(backLeftPower);
+        frontRightMotor.setPower(frontRightPower);
+        backRightMotor.setPower(backRightPower);
     }
 
     public void turn(double power) {
         // negative because the front left and back left motors are in reverse
-        Hardware.frontLeftMotor.setPower(-power);
-        Hardware.backLeftMotor.setPower(-power);
-        Hardware.frontRightMotor.setPower(power);
-        Hardware.backRightMotor.setPower(power);
+        frontLeftMotor.setPower(-power);
+        backLeftMotor.setPower(-power);
+        frontRightMotor.setPower(power);
+        backRightMotor.setPower(power);
     }
 
     private void setDriveMode(Runnable runnable) {
@@ -120,9 +193,9 @@ public class Robot {
 
     // PID tutorial video: https://www.youtube.com/watch?v=TvyiyHF2tEM
     double integralSum = 0;
-    private final double Kp = PIDConstants.Kp;
-    private final double Ki = PIDConstants.Ki;
-    private final double Kd = PIDConstants.Kd;
+    private double Kp = PIDConstants.Kp;
+    private double Ki = PIDConstants.Ki;
+    private double Kd = PIDConstants.Kd;
     private final ElapsedTime timer = MainDrive.runtime;
     private double lastError = 0;
     // the angle that the robot is supposed to stay at
@@ -130,7 +203,7 @@ public class Robot {
 
     public double PIDControl(double reference, double state) {
         double error = angleWrap(reference - state);
-        telemetry.addData("Error: ", error);
+        globalTelemetry.addData("Error: ", error);
         integralSum += error * timer.seconds();
         double derivative = (error - lastError) / (timer.seconds());
         lastError = error;

@@ -31,13 +31,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -67,18 +62,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "Field-Centric Drive", group = "BAZ")
+@TeleOp(name = "Field-Centric Drive BAZ BAZ BAZ BAZ", group = "BAZ")
 public class MainDrive extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     public static final ElapsedTime runtime = new ElapsedTime();
-    public static Telemetry telemetry;
-    public static HardwareMap hardwareMap;
+    public static Telemetry globalTelemetry;
+    public Gamepads gamepads;
 
-    public static Gamepad currentGamepad1;
-    public static Gamepad currentGamepad2;
-    public static Gamepad previousGamepad1;
-    public static Gamepad previousGamepad2;
+//    public static Gamepad currentGamepad1;
+//    public static Gamepad currentGamepad2;
+//    public static Gamepad previousGamepad1;
+//    public static Gamepad previousGamepad2;
 
     public Robot robot;
 
@@ -86,22 +81,14 @@ public class MainDrive extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        MainDrive.telemetry = telemetry;
-        MainDrive.hardwareMap = hardwareMap;
-        // gamepad docs: https://gm0.org/en/latest/docs/software/tutorials/gamepad.html
-        // By setting these values to new Gamepad(), they will default to all
-        // boolean values as false and all float values as 0
-        MainDrive.currentGamepad1 = new Gamepad();
-        MainDrive.currentGamepad2 = new Gamepad();
+        MainDrive.globalTelemetry = telemetry;
+        gamepads = new Gamepads(gamepad1, gamepad2);
 
-        Hardware.init(hardwareMap);
-
-
-        robot = new Robot();
+        robot = new Robot(hardwareMap, gamepads);
 
         // Wait for the game to start (driver presses PLAY)
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        globalTelemetry.addData("Status", "Initialized");
+        globalTelemetry.update();
 
         waitForStart();
         runtime.reset();
@@ -109,27 +96,12 @@ public class MainDrive extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            // Store the gamepad values from the previous loop iteration in
-            // previousGamepad1/2 to be used in this loop iteration.
-            // This is equivalent to doing this at the end of the previous
-            // loop iteration, as it will run in the same order except for
-            // the first/last iteration of the loop.
-            previousGamepad1.copy(currentGamepad1);
-            previousGamepad2.copy(currentGamepad2);
 
-            // Store the gamepad values from this loop iteration in
-            // currentGamepad1/2 to be used for the entirety of this loop iteration.
-            // This prevents the gamepad values from changing between being
-            // used and stored in previousGamepad1/2.
-            currentGamepad1.copy(gamepad1);
-            currentGamepad2.copy(gamepad2);
-
+            gamepads.update();
             // Main teleop loop goes here
-            telemetry.addData("Target IMU Angle", robot.referenceAngle);
-            telemetry.addData("Current IMU Angle", Hardware.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
             robot.update();
+            globalTelemetry.addData("Target IMU Angle", robot.referenceAngle);
         }
     }
-
 
 }
