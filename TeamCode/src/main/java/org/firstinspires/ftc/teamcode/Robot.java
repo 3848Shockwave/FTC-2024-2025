@@ -178,12 +178,18 @@ public class Robot {
 
         }
         if (gamepadConfig.getGamepad2Y()) {
-            long lastToggleTime = 0;
-            if (System.currentTimeMillis() - lastToggleTime > toggleDelay) {
-                boolean isClosed = hardware.getServoPosition("horzClawGrip") == servoPositions.HORZCLAWGRIPCLOSE.getPosition();
-                hardware.setServoPosition("horzClawGrip", isClosed ? servoPositions.HORZCLAWGRIPOPEN.getPosition() : servoPositions.HORZCLAWGRIPCLOSE.getPosition());
-                lastToggleTime = System.currentTimeMillis();
-            }
+            Handler handler = new Handler(Looper.getMainLooper());
+
+// Step 2: Perform vertical claw rotation and arm adjustments after 1000ms
+
+                hardware.setServoPosition("horzClawRot", servoPositions.HORZROTPICK.getPosition());
+                hardware.setServoPosition("horzArmRotL", -1);
+                hardware.setServoPosition("horzArmRotR", 1);
+
+            handler.postDelayed(() -> {
+            hardware.setServoPosition("horzClawGrip",servoPositions.HORZCLAWGRIPOPEN.getPosition());
+            }, 1000);
+
         }
         if (gamepadConfig.getGamepad2B()) {
             long lastToggleTime = 0;
@@ -235,6 +241,7 @@ public class Robot {
             hardware.setServoPosition("vertArmRotL", hardware.getServoPosition("vertArmRotL") - step);
             hardware.setServoPosition("vertArmRotR", hardware.getServoPosition("vertArmRotR") + step);
         }
+
         if (gamepadConfig.getGamepad2A()) {
             // Move retract spools to max
             //hardware.setDcMotorPower("spoolLeft", -1);
@@ -268,25 +275,41 @@ public class Robot {
 // Step 3: Close horizontal claw grip after another 1000ms (2000ms total from start)
             handler.postDelayed(() -> {
                 hardware.setServoPosition("vertClawGrip", servoPositions.VERTCLAWGRIPOPEN.getPosition());
-            }, 2500);
+            }, 2400);
 
 // Step 4: Open vertical claw grip immediately after the last action (no additional delay)
             handler.postDelayed(() -> {
                 hardware.setServoPosition("horzClawGrip", servoPositions.HORZCLAWGRIPCLOSE.getPosition());
-            }, 2750);
-        }
-        if(gamepadConfig.getGamepad2X() && count == 0) {
-    hardware.setServoPosition("horzClawRot", servoPositions.HORZROTPICK.getPosition());
-    hardware.setServoPosition("horzArmRotL", servoPositions.HORZARMLEFTPICK.getPosition());
-    hardware.setServoPosition("horzArmRotR", servoPositions.HORZARMRIGHTPICK.getPosition());
-    hardware.setServoPosition("horzClawGrip",servoPositions.HORZCLAWGRIPCLOSE.getPosition());
-    count += 1;
-} else if(gamepadConfig.getGamepad2X() && count == 1) {
-    // Add code to move other things when the button is pressed again
-            hardware.setServoPosition("horzArmRotL", -1);
-            hardware.setServoPosition("horzArmRotR", 1);
+            }, 2500);
+            handler.postDelayed(() -> {
+                hardware.setServoPosition("vertClawRot", servoPositions.VERTCLAWROTOUT.getPosition());
+                hardware.setServoPosition("vertArmRotL", servoPositions.VERTARMLOUT.getPosition());
+                hardware.setServoPosition("vertArmRotR", servoPositions.VERTARMROUT.getPosition());
+                if(hardware.getDcMotor("spoolLeft").getCurrentPosition()>maxThreshold){
+                    hardware.getDcMotor("spoolLeft").setPower(1);
+                    hardware.getDcMotor("spoolRight").setPower(1);
+                }
+                else{
+                    hardware.getDcMotor("spoolLeft").setPower(0);
+                    hardware.getDcMotor("spoolRight").setPower(0);
+                }
 
-            count = 0;
+                }, 2750);
+            handler.postDelayed(() -> {
+                hardware.setServoPosition("horzClawRot", servoPositions.HORZROTPICK.getPosition());
+                hardware.setServoPosition("horzArmRotL", servoPositions.HORZARMLEFTPICK.getPosition());
+                hardware.setServoPosition("horzArmRotR", servoPositions.HORZARMRIGHTPICK.getPosition());
+                hardware.setServoPosition("horzClawGrip",servoPositions.HORZCLAWGRIPCLOSE.getPosition());
+
+            }, 3000);
+
+        }
+        if(gamepadConfig.getGamepad2X()) {
+    hardware.setServoPosition("horzClawRot", servoPositions.HORZROTPICK.getPosition());
+            hardware.setServoPosition("horzArmRotL", -.8);
+            hardware.setServoPosition("horzArmRotR", .80);
+            hardware.setServoPosition("horzClawGrip",servoPositions.HORZCLAWGRIPCLOSE.getPosition());
+
 }
     }
 }

@@ -62,7 +62,9 @@ public class MainDrive extends LinearOpMode {
         //
         //And may thine circuitry remain divinely blessed.
         waitForStart();
-
+        robot.hardware.setServoPosition("vertClawRot", servoPositions.VERTCLAWROTOUT.getPosition());
+        robot.hardware.setServoPosition("vertArmRotL", servoPositions.VERTARMLOUT.getPosition());
+        robot.hardware.setServoPosition("vertArmRotR", servoPositions.VERTARMROUT.getPosition());
 
         while (opModeIsActive()) {
 
