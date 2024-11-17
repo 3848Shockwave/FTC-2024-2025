@@ -12,9 +12,54 @@ public class TrajectorySequences {
     // reference: https://github.com/technototes/IntoTheDeep2024/blob/main/MeepMeepTesting/src/main/java/com/example/meepmeeptesting/ViggoTesting.java#L19
 
     // import "drive" as an argument to return the desired Trajectory Sequence
+    public static int redAngleAdjustment;
+    public static int redPoseAdjustment;
+    public static Pose2d bucketStartPose;
+    public static Pose2d coloredSampleStartPose;
+    public static Pose2d submersiblePickUpPose;
+    public static Pose2d dropSamplePose;
+
+    public enum COLOR {
+        RED, BLUE;
+    }
+
+    public static COLOR currentColor;
+
+    static {
+        currentColor = COLOR.BLUE;
+        redAngleAdjustment = 0;
+        redPoseAdjustment = 1;
+
+        if (currentColor == COLOR.RED) {
+            redAngleAdjustment = 180;
+            redPoseAdjustment = -1;
+        }
+
+        bucketStartPose = new Pose2d(
+                35 * redPoseAdjustment,
+                62 * redPoseAdjustment,
+                Math.toRadians(-90 + redAngleAdjustment)
+        );
+        coloredSampleStartPose = new Pose2d(
+                -35 * redPoseAdjustment,
+                62 * redPoseAdjustment,
+                Math.toRadians(-90 + redAngleAdjustment)
+        );
+        submersiblePickUpPose = new Pose2d(
+                27 * redPoseAdjustment,
+                0 * redPoseAdjustment,
+                Math.toRadians(180 + redAngleAdjustment)
+        );
+        dropSamplePose = new Pose2d(
+                50 * redPoseAdjustment,
+                50 * redPoseAdjustment,
+                Math.toRadians(180 + 45 + redAngleAdjustment)
+        );
+
+    }
+
     public static TrajectorySequence pushSamplesTS(DriveShim drive) {
         return drive.trajectorySequenceBuilder(coloredSampleStartPose)
-                .waitSeconds(waitForSpecimenTime)
                 // LOOP 1
 
                 // drop specimen
