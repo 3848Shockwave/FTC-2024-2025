@@ -27,13 +27,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.main;
 
-import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -63,33 +63,30 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "Field-Centric Drive BAZ BAZ BAZ BAZ", group = "BAZ")
-public class MainDrive extends LinearOpMode {
+@TeleOp(name = "TESTING BAZ BAZ BAZ", group = "BAZ")
+public class Test extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
-    public static final ElapsedTime runtime = new ElapsedTime();
-    public static Telemetry globalTelemetry;
-    public Gamepads gamepads;
-
-//    public static Gamepad currentGamepad1;
-//    public static Gamepad currentGamepad2;
-//    public static Gamepad previousGamepad1;
-//    public static Gamepad previousGamepad2;
-
-    public Robot robot;
+    private ElapsedTime runtime = new ElapsedTime();
+    private ServoImplEx wristServo;
+    private PitchArm pitchArm;
+    private Gamepads gamepads;
 
 
     @Override
     public void runOpMode() {
 
-        MainDrive.globalTelemetry = telemetry;
         gamepads = new Gamepads(gamepad1, gamepad2);
 
-        robot = new Robot(hardwareMap, gamepads);
+        wristServo = hardwareMap.get(ServoImplEx.class, "wrist");
+        wristServo.setPwmEnable();
+        wristServo.setPwmRange(new PwmControl.PwmRange(Constants.PWM_LOW, Constants.PWM_HIGH));
+
+        pitchArm = new PitchArm(hardwareMap, gamepads);
 
         // Wait for the game to start (driver presses PLAY)
-        globalTelemetry.addData("Status", "Initialized");
-        globalTelemetry.update();
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
         waitForStart();
         runtime.reset();
@@ -97,12 +94,14 @@ public class MainDrive extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
             gamepads.update();
-            // Main teleop loop goes here
-            robot.update();
-            globalTelemetry.addData("Target IMU Angle", robot.referenceAngle);
+//            updateRobot();
+            pitchArm.update();
+            // update wrist
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.update();
         }
     }
+
 
 }
