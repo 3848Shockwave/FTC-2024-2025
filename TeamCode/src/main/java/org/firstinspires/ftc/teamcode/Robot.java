@@ -31,9 +31,9 @@ public class Robot {
     public DcMotorEx frontRightMotor;
     public DcMotorEx backLeftMotor;
     public DcMotorEx backRightMotor;
+
     public IMU imu;
 
-    private PitchArm pitchArm;
     private ServoImplEx wristServo;
     private Gamepads gamepads;
 
@@ -83,7 +83,6 @@ public class Robot {
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
 
 //        claw = new Claw(hardwareMap, gamepads);
-        pitchArm = new PitchArm(hardwareMap, gamepads);
 //        wristServo = hardwareMap.get(ServoImplEx.class, "wrist");
 //        wristServo.setPwmEnable();
 //        wristServo.setPwmRange(new PwmControl.PwmRange(1000, 2000));
@@ -114,7 +113,6 @@ public class Robot {
 
 //        double power = PIDControl(referenceAngle, imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle);
 //        turn(power);
-        pitchArm.update();
     }
 
     private void updateMovement() {
