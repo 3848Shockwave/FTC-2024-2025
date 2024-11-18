@@ -275,33 +275,29 @@ public class Robot {
 // Step 3: Close horizontal claw grip after another 1000ms (2000ms total from start)
             handler.postDelayed(() -> {
                 hardware.setServoPosition("vertClawGrip", servoPositions.VERTCLAWGRIPOPEN.getPosition());
-            }, 2400);
+            }, 2500);
 
 // Step 4: Open vertical claw grip immediately after the last action (no additional delay)
             handler.postDelayed(() -> {
                 hardware.setServoPosition("horzClawGrip", servoPositions.HORZCLAWGRIPCLOSE.getPosition());
-            }, 2500);
+            }, 3500);
             handler.postDelayed(() -> {
                 hardware.setServoPosition("vertClawRot", servoPositions.VERTCLAWROTOUT.getPosition());
                 hardware.setServoPosition("vertArmRotL", servoPositions.VERTARMLOUT.getPosition());
                 hardware.setServoPosition("vertArmRotR", servoPositions.VERTARMROUT.getPosition());
-                if(hardware.getDcMotor("spoolLeft").getCurrentPosition()>maxThreshold){
-                    hardware.getDcMotor("spoolLeft").setPower(1);
-                    hardware.getDcMotor("spoolRight").setPower(1);
-                }
-                else{
-                    hardware.getDcMotor("spoolLeft").setPower(0);
-                    hardware.getDcMotor("spoolRight").setPower(0);
-                }
 
-                }, 2750);
+
+
+
+
+                }, 4000);
             handler.postDelayed(() -> {
                 hardware.setServoPosition("horzClawRot", servoPositions.HORZROTPICK.getPosition());
                 hardware.setServoPosition("horzArmRotL", servoPositions.HORZARMLEFTPICK.getPosition());
                 hardware.setServoPosition("horzArmRotR", servoPositions.HORZARMRIGHTPICK.getPosition());
                 hardware.setServoPosition("horzClawGrip",servoPositions.HORZCLAWGRIPCLOSE.getPosition());
 
-            }, 3000);
+            }, 4250);
 
         }
         if(gamepadConfig.getGamepad2X()) {
