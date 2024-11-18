@@ -34,7 +34,8 @@ public class Robot {
 
     public IMU imu;
 
-    private ServoImplEx wristServo;
+    private HorizontalArm horizontalArm;
+    private VerticalArm verticalArm;
     private Gamepads gamepads;
 
     public Robot(HardwareMap hardwareMap, Gamepads gamepads) {
@@ -82,10 +83,9 @@ public class Robot {
         //
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
 
-//        claw = new Claw(hardwareMap, gamepads);
-//        wristServo = hardwareMap.get(ServoImplEx.class, "wrist");
-//        wristServo.setPwmEnable();
-//        wristServo.setPwmRange(new PwmControl.PwmRange(1000, 2000));
+        verticalArm = new VerticalArm(hardwareMap);
+        horizontalArm = new HorizontalArm(hardwareMap);
+
 
         // https://www.youtube.com/watch?v=QEZO5e2zUcY
 
@@ -111,8 +111,27 @@ public class Robot {
             referenceAngle += Constants.ANGLE_SPEED;
         }
 
+        // TRANSFER SEQUENCE
+        if (gamepads.currentGamepad2.a && !gamepads.previousGamepad2.a) {
+            performTransferSequence();
+        }
+
+
 //        double power = PIDControl(referenceAngle, imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle);
 //        turn(power);
+    }
+
+    private void performTransferSequence() {
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+
+
+        // make horizontal arm go up
+
+        // make vertical arm go down
+        // close vertical claw
+        // open horizontal claw
+        // make vertical arm go up
     }
 
     private void updateMovement() {
@@ -200,7 +219,7 @@ public class Robot {
     private double Kp = Constants.Kp;
     private double Ki = Constants.Ki;
     private double Kd = Constants.Kd;
-    private final ElapsedTime timer = MainDrive.runtime;
+    private final ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
     // the angle that the robot is supposed to stay at
     public double referenceAngle = Math.toRadians(0);
