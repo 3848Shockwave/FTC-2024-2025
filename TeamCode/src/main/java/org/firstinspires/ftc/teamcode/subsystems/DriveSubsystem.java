@@ -3,17 +3,18 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import org.firstinspires.ftc.teamcode.Robot;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class DriveSubsystem extends SubsystemBase {
     private Motor frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
     private MecanumDrive mecanumDrive;
 
-    public DriveSubsystem(Robot robot) {
-        this.frontLeftMotor = robot.frontLeftMotor;
-        this.frontRightMotor = robot.frontRightMotor;
-        this.backLeftMotor = robot.backLeftMotor;
-        this.backRightMotor = robot.backRightMotor;
+
+    public DriveSubsystem(HardwareMap hardwareMap) {
+        frontLeftMotor = new Motor(hardwareMap, "frontLeft");
+        frontRightMotor = new Motor(hardwareMap, "frontRight");
+        backLeftMotor = new Motor(hardwareMap, "backLeft");
+        backRightMotor = new Motor(hardwareMap, "backRight");
 
         mecanumDrive = new MecanumDrive(frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor);
     }

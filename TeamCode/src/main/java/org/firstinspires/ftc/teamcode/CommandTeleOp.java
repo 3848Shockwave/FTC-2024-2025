@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TransferCommandSequence;
@@ -17,24 +18,23 @@ public class CommandTeleOp extends CommandOpMode {
     private IntakeSubsystem intakeSubsystem;
     private DriveCommand driveCommand;
     private GamepadEx gamepad;
-
-    private Robot robot;
+    public RevIMU imu;
 
 
     @Override
     public void initialize() {
-        robot = Robot.getRobot();
-        robot.init(hardwareMap);
+
+        imu = new RevIMU(hardwareMap, "imu");
 
 
         gamepad = new GamepadEx(gamepad1);
 
 //        imu = new RevIMU(hardwareMap, "imu");
 
-        driveSubsystem = new DriveSubsystem(robot);
-        intakeSubsystem = new IntakeSubsystem(robot, telemetry);
+        driveSubsystem = new DriveSubsystem(hardwareMap);
+        intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
 
-        driveCommand = new DriveCommand(driveSubsystem, gamepad::getLeftX, gamepad::getLeftY, gamepad::getRightX, robot.imu::getAbsoluteHeading);
+        driveCommand = new DriveCommand(driveSubsystem, gamepad::getLeftX, gamepad::getLeftY, gamepad::getRightX, imu::getAbsoluteHeading);
 
         // good practice to register the subsystem before setting default command
         register(driveSubsystem);
@@ -49,6 +49,7 @@ public class CommandTeleOp extends CommandOpMode {
             intakeSubsystem.closeClawManual(intakeSubsystem.currentIntakeState);
         }));
 
+        // initiate transfer command sequence
         gamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new TransferCommandSequence(intakeSubsystem));
 
     }
