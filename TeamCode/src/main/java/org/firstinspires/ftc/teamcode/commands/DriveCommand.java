@@ -9,6 +9,8 @@ public class DriveCommand extends CommandBase {
     private DriveSubsystem driveSubsystem;
     private DoubleSupplier strafeSpeed, forwardSpeed, rotationSpeed, heading;
 
+    // HAS to be DoubleSuppliers because it never ends. These doubles constantly update but the method does not,
+    // so it has to use DoubleSuppliers to get the updated values
     public DriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier strafeSpeed, DoubleSupplier forwardSpeed, DoubleSupplier rotationSpeed, DoubleSupplier heading) {
         this.driveSubsystem = driveSubsystem;
         this.strafeSpeed = strafeSpeed;
@@ -34,6 +36,7 @@ public class DriveCommand extends CommandBase {
 //    public void end(boolean interrupted) {
 //    }
 
+    // never ends since it doesn't override isFinished()
 //    @Override
 //    public boolean isFinished() {
 //        return false;
