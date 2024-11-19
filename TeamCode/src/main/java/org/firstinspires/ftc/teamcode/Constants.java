@@ -5,6 +5,8 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class Constants {
 
+    public static boolean IS_FIELD_CENTRIC = true;
+
     // horizontal or vertical doesn't matter for claw grip
     public static double CLAW_GRIP_OPEN_POSITION = 0;
     public static double CLAW_GRIP_CLOSED_POSITION = 0;

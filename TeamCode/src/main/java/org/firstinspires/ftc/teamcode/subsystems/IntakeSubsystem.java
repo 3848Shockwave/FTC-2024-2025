@@ -62,14 +62,14 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalWristPitchServoR = new SimpleServo(hardwareMap, "vertArmRotR", 0, 180);
 
         // vertical slide motors
-        verticalSlideMotorBottom = new Motor(hardwareMap, "spoolRight");
+        verticalSlideMotorBottom = new Motor(hardwareMap, "spoolRight", Motor.GoBILDA.RPM_435);
         verticalSlideMotorBottom.setRunMode(Motor.RunMode.PositionControl);
         verticalSlideMotorBottom.setPositionCoefficient(0.1);
         verticalSlideMotorBottom.setPositionTolerance(10);
         verticalSlideMotorBottom.setTargetPosition(5000);
         verticalSlideMotorBottom.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        verticalSlideMotorTop = new Motor(hardwareMap, "spoolLeft");
+        verticalSlideMotorTop = new Motor(hardwareMap, "spoolLeft", Motor.GoBILDA.RPM_435);
         verticalSlideMotorTop.setRunMode(Motor.RunMode.PositionControl);
         verticalSlideMotorTop.setPositionCoefficient(0.1);
         verticalSlideMotorTop.setPositionTolerance(10);
