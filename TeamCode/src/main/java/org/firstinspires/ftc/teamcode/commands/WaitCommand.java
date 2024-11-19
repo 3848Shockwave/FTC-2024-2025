@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class WaitCommand extends CommandBase {
 
-    private final double duration;
+    private final double durationMS;
     private ElapsedTime timer;
 
-    public WaitCommand(double duration) {
-        this.duration = duration;
+    public WaitCommand(double durationMS) {
+        this.durationMS = durationMS;
     }
 
     @Override
@@ -19,6 +19,6 @@ public class WaitCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.time() >= duration;
+        return timer.milliseconds() >= durationMS;
     }
 }

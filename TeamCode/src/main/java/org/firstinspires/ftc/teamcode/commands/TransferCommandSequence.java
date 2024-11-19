@@ -12,44 +12,24 @@ public class TransferCommandSequence extends SequentialCommandGroup {
         this.intakeSubsystem = intakeSubsystem;
         addCommands(
                 // set horizontal arm to transfer position
-                new InstantCommand(
-                        () -> {
-                            intakeSubsystem.setHorizontalArmPosition(
-                                    IntakeSubsystem.IntakeState.TRANSFER
-                            );
-                        }
-                ),
-                // wait like 50-200 ms
-                // 1 is here for all the WaitCommands as a testing placeholder
-                new WaitCommand(1),
-
-                // set vertical arm to transfer position (this is going to happen during
-                new InstantCommand(
-                        () -> {
-                            intakeSubsystem.setVerticalArmPosition(
-                                    IntakeSubsystem.IntakeState.TRANSFER
-                            );
-                        }
-                ),
-                // (wait until ^ done)
-                new WaitCommand(1),
-                // close vertical arm claw
+                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER),
+                // wait
+                new WaitCommand(1000),
+                // set vertical arm to transfer position
+                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER),
+//                // (wait until ^ done)
+                new WaitCommand(1000),
+//                // close vertical arm claw
                 new InstantCommand(intakeSubsystem::closeVerticalClaw),
-                // (wait until ^ done)
-                new WaitCommand(1),
-                // open horizontal arm claw
+//                // (wait until ^ done)
+                new WaitCommand(1000),
+//                // open horizontal arm claw
                 new InstantCommand(intakeSubsystem::openHorizontalClaw),
-                // (wait until ^ done)
-                new WaitCommand(1),
-                // set horizontal arm to deposit position
-                new InstantCommand(
-                        () -> {
-                            intakeSubsystem.setHorizontalArmPosition(
-                                    IntakeSubsystem.IntakeState.DEPOSIT
-                            );
-                        }
-                )
-                // DONE!
+//                // (wait until ^ done)
+                new WaitCommand(1000),
+//                // set horizontal arm to deposit position
+                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
+//                // DONE!
         );
         addRequirements(intakeSubsystem);
     }
