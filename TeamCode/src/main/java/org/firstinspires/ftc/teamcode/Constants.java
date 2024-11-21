@@ -5,11 +5,14 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class Constants {
 
+    public static int TEST_INT0 = 3000;
+    public static int TEST_INT1 = 2000;
+    public static double TEST_DOUBLE = 1;
     public static boolean IS_FIELD_CENTRIC = true;
 
     // horizontal or vertical doesn't matter for claw grip
-    public static double CLAW_GRIP_OPEN_POSITION = 0;
-    public static double CLAW_GRIP_CLOSED_POSITION = 0;
+    public static double CLAW_GRIP_OPEN_POSITION = 75;
+    public static double CLAW_GRIP_CLOSED_POSITION = 180;
 
     // horizontal
     public static double HORIZONTAL_SLIDE_INTAKE_POSITION = 0;
@@ -17,9 +20,9 @@ public class Constants {
     public static double HORIZONTAL_CLAW_ROLL_INTAKE_POSITION = 0;
     public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 0;
     public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 0;
-    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 0;
-    public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 0;
-    public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 0;
+    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 17;
+    public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
+    public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 25;
 
     // vertical
     public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = 0;
