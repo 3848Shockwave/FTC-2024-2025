@@ -10,7 +10,7 @@ public class SetHorizontalArmPositionCommand extends CommandBase {
     public SetHorizontalArmPositionCommand(IntakeSubsystem intakeSubsystem, IntakeSubsystem.IntakeState intakeState) {
         this.intakeSubsystem = intakeSubsystem;
         this.intakeState = intakeState;
-        addRequirements(intakeSubsystem);
+//        addRequirements(intakeSubsystem);
     }
 
     @Override

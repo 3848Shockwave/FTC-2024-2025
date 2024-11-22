@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.SetHorizontalArmPositionCommand;
+import org.firstinspires.ftc.teamcode.commands.SetVerticalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -44,22 +45,52 @@ public class CommandTeleOp extends CommandOpMode {
         register(driveSubsystem, intakeSubsystem);
 //        // "always be runnin this thing"
 //        driveSubsystem.setDefaultCommand(driveCommand);
-
-        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-//            intakeSubsystem.setHorizontalArmPosition(IntakeSubsystem.IntakeState.INTAKE);
-                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE)
-        );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-//            intakeSubsystem.setHorizontalArmPosition(IntakeSubsystem.IntakeState.TRANSFER);
-                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER)
-        );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT1, Constants.TEST_DOUBLE, telemetry)
-        );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() ->
+                intakeSubsystem.setVerticalWristPitchPosition(Constants.TEST_DOUBLE
+                )));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() ->
+                intakeSubsystem.setVerticalClawPitchPosition(Constants.TEST_DOUBLE
+                )));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() ->
+                intakeSubsystem.setVerticalClawRollPosition(Constants.TEST_DOUBLE
+                )));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() ->
+                intakeSubsystem.closeVerticalClaw()));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() ->
+                intakeSubsystem.openVerticalClaw()));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
                 new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT0, Constants.TEST_DOUBLE, telemetry)
         );
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whileHeld(
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT1, Constants.TEST_DOUBLE, telemetry)
+        );
+
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+//                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE)
+//        );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+//                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER)
+//        );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+//                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER)
+////                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT1, Constants.TEST_DOUBLE, telemetry)
+//        );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+//                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
+////                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT0, Constants.TEST_DOUBLE, telemetry)
+//        );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
+//                new InstantCommand(intakeSubsystem::closeVerticalClaw)
+//        );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
+//                new InstantCommand(intakeSubsystem::openVerticalClaw)
+//        );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+//                new InstantCommand(intakeSubsystem::closeHorizontalClaw)
+//
+//        );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
+//                new InstantCommand(intakeSubsystem::openHorizontalClaw)
 //        );
         schedule(new RunCommand(() -> telemetry.update()));
 

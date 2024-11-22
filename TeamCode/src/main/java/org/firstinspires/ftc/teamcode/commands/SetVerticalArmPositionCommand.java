@@ -10,7 +10,7 @@ public class SetVerticalArmPositionCommand extends CommandBase {
     public SetVerticalArmPositionCommand(IntakeSubsystem intakeSubsystem, IntakeSubsystem.IntakeState intakeState) {
         this.intakeSubsystem = intakeSubsystem;
         this.intakeState = intakeState;
-        addRequirements(intakeSubsystem);
+//        addRequirements(intakeSubsystem);
     }
 
     @Override

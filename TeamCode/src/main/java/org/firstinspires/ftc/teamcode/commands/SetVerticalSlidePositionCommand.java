@@ -22,7 +22,8 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
         this.targetPosition = targetPosition;
         this.speed = speed;
         this.telemetry = telemetry;
-        addRequirements(intakeSubsystem);
+        // THIS MAKES IT BLOCKING: IT R E Q U I R E S THE SUBSYSTEM
+//        addRequirements(intakeSubsystem);
 
     }
 

@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Constants;
@@ -32,6 +31,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public ServoEx verticalClawRollServo;
     public ServoEx verticalClawPitchServo;
     public ServoEx verticalWristPitchServoL, verticalWristPitchServoR;
+
+//    public int verticalSlideMotorCurrentTargetPosition;
 
 
     public enum IntakeState {
@@ -78,17 +79,23 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalSlideMotorTop.setPositionTolerance(10);
 //        verticalSlideMotorTop.setTargetPosition(5000);
         verticalSlideMotorTop.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-
     }
 
     // constantly updating
     @Override
     public void periodic() {
+        // constantly set motor position
+//        verticalSlideMotorTop.setTargetPosition(verticalSlideMotorCurrentTargetPosition);
+//        verticalSlideMotorBottom.setTargetPosition(-verticalSlideMotorCurrentTargetPosition);
+
         telemetry.addData("claw grippy (periodic)", verticalClawGripServo.getPosition());
         telemetry.addData("motor position: ", verticalSlideMotorTop.getCurrentPosition());
-//        telemetry.addData()
-//        telemetry.update();
+//        telemetry.addData("motor current target position: ", verticalSlideMotorCurrentTargetPosition);
     }
+
+//    public void setVerticalSlideMotorCurrentTargetPosition(int targetPosition) {
+//        verticalSlideMotorCurrentTargetPosition = targetPosition;
+//    }
 
     public void setCurrentState(IntakeState intakeState) {
         currentIntakeState = intakeState;
@@ -142,7 +149,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
             case DEPOSIT:
                 setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION);
-                setVerticalSlidePosition(Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION);
+//                setVerticalSlideMotorCurrentTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION);
                 setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_DEPOSIT_POSITION);
                 setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_DEPOSIT_POSITION);
                 break;
@@ -194,10 +201,6 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalWristPitchServoR.turnToAngle(degrees);
     }
 
-    public void setVerticalSlidePosition(int position) {
-//        verticalSlideMotorBottom.setTargetPosition(-position);
-//        verticalSlideMotorTop.setTargetPosition(position);
-    }
 
     public void setVerticalClawRollPosition(double degrees) {
         verticalClawRollServo.turnToAngle(degrees);

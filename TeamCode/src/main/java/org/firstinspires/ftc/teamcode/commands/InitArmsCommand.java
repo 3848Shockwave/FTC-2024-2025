@@ -9,7 +9,7 @@ public class InitArmsCommand extends CommandBase {
     private ElapsedTime timer;
     public InitArmsCommand(IntakeSubsystem intakeSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
-        addRequirements(intakeSubsystem);
+//        addRequirements(intakeSubsystem);
     }
 
     @Override

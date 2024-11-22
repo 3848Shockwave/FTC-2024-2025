@@ -20,7 +20,7 @@ public class Constants {
     public static double HORIZONTAL_CLAW_ROLL_INTAKE_POSITION = 0;
     public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 0;
     public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 0;
-    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 17;
+    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 25;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
     public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 25;
 
