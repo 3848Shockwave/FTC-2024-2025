@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //@Autonomous(name = "Autonimous")
 public class Autonomous extends BasicOpMode_Linear_TankDrive {
 
-    private DcMotor left;
-    private DcMotor right;
+    private DcMotor leftDrive;
+    private DcMotor rightDrive;
     private DcMotor arm;
     private Servo wrist;
     private CRServo grabber;
@@ -51,12 +51,12 @@ public class Autonomous extends BasicOpMode_Linear_TankDrive {
         waitForStart();
 
         while (timer.seconds() <= time) {
-            left.setPower(-1.0);
-            right.setPower(1.0);
+            leftDrive.setPower(-1.0);
+            rightDrive.setPower(1.0);
         }
 
-        left.setPower(0.0);
-        right.setPower(0.0);
+        leftDrive.setPower(0.0);
+        rightDrive.setPower(0.0);
         leftDrive.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
         rightDrive.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
     }
@@ -71,11 +71,11 @@ public class Autonomous extends BasicOpMode_Linear_TankDrive {
         waitForStart();
 
         while (timer.seconds() <= time) {
-            left.setPower(1.0);
-            right.setPower(-1.0);
+            leftDrive.setPower(1.0);
+            rightDrive.setPower(-1.0);
         }
-        left.setPower(0.0);
-        right.setPower(0.0);
+        leftDrive.setPower(0.0);
+        rightDrive.setPower(0.0);
         leftDrive.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
         rightDrive.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
     }
@@ -92,8 +92,8 @@ public class Autonomous extends BasicOpMode_Linear_TankDrive {
 
         if (direction) {
             while (timer.seconds() <= time) {
-                right.setPower(-0.5);
-                left.setPower(-0.5);
+                rightDrive.setPower(-0.5);
+                leftDrive.setPower(-0.5);
             }
         } else {
             /*
@@ -101,12 +101,12 @@ public class Autonomous extends BasicOpMode_Linear_TankDrive {
              * you're using or how much power is set to the motor
              */
             while (timer.seconds() <= time) {
-                right.setPower(0.5);
-                left.setPower(0.5);
+                rightDrive.setPower(0.5);
+                leftDrive.setPower(0.5);
             }
         }
-        right.setPower(0.0);
-        right.setPower(0.0);
+        rightDrive.setPower(0.0);
+        rightDrive.setPower(0.0);
         leftDrive.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
         rightDrive.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
     }
@@ -121,8 +121,8 @@ public class Autonomous extends BasicOpMode_Linear_TankDrive {
         waitForStart();
 
         while (timer.seconds() <= time) {
-            right.setPower(0.0);
-            left.setPower(0.0);
+            rightDrive.setPower(0.0);
+            leftDrive.setPower(0.0);
         }
     }
 
@@ -158,6 +158,7 @@ public class Autonomous extends BasicOpMode_Linear_TankDrive {
     //true to grab position, false to hang position
     double intakeAngle = Math.toRadians(30);
     double hangSpecimenAngle = Math.toRadians(90);
+    double wristAngle;
     public void wrist(boolean position){
 
         ElapsedTime timer = new ElapsedTime();
