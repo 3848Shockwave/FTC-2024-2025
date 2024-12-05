@@ -57,6 +57,7 @@ public class BasicOpMode_Linear_TankDrive extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+
     private DcMotor leftDrive;
     private DcMotor rightDrive;
     private DcMotor arm;
@@ -143,9 +144,9 @@ public class BasicOpMode_Linear_TankDrive extends LinearOpMode {
 
 
 
-            //try and errors
+            //wrist
             double intakeAngle = Math.toRadians(30);
-            double hangSpecimenAngle = Math.toRadians(90);
+            double hangSpecimenAngle = Math.toRadians(180);
 
 
             if (gamepad1.left_bumper) {
