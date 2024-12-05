@@ -43,10 +43,10 @@ public class CommandTeleOp extends CommandOpMode {
 //        // "always be runnin this thing"
 //        driveSubsystem.setDefaultCommand(driveCommand);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT0, Constants.TEST_DOUBLE, telemetry)
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION, Constants.TEST_DOUBLE, telemetry)
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT1, Constants.TEST_DOUBLE, telemetry)
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, Constants.TEST_DOUBLE, telemetry)
         );
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() ->

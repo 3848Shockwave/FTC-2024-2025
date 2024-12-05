@@ -5,26 +5,31 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class Constants {
 
-    public static int TEST_INT0 = 3000;
-    public static int TEST_INT1 = 2000;
+//    public static int TEST_INT0 = 3000;
+//    public static int TEST_INT1 = 2000;
     public static double TEST_DOUBLE = 1;
     public static boolean IS_FIELD_CENTRIC = true;
 
-    // horizontal or vertical doesn't matter for claw grip
-    public static double CLAW_GRIP_OPEN_POSITION = 75;
-    public static double CLAW_GRIP_CLOSED_POSITION = 130;
 
     // horizontal
+    // claw
+    public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 75;
+    public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 130;
+    // slide
     public static double HORIZONTAL_SLIDE_INTAKE_POSITION = 0;
     public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 0;
     public static double HORIZONTAL_CLAW_ROLL_INTAKE_POSITION = 90;
-    public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 0;
+    public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 82;
     public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 68;
-    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 35;
+    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 80;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
-    public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 35;
+    public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 30;
 
     // vertical
+    //claw
+    public static double VERTICAL_CLAW_GRIP_OPEN_POSITION = 75;
+    public static double VERTICAL_CLAW_GRIP_CLOSED_POSITION = 130;
+
     public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = 0;
     public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 0;
     public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 0;

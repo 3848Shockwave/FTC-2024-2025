@@ -41,7 +41,6 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         verticalSlideMotorTop.stopMotor();
-        telemetry.addLine("command ended");
 
     }
 

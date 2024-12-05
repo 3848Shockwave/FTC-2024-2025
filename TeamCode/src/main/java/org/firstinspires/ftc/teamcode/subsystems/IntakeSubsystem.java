@@ -33,7 +33,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public ServoEx verticalWristPitchServoL, verticalWristPitchServoR;
 
     public int initialTopMotorPosition;
-    public int initialBottomMotorPosition;
 
 
     public enum IntakeState {
@@ -81,8 +80,6 @@ public class IntakeSubsystem extends SubsystemBase {
 //        verticalSlideMotorTop.setTargetPosition(5000);
         verticalSlideMotorTop.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        initialTopMotorPosition = verticalSlideMotorTop.getCurrentPosition();
-        initialBottomMotorPosition = verticalSlideMotorBottom.getCurrentPosition();
     }
 
     // constantly updating
@@ -95,12 +92,11 @@ public class IntakeSubsystem extends SubsystemBase {
         telemetry.addData("claw grippy (periodic)", verticalClawGripServo.getPosition());
         telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
         telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
-        telemetry.addData("initial top motor position: ", initialTopMotorPosition);
     }
 
     public void setVerticalSlideMotorTargetPosition(int targetPosition) {
 //        verticalSlideMotorTop.setTargetPosition(initialTopMotorPosition + targetPosition);
-        verticalSlideMotorBottom.setTargetPosition(initialBottomMotorPosition + targetPosition);
+        verticalSlideMotorBottom.setTargetPosition(targetPosition);
     }
 
     public void setCurrentState(IntakeState intakeState) {
@@ -126,19 +122,19 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void openVerticalClaw() {
-        verticalClawGripServo.turnToAngle(Constants.CLAW_GRIP_OPEN_POSITION, AngleUnit.DEGREES);
+        verticalClawGripServo.turnToAngle(Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION, AngleUnit.DEGREES);
     }
 
     public void closeVerticalClaw() {
-        verticalClawGripServo.turnToAngle(Constants.CLAW_GRIP_CLOSED_POSITION, AngleUnit.DEGREES);
+        verticalClawGripServo.turnToAngle(Constants.VERTICAL_CLAW_GRIP_CLOSED_POSITION, AngleUnit.DEGREES);
     }
 
     public void openHorizontalClaw() {
-        horizontalClawGripServo.turnToAngle(Constants.CLAW_GRIP_OPEN_POSITION, AngleUnit.DEGREES);
+        horizontalClawGripServo.turnToAngle(Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION, AngleUnit.DEGREES);
     }
 
     public void closeHorizontalClaw() {
-        horizontalClawGripServo.turnToAngle(Constants.CLAW_GRIP_CLOSED_POSITION, AngleUnit.DEGREES);
+        horizontalClawGripServo.turnToAngle(Constants.HORIZONTAL_CLAW_GRIP_CLOSED_POSITION, AngleUnit.DEGREES);
     }
 
 
