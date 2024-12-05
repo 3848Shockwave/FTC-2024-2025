@@ -32,7 +32,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public ServoEx verticalClawPitchServo;
     public ServoEx verticalWristPitchServoL, verticalWristPitchServoR;
 
-//    public int verticalSlideMotorCurrentTargetPosition;
+    public int initialTopMotorPosition;
+    public int initialBottomMotorPosition;
 
 
     public enum IntakeState {
@@ -79,6 +80,9 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalSlideMotorTop.setPositionTolerance(10);
 //        verticalSlideMotorTop.setTargetPosition(5000);
         verticalSlideMotorTop.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
+        initialTopMotorPosition = verticalSlideMotorTop.getCurrentPosition();
+        initialBottomMotorPosition = verticalSlideMotorBottom.getCurrentPosition();
     }
 
     // constantly updating
@@ -89,13 +93,15 @@ public class IntakeSubsystem extends SubsystemBase {
 //        verticalSlideMotorBottom.setTargetPosition(-verticalSlideMotorCurrentTargetPosition);
 
         telemetry.addData("claw grippy (periodic)", verticalClawGripServo.getPosition());
-        telemetry.addData("motor position: ", verticalSlideMotorTop.getCurrentPosition());
-//        telemetry.addData("motor current target position: ", verticalSlideMotorCurrentTargetPosition);
+        telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
+        telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
+        telemetry.addData("initial top motor position: ", initialTopMotorPosition);
     }
 
-//    public void setVerticalSlideMotorCurrentTargetPosition(int targetPosition) {
-//        verticalSlideMotorCurrentTargetPosition = targetPosition;
-//    }
+    public void setVerticalSlideMotorTargetPosition(int targetPosition) {
+//        verticalSlideMotorTop.setTargetPosition(initialTopMotorPosition + targetPosition);
+        verticalSlideMotorBottom.setTargetPosition(initialBottomMotorPosition + targetPosition);
+    }
 
     public void setCurrentState(IntakeState intakeState) {
         currentIntakeState = intakeState;
@@ -164,7 +170,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //                                    intakeSubsystem.closeClaw();
                 setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION);
                 // bring back slides
-//                setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_INTAKE_POSITION);
+                setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_INTAKE_POSITION);
                 setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION);
                 setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_INTAKE_POSITION);
                 break;

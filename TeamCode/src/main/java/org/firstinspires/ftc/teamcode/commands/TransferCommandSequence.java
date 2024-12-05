@@ -12,13 +12,12 @@ public class TransferCommandSequence extends SequentialCommandGroup {
     public TransferCommandSequence(IntakeSubsystem intakeSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
         addCommands(
-                // set horizontal arm to transfer position
-                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER),
-                // wait
-                new WaitCommand(1000),
                 // set vertical arm to transfer position
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER),
 //                // (wait until ^ done)
+                new WaitCommand(1000),
+                // set horizontal arm to transfer position
+                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER),
                 new WaitCommand(1000),
 //                // close vertical arm claw
                 new InstantCommand(intakeSubsystem::closeVerticalClaw),

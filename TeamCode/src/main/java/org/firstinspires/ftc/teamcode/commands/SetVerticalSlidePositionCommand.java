@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands;
 
-import android.sax.StartElementListener;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 public class SetVerticalSlidePositionCommand extends CommandBase {
@@ -29,13 +27,15 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        verticalSlideMotorTop.setTargetPosition(targetPosition);
+//        verticalSlideMotorTop.setTargetPosition(targetPosition);
+        intakeSubsystem.setVerticalSlideMotorTargetPosition(targetPosition);
     }
 
 
     @Override
     public void execute() {
         verticalSlideMotorTop.set(speed);
+        telemetry.addLine("if you are seeing this, the execute method is running repeatedly");
     }
 
     @Override
