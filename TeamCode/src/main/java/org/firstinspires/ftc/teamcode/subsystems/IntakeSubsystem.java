@@ -141,48 +141,6 @@ public class IntakeSubsystem extends SubsystemBase {
         horizontalClawGripServo.turnToAngle(Constants.CLAW_GRIP_CLOSED_POSITION, AngleUnit.DEGREES);
     }
 
-    public void setVerticalArmPosition(IntakeState intakeState) {
-        switch (intakeState) {
-            case TRANSFER:
-                // claw should already be closed
-//                                    intakeSubsystem.closeClaw();
-                setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION);
-                // bring back slides
-                // TODO WE'LL COME BACK TO THIS LATER V
-//                setVerticalSlidePosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);
-                setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION);
-                setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION);
-                break;
-            case DEPOSIT:
-                setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION);
-//                setVerticalSlideMotorCurrentTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION);
-                setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_DEPOSIT_POSITION);
-                setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_DEPOSIT_POSITION);
-                break;
-        }
-
-    }
-
-    public void setHorizontalArmPosition(IntakeState intakeState) {
-        switch (intakeState) {
-            case INTAKE:
-                // claw should already be closed
-//                                    intakeSubsystem.closeClaw();
-                setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION);
-                // bring back slides
-                setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_INTAKE_POSITION);
-                setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION);
-                setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_INTAKE_POSITION);
-                break;
-            case TRANSFER:
-                setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION);
-                setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION);
-                setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION);
-                setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);
-                break;
-        }
-
-    }
 
     public void setHorizontalWristPitchPosition(double degrees) {
         horizontalWristPitchServoL.turnToAngle(180 - degrees);
