@@ -17,8 +17,7 @@ public class SetVerticalArmPositionCommand extends SequentialCommandGroup {
             case TRANSFER:
                 addCommands(
                         new InstantCommand(() -> {
-                            // claw should already be closed
-//                                    intakeSubsystem.closeClaw();
+                            intakeSubsystem.openVerticalClaw();
                             intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION);
                             // bring back slides
                             // TODO WE'LL COME BACK TO THIS LATER V

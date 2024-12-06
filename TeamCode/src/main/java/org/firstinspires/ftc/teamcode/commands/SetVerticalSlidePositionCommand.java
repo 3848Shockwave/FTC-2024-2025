@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 public class SetVerticalSlidePositionCommand extends CommandBase {
 
     private Motor verticalSlideMotorTop;
+    private Motor verticalSlideMotorBottom;
     private IntakeSubsystem intakeSubsystem;
     private int targetPosition;
     private double speed;
@@ -17,6 +18,7 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
     public SetVerticalSlidePositionCommand(IntakeSubsystem intakeSubsystem, int targetPosition, double speed, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
         verticalSlideMotorTop = intakeSubsystem.verticalSlideMotorTop;
+        verticalSlideMotorBottom = intakeSubsystem.verticalSlideMotorTop;
         this.targetPosition = targetPosition;
         this.speed = speed;
         this.telemetry = telemetry;
@@ -27,26 +29,26 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
 
     @Override
     public void initialize() {
-//        verticalSlideMotorTop.setTargetPosition(targetPosition);
-        intakeSubsystem.setVerticalSlideMotorTargetPosition(targetPosition);
+        intakeSubsystem.setVerticalSlideMotorsTargetPosition(targetPosition);
     }
 
 
     @Override
     public void execute() {
         verticalSlideMotorTop.set(speed);
+        verticalSlideMotorBottom.set(speed);
+
         telemetry.addLine("if you are seeing this, the execute method is running repeatedly");
     }
 
     @Override
     public void end(boolean interrupted) {
         verticalSlideMotorTop.stopMotor();
-
+        verticalSlideMotorBottom.stopMotor();
     }
 
     @Override
     public boolean isFinished() {
-
-        return verticalSlideMotorTop.atTargetPosition();
+        return verticalSlideMotorTop.atTargetPosition() || verticalSlideMotorBottom.atTargetPosition();
     }
 }

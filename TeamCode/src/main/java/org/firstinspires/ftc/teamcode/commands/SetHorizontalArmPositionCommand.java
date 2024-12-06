@@ -18,7 +18,7 @@ public class SetHorizontalArmPositionCommand extends SequentialCommandGroup {
                 addCommands(
                         new InstantCommand(() -> {
                             // claw should already be closed
-//                                    intakeSubsystem.closeClaw();
+                            intakeSubsystem.closeHorizontalClaw();
                             intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION);
                             // bring back slides
                             intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_INTAKE_POSITION);

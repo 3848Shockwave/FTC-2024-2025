@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
@@ -10,6 +11,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -24,9 +26,15 @@ public class CommandTeleOp extends CommandOpMode {
     private GamepadEx driverGamepad;
     private GamepadEx utilityGamepad;
 
+    private FtcDashboard dashboard;
+
+    Telemetry dashboardTelemetry;
 
     @Override
     public void initialize() {
+
+        dashboard = FtcDashboard.getInstance();
+        dashboardTelemetry = dashboard.getTelemetry();
 
         driverGamepad = new GamepadEx(gamepad1);
         utilityGamepad = new GamepadEx(gamepad2);
@@ -73,6 +81,11 @@ public class CommandTeleOp extends CommandOpMode {
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
+//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT0, Constants.TEST_DOUBLE, telemetry)
+        );
+        // TRANSFER SEQUENCE
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
+                new TransferCommandSequence(intakeSubsystem, telemetry)
 //                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT0, Constants.TEST_DOUBLE, telemetry)
         );
         schedule(new RunCommand(() -> telemetry.update()));

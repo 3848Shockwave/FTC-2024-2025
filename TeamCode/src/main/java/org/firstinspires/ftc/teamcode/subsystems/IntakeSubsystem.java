@@ -11,7 +11,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 
-@Config
 public class IntakeSubsystem extends SubsystemBase {
     // first let's do horizontal
     private Telemetry telemetry;
@@ -33,6 +32,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public ServoEx verticalWristPitchServoL, verticalWristPitchServoR;
 
     public int initialTopMotorPosition;
+    public int initialBottomMotorPosition;
 
 
     public enum IntakeState {
@@ -80,23 +80,23 @@ public class IntakeSubsystem extends SubsystemBase {
 //        verticalSlideMotorTop.setTargetPosition(5000);
         verticalSlideMotorTop.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
+        initialTopMotorPosition = verticalSlideMotorTop.getCurrentPosition();
+        initialBottomMotorPosition = verticalSlideMotorBottom.getCurrentPosition();
+
     }
 
     // constantly updating
     @Override
     public void periodic() {
-        // constantly set motor position
-//        verticalSlideMotorTop.setTargetPosition(verticalSlideMotorCurrentTargetPosition);
-//        verticalSlideMotorBottom.setTargetPosition(-verticalSlideMotorCurrentTargetPosition);
 
         telemetry.addData("claw grippy (periodic)", verticalClawGripServo.getPosition());
         telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
         telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
     }
 
-    public void setVerticalSlideMotorTargetPosition(int targetPosition) {
-//        verticalSlideMotorTop.setTargetPosition(initialTopMotorPosition + targetPosition);
-        verticalSlideMotorBottom.setTargetPosition(targetPosition);
+    public void setVerticalSlideMotorsTargetPosition(int targetPosition) {
+        verticalSlideMotorTop.setTargetPosition(targetPosition);
+        verticalSlideMotorBottom.setTargetPosition(-targetPosition);
     }
 
     public void setCurrentState(IntakeState intakeState) {
