@@ -21,6 +21,7 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     public static int WAIT1 = 600;
     public static int WAIT2 = 300;
     public static int WAIT3 = 500;
+    public static int WAIT3_5 = 500;
     public static int WAIT4 = 500;
 
     public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
@@ -29,6 +30,7 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 0;
     public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 0;
     public static int VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 0;
+    public static int HORIZONTAL_SLIDE_GTFO = 0;
 
     public SpecimenTransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
@@ -68,6 +70,12 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                 new InstantCommand(intakeSubsystem::openHorizontalClaw),
 //                // (wait until ^ done)
                 new WaitCommand(WAIT3),
+
+                new InstantCommand(() -> {
+                    intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_GTFO);
+                }),
+
+                new WaitCommand(WAIT3_5),
 
                 // set vertical slide position to deposit position, after start of this command: wait 500 ms, then set vertical arm to deposit position
                 new ParallelCommandGroup(
