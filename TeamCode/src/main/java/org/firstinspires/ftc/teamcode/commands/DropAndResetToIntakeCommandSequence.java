@@ -14,19 +14,22 @@ public class DropAndResetToIntakeCommandSequence extends SequentialCommandGroup 
     public static int WAIT0 = 1000;
     public static int WAIT1 = 1000;
     public static int WAIT2 = 1000;
+    private IntakeSubsystem intakeSubsystem;
 
     public DropAndResetToIntakeCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
+        interruptOn(() -> false);
         addCommands(
                 new InstantCommand(intakeSubsystem::openVerticalClaw),
                 new WaitCommand(WAIT0),
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER),
                 new WaitCommand(WAIT1),
-                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
+                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL),
                 new WaitCommand(WAIT2),
                 new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION, telemetry)
         );
         addRequirements(intakeSubsystem);
     }
+
 
 
 }

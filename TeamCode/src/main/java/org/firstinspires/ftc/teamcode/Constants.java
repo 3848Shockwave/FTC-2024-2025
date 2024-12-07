@@ -28,7 +28,7 @@ public class Constants {
     public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 77;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
     public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 30;
-    public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 0;
+    public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 100;
 
     // hovers
     public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 170;
