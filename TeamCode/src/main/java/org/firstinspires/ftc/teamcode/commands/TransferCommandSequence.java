@@ -16,11 +16,11 @@ public class TransferCommandSequence extends SequentialCommandGroup {
     private Telemetry telemetry;
 
     // waits are in milliseconds
-    public static int WAIT0 = 2000;
-    public static int WAIT1 = 2000;
-    public static int WAIT2 = 2000;
-    public static int WAIT3 = 2000;
-    public static int WAIT4 = 2000;
+    public static int WAIT0 = 0;
+    public static int WAIT1 = 500;
+    public static int WAIT2 = 300;
+    public static int WAIT3 = 500;
+    public static int WAIT4 = 500;
 
     public TransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
