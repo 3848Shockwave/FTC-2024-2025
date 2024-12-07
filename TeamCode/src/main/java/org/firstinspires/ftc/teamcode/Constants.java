@@ -38,7 +38,7 @@ public class Constants {
     public static double VERTICAL_CLAW_GRIP_OPEN_POSITION = 75;
     public static double VERTICAL_CLAW_GRIP_CLOSED_POSITION = 130;
 
-    public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = 100;
+    public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = 0;
     public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 4250;
     public static double VERTICAL_SLIDE_MOTOR_SPEED_FAST = 1;
     public static double VERTICAL_SLIDE_MOTOR_SPEED_SLOW = 0.5;
