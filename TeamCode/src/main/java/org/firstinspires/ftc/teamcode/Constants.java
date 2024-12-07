@@ -24,7 +24,7 @@ public class Constants {
     //    // claw roll speed for manually aligning it with the samples
 //    public static double HORIZONTAL_CLAW_ROLL_SPEED = 1;
 //    //
-    public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 68;
+    public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 0;
     public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 77;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
     public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 30;

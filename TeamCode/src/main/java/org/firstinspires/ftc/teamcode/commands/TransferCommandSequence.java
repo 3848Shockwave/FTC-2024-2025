@@ -16,6 +16,7 @@ public class TransferCommandSequence extends SequentialCommandGroup {
     private Telemetry telemetry;
 
     // waits are in milliseconds
+    public static int CLOSE_CLAW_WAIT = 0;
     public static int WAIT0 = 0;
     public static int WAIT1 = 500;
     public static int WAIT2 = 300;
@@ -28,6 +29,8 @@ public class TransferCommandSequence extends SequentialCommandGroup {
         addCommands(
                 // close horizontal arm claw to pick up the sample
                 new InstantCommand(intakeSubsystem::closeHorizontalClaw),
+//                // (wait until ^ done)
+                new WaitCommand(CLOSE_CLAW_WAIT),
                 // set vertical arm to transfer position
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER),
 //                // (wait until ^ done)
