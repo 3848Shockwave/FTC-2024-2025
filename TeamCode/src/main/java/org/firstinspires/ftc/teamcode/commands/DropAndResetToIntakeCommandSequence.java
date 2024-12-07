@@ -17,7 +17,6 @@ public class DropAndResetToIntakeCommandSequence extends SequentialCommandGroup 
     private IntakeSubsystem intakeSubsystem;
 
     public DropAndResetToIntakeCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
-        interruptOn(() -> false);
         addCommands(
                 new InstantCommand(intakeSubsystem::openVerticalClaw),
                 new WaitCommand(WAIT0),

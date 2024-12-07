@@ -26,7 +26,6 @@ public class TransferCommandSequence extends SequentialCommandGroup {
     public TransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
         this.telemetry = telemetry;
-        interruptOn(() -> false);
         addCommands(
                 // close horizontal arm claw to pick up the sample
                 new InstantCommand(intakeSubsystem::closeHorizontalClaw),
