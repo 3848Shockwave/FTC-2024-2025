@@ -20,12 +20,11 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     public static int WAIT0 = 500;
     public static int WAIT1 = 500;
     public static int WAIT2 = 500;
-    public static int WAIT3 = 1000;
+    public static int WAIT3 = 700;
     public static int WAIT3_5 = 500;
     public static int WAIT4 = 500;
 
     public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
-    public static int VERTICAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
     public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 77;
     public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 40;
     public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 85;
@@ -51,7 +50,6 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                     intakeSubsystem.setVerticalClawPitchPosition(VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
                     intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION);
                 }),
-                new SetVerticalSlidePositionCommand(intakeSubsystem, VERTICAL_SLIDE_SPECIMEN_TRANSFER_POSITION, telemetry),
 //                // (wait until ^ done)
                 new WaitCommand(WAIT0),
                 // set horizontal arm to transfer position
