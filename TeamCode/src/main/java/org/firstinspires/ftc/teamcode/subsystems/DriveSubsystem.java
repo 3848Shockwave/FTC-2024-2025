@@ -31,9 +31,7 @@ public class DriveSubsystem extends SubsystemBase {
         backLeftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        backLeftMotor.setInverted(true);
-        frontLeftMotor.setInverted(true);
-        frontRightMotor.setInverted(true);
+        backRightMotor.setInverted(true);
 
         this.imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(

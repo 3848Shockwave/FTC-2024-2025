@@ -35,10 +35,11 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
+        // MANUALLY REVERSED ROTATION SPEED, I SHOULDN'T HAVE NEEDED TO BUT I HAD TO :(
         if (isFieldCentric.getAsBoolean()) {
-            driveSubsystem.driveFieldCentric(strafeSpeed.getAsDouble(), forwardSpeed.getAsDouble(), rotationSpeed.getAsDouble());
+            driveSubsystem.driveFieldCentric(strafeSpeed.getAsDouble(), forwardSpeed.getAsDouble(), -rotationSpeed.getAsDouble());
         } else {
-            driveSubsystem.driveRobotCentric(strafeSpeed.getAsDouble(), forwardSpeed.getAsDouble(), rotationSpeed.getAsDouble());
+            driveSubsystem.driveRobotCentric(strafeSpeed.getAsDouble(), forwardSpeed.getAsDouble(), -rotationSpeed.getAsDouble());
         }
     }
 
