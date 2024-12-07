@@ -40,18 +40,18 @@ public class TransferCommandSequence extends SequentialCommandGroup {
 //                // open horizontal arm claw
                 new InstantCommand(intakeSubsystem::openHorizontalClaw),
 //                // (wait until ^ done)
-                new WaitCommand(WAIT3)
+                new WaitCommand(WAIT3),
 
-//                // set vertical slide position to deposit position, after start of this command: wait 500 ms, then set vertical arm to deposit position
-//                new ParallelCommandGroup(
-//                        // set vertical slide position to transfer position
-//                        new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, Constants.TEST_DOUBLE, telemetry),
-//                        new SequentialCommandGroup(
-//                                new WaitCommand(WAIT4),
-//                                // set vertical arm to deposit position
-//                                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
-//                        )
-//                )
+                // set vertical slide position to deposit position, after start of this command: wait 500 ms, then set vertical arm to deposit position
+                new ParallelCommandGroup(
+                        // set vertical slide position to transfer position
+                        new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, Constants.TEST_DOUBLE, telemetry),
+                        new SequentialCommandGroup(
+                                new WaitCommand(WAIT4),
+                                // set vertical arm to deposit position
+                                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
+                        )
+                )
                 // DONE!
         );
         addRequirements(intakeSubsystem);
