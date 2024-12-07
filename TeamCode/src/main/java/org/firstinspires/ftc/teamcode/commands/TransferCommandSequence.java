@@ -16,7 +16,7 @@ public class TransferCommandSequence extends SequentialCommandGroup {
     private Telemetry telemetry;
 
     // waits are in milliseconds
-    public static int CLOSE_CLAW_WAIT = 0;
+    public static int CLOSE_CLAW_WAIT = 500;
     public static int WAIT0 = 0;
     public static int WAIT1 = 500;
     public static int WAIT2 = 300;
@@ -55,7 +55,9 @@ public class TransferCommandSequence extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new WaitCommand(WAIT4),
                                 // set vertical arm to deposit position
-                                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
+                                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT),
+                                // set horizontal arm to be straight up
+                                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL)
                         )
                 )
                 // DONE!

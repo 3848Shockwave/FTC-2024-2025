@@ -40,6 +40,8 @@ public class SetHorizontalArmPositionCommand extends SequentialCommandGroup {
                 intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);
 
                 break;
+            case VERTICAL:
+                intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION);
         }
     }
 

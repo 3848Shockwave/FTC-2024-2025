@@ -38,7 +38,9 @@ public class IntakeSubsystem extends SubsystemBase {
         INTAKE,
         TRANSFER,
         DEPOSIT,
-        HOVER_OVER_SAMPLE
+        HOVER_OVER_SAMPLE,
+        VERTICAL
+
 
     }
 
