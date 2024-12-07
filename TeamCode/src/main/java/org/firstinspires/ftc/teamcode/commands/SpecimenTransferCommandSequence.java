@@ -16,13 +16,13 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     private Telemetry telemetry;
 
     // waits are in milliseconds
-    public static int CLOSE_CLAW_WAIT = 500;
-    public static int WAIT0 = 0;
-    public static int WAIT1 = 600;
-    public static int WAIT2 = 300;
-    public static int WAIT3 = 500;
-    public static int WAIT3_5 = 500;
-    public static int WAIT4 = 500;
+    public static int CLOSE_CLAW_WAIT = 2000;
+    public static int WAIT0 = 2000;
+    public static int WAIT1 = 2000;
+    public static int WAIT2 = 2000;
+    public static int WAIT3 = 2000;
+    public static int WAIT3_5 = 2000;
+    public static int WAIT4 = 2000;
 
     public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
     public static int VERTICAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
