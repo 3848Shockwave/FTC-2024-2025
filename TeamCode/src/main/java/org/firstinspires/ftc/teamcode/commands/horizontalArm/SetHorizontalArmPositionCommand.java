@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.horizontalArm;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
-public class SetHorizontalArmPositionCommand extends SequentialCommandGroup {
+public class SetHorizontalArmPositionCommand extends CommandBase {
     private final IntakeSubsystem intakeSubsystem;
     private final IntakeSubsystem.IntakeState intakeState;
 
@@ -42,6 +42,7 @@ public class SetHorizontalArmPositionCommand extends SequentialCommandGroup {
                 break;
             case VERTICAL:
                 intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION);
+                break;
         }
     }
 
