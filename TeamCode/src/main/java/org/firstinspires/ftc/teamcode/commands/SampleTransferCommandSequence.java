@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 @Config
-public class TransferCommandSequence extends SequentialCommandGroup {
+public class SampleTransferCommandSequence extends SequentialCommandGroup {
 
     private IntakeSubsystem intakeSubsystem;
     private Telemetry telemetry;
@@ -18,12 +18,12 @@ public class TransferCommandSequence extends SequentialCommandGroup {
     // waits are in milliseconds
     public static int CLOSE_CLAW_WAIT = 500;
     public static int WAIT0 = 0;
-    public static int WAIT1 = 500;
+    public static int WAIT1 = 600;
     public static int WAIT2 = 300;
     public static int WAIT3 = 500;
     public static int WAIT4 = 500;
 
-    public TransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
+    public SampleTransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
         this.telemetry = telemetry;
         addCommands(
