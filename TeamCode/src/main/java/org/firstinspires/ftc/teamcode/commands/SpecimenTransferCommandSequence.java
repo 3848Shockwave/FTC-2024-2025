@@ -22,16 +22,15 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     public static int WAIT2 = 500;
     public static int WAIT3 = 0;
     public static int WAIT3_5 = 500;
-    public static int WAIT4 = 500;
+    public static int WAIT4 = 0;
 
     public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
-    public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 87;
+    public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 82;
     public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 40;
     public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 90;
     public static int VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 180;
 
     public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION = 1400;
-    public static int HORIZONTAL_SLIDE_GTFO = 60;
 
     public SpecimenTransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
@@ -70,10 +69,6 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                 new InstantCommand(intakeSubsystem::openHorizontalClaw),
 //                // (wait until ^ done)
                 new WaitCommand(WAIT3),
-
-                new InstantCommand(() -> {
-                    intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_GTFO);
-                }),
 
                 new WaitCommand(WAIT3_5),
 
