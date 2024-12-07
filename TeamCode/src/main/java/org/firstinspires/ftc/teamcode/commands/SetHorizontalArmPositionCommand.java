@@ -26,17 +26,16 @@ public class SetHorizontalArmPositionCommand extends SequentialCommandGroup {
 
                 break;
             case INTAKE:
-                // claw should already be closed
                 intakeSubsystem.closeHorizontalClaw();
                 intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION);
-                // bring back slides
-                intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_INTAKE_POSITION);
                 intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION);
-                intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_INTAKE_POSITION);
+                // don't set roll
+//                intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_INTAKE_POSITION);
 
                 break;
             case TRANSFER:
                 intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION);
+                // bring back slides
                 intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION);
                 intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION);
                 intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);

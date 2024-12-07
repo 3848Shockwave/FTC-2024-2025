@@ -26,6 +26,8 @@ public class TransferCommandSequence extends SequentialCommandGroup {
         this.intakeSubsystem = intakeSubsystem;
         this.telemetry = telemetry;
         addCommands(
+                // close horizontal arm claw to pick up the sample
+                new InstantCommand(intakeSubsystem::closeHorizontalClaw),
                 // set vertical arm to transfer position
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER),
 //                // (wait until ^ done)
