@@ -82,9 +82,9 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 new DropAndResetToIntakeCommandSequence(intakeSubsystem, telemetry)
         );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
-        );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+//                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
+//        );
 
 
         // TRANSFER SEQUENCE

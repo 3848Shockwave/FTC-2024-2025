@@ -11,9 +11,9 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 @Config
 public class DropAndResetToIntakeCommandSequence extends SequentialCommandGroup {
 
-    public static int WAIT0 = 1000;
-    public static int WAIT1 = 1000;
-    public static int WAIT2 = 1000;
+    public static int WAIT0 = 500;
+    public static int WAIT1 = 250;
+    public static int WAIT2 = 0;
     private IntakeSubsystem intakeSubsystem;
 
     public DropAndResetToIntakeCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
