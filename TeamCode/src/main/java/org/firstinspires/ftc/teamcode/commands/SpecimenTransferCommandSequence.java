@@ -16,22 +16,22 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     private Telemetry telemetry;
 
     // waits are in milliseconds
-    public static int CLOSE_CLAW_WAIT = 500;
+    public static int CLOSE_CLAW_WAIT = 0;
     public static int WAIT0 = 500;
     public static int WAIT1 = 500;
     public static int WAIT2 = 500;
-    public static int WAIT3 = 700;
+    public static int WAIT3 = 0;
     public static int WAIT3_5 = 500;
     public static int WAIT4 = 500;
 
     public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
-    public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 77;
+    public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 87;
     public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 40;
-    public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 85;
+    public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 90;
     public static int VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 180;
 
-    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION = 2000;
-    public static int HORIZONTAL_SLIDE_GTFO = 70;
+    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION = 1400;
+    public static int HORIZONTAL_SLIDE_GTFO = 60;
 
     public SpecimenTransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;

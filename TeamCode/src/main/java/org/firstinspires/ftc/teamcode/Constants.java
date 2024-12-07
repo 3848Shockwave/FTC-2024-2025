@@ -17,7 +17,7 @@ public class Constants {
     public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 130;
     // slide
     public static double HORIZONTAL_SLIDE_INTAKE_POSITION = 0;
-    public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 55;
+    public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 54;
     public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 82;
     public static int HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION = 23;
     public static int HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION = 83;
@@ -25,7 +25,7 @@ public class Constants {
 //    public static double HORIZONTAL_CLAW_ROLL_SPEED = 1;
 //    //
     public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 0;
-    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 77;
+    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 73;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
     public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 30;
     public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 100;
@@ -45,7 +45,7 @@ public class Constants {
     public static double VERTICAL_SLIDE_MOTOR_SPEED_SLOW = 0.5;
     public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 90;
     public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 90;
-    public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 85;
+    public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 81;
     public static double VERTICAL_CLAW_PITCH_DEPOSIT_POSITION = 40;
     public static double VERTICAL_WRIST_PITCH_TRANSFER_POSITION = 180;
     public static double VERTICAL_WRIST_PITCH_DEPOSIT_POSITION = 0;
