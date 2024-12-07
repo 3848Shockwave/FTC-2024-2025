@@ -81,6 +81,10 @@ public class CommandTeleOp extends CommandOpMode {
 //                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
 //        );
 
+        // SPECIMEN TRANSFER SEQUENCE
+        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
+                new SpecimenTransferCommandSequence(intakeSubsystem, currentTelemetry)
+        );
 
         // TRANSFER SEQUENCE
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
