@@ -13,35 +13,41 @@ public class SetHorizontalArmPositionCommand extends SequentialCommandGroup {
     public SetHorizontalArmPositionCommand(IntakeSubsystem intakeSubsystem, IntakeSubsystem.IntakeState intakeState) {
         this.intakeSubsystem = intakeSubsystem;
         this.intakeState = intakeState;
+//        addRequirements(intakeSubsystem);
+    }
+
+    @Override
+    public void initialize() {
         switch (intakeState) {
+            case HOVER_OVER_SAMPLE:
+                intakeSubsystem.openHorizontalClaw();
+                intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_HOVER_POSITION);
+                intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION);
+
+                break;
             case INTAKE:
-                addCommands(
-                        new InstantCommand(() -> {
-                            // claw should already be closed
-                            intakeSubsystem.closeHorizontalClaw();
-                            intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION);
-                            // bring back slides
-                            intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_INTAKE_POSITION);
-                            intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION);
-                            intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_INTAKE_POSITION);
+                // claw should already be closed
+                intakeSubsystem.closeHorizontalClaw();
+                intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION);
+                // bring back slides
+                intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_INTAKE_POSITION);
+                intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION);
+                intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_INTAKE_POSITION);
 
-                        })
-
-                );
                 break;
             case TRANSFER:
-                addCommands(
-                        new InstantCommand(() -> {
-                            intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION);
-                            intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION);
-                            intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION);
-                            intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);
+                intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION);
+                intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION);
+                intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION);
+                intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);
 
-                        })
-                );
                 break;
         }
-//        addRequirements(intakeSubsystem);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 
 

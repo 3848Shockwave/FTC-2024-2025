@@ -37,7 +37,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public enum IntakeState {
         INTAKE,
         TRANSFER,
-        DEPOSIT
+        DEPOSIT,
+        HOVER_OVER_SAMPLE
 
     }
 

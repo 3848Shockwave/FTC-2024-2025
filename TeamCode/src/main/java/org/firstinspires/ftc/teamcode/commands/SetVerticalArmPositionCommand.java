@@ -13,29 +13,30 @@ public class SetVerticalArmPositionCommand extends SequentialCommandGroup {
     public SetVerticalArmPositionCommand(IntakeSubsystem intakeSubsystem, IntakeSubsystem.IntakeState intakeState) {
         this.intakeSubsystem = intakeSubsystem;
         this.intakeState = intakeState;
+//        addRequirements(intakeSubsystem);
+    }
+
+    @Override
+    public void initialize() {
         switch (intakeState) {
             case TRANSFER:
-                addCommands(
-                        new InstantCommand(() -> {
-                            intakeSubsystem.openVerticalClaw();
-                            intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION);
-                            intakeSubsystem.setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION);
-                            intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION);
-                        })
-                );
+                intakeSubsystem.openVerticalClaw();
+                intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION);
+                intakeSubsystem.setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION);
+                intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION);
                 break;
             case DEPOSIT:
-                addCommands(
-                        new InstantCommand(() -> {
-                            intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION);
-                            intakeSubsystem.setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_DEPOSIT_POSITION);
-                            intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_DEPOSIT_POSITION);
-
-                        })
-                );
+                intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION);
+                intakeSubsystem.setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_DEPOSIT_POSITION);
+                intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_DEPOSIT_POSITION);
                 break;
         }
-//        addRequirements(intakeSubsystem);
+
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 
 

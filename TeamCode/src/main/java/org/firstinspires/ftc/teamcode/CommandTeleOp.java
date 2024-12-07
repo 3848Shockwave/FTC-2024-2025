@@ -71,7 +71,7 @@ public class CommandTeleOp extends CommandOpMode {
                 intakeSubsystem.closeClawManual(IntakeSubsystem.IntakeState.DEPOSIT)
         ));
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE)
+                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE)
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER)
