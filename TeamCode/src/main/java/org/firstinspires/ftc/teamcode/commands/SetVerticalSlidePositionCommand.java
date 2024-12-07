@@ -34,11 +34,15 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
 
     @Override
     public void execute() {
-        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 
-//        if (Math.abs(verticalSlideMotorTop.getCurrentPosition() - targetPosition)/targetPosition < 0.5) {
-//
+//        if ((double) Math.abs(verticalSlideMotorTop.getCurrentPosition() - targetPosition) / targetPosition < 0.5) {
+//            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
+//            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
+//        } else {
+//            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+//            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 //        }
 
         telemetry.addLine("if you are seeing this and the motors aren't moving, that's bad and it's probably my fault.");
