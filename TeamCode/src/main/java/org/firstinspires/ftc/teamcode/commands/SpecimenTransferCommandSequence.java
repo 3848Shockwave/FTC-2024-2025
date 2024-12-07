@@ -16,13 +16,13 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     private Telemetry telemetry;
 
     // waits are in milliseconds
-    public static int CLOSE_CLAW_WAIT = 2000;
-    public static int WAIT0 = 2000;
-    public static int WAIT1 = 2000;
-    public static int WAIT2 = 2000;
-    public static int WAIT3 = 2000;
-    public static int WAIT3_5 = 2000;
-    public static int WAIT4 = 2000;
+    public static int CLOSE_CLAW_WAIT = 500;
+    public static int WAIT0 = 500;
+    public static int WAIT1 = 500;
+    public static int WAIT2 = 500;
+    public static int WAIT3 = 1000;
+    public static int WAIT3_5 = 500;
+    public static int WAIT4 = 500;
 
     public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
     public static int VERTICAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
@@ -30,6 +30,8 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 0;
     public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 0;
     public static int VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 0;
+
+    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION = 0;
     public static int HORIZONTAL_SLIDE_GTFO = 0;
 
     public SpecimenTransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
@@ -80,7 +82,7 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                 // set vertical slide position to deposit position, after start of this command: wait 500 ms, then set vertical arm to deposit position
                 new ParallelCommandGroup(
                         // set vertical slide position to transfer position
-                        new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, telemetry),
+                        new SetVerticalSlidePositionCommand(intakeSubsystem, VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION, telemetry),
                         new SequentialCommandGroup(
                                 new WaitCommand(WAIT4),
                                 // set vertical arm to deposit position
