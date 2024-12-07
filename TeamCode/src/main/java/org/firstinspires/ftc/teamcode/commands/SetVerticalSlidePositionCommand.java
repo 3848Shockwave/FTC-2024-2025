@@ -38,7 +38,7 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
         verticalSlideMotorTop.set(speed);
         verticalSlideMotorBottom.set(speed);
 
-        telemetry.addLine("if you are seeing this, the execute method is running repeatedly");
+        telemetry.addLine("if you are seeing this and the motors aren't moving, that's bad and it's probably my fault.");
     }
 
     @Override

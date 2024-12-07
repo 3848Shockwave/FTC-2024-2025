@@ -32,6 +32,7 @@ public class TransferCommandSequence extends SequentialCommandGroup {
                 new WaitCommand(WAIT0),
                 // set horizontal arm to transfer position
                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER),
+//                // (wait until ^ done)
                 new WaitCommand(WAIT1),
 //                // close vertical arm claw
                 new InstantCommand(intakeSubsystem::closeVerticalClaw),
