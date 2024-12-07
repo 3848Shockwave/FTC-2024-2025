@@ -26,7 +26,6 @@ public class SetHorizontalArmPositionCommand extends SequentialCommandGroup {
 
                 break;
             case INTAKE:
-                intakeSubsystem.closeHorizontalClaw();
                 intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION);
                 intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION);
                 // don't set roll
