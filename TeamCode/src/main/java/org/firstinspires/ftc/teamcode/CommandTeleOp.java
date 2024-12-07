@@ -71,6 +71,7 @@ public class CommandTeleOp extends CommandOpMode {
                 intakeSubsystem.closeClawManual(IntakeSubsystem.IntakeState.DEPOSIT)
         ));
 
+
         // put the claw inside the sample but don't close it
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE)
@@ -94,6 +95,15 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
                 new TransferCommandSequence(intakeSubsystem, currentTelemetry)
         );
+
+        // triggers to control claw roll
+        schedule(new RunCommand(() -> {
+            double leftTriggerValue = driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
+            double rightTriggerValue = driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
+            intakeSubsystem.horizontalClawRollServo.rotateByAngle(Constants.HORIZONTAL_CLAW_ROLL_SPEED* (leftTriggerValue - rightTriggerValue));
+//            intakeSubsystem.horizontalClawRollServo.rotateByAngle(rightTriggerValue - leftTriggerValue);
+        }));
+
         schedule(new RunCommand(() -> currentTelemetry.update()));
 
 //        // whenPressed is rising edge btw

@@ -20,6 +20,9 @@ public class Constants {
     public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 55;
     public static double HORIZONTAL_CLAW_ROLL_INTAKE_POSITION = 90;
     public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 82;
+    // claw roll speed for manually aligning it with the samples
+    public static double HORIZONTAL_CLAW_ROLL_SPEED = 1;
+    //
     public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 68;
     public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 77;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
