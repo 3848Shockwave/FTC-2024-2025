@@ -30,7 +30,7 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 85;
     public static int VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 180;
 
-    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION = 0;
+    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION = 2000;
     public static int HORIZONTAL_SLIDE_GTFO = 70;
 
     public SpecimenTransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
