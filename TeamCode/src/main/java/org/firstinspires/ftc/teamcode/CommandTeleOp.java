@@ -77,7 +77,7 @@ public class CommandTeleOp extends CommandOpMode {
                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE)
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER)
+                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE)
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 new DropAndResetToIntakeCommandSequence(intakeSubsystem, telemetry)
@@ -86,10 +86,6 @@ public class CommandTeleOp extends CommandOpMode {
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
         );
 
-        // put the arm in hover-over-sample position
-        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
-                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE)
-        );
 
         // TRANSFER SEQUENCE
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
