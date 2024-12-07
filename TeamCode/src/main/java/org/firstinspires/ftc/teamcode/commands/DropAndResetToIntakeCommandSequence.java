@@ -21,7 +21,7 @@ public class DropAndResetToIntakeCommandSequence extends SequentialCommandGroup 
                 new WaitCommand(WAIT0),
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER),
                 new WaitCommand(WAIT1),
-                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
+                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
                 new WaitCommand(WAIT2),
                 new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION, telemetry)
         );
