@@ -15,6 +15,7 @@ public class TransferCommandSequence extends SequentialCommandGroup {
     private IntakeSubsystem intakeSubsystem;
     private Telemetry telemetry;
 
+    // waits are in milliseconds
     public static int WAIT0 = 2000;
     public static int WAIT1 = 2000;
     public static int WAIT2 = 2000;
@@ -54,6 +55,11 @@ public class TransferCommandSequence extends SequentialCommandGroup {
                 // DONE!
         );
         addRequirements(intakeSubsystem);
+    }
+
+    @Override
+    public void execute() {
+        telemetry.addLine("transfer command sequence EXECUTING!");
     }
 
 //    @Override

@@ -28,21 +28,22 @@ public class CommandTeleOp extends CommandOpMode {
 
     private FtcDashboard dashboard;
 
-    Telemetry dashboardTelemetry;
+    private Telemetry currentTelemetry;
+
 
     @Override
     public void initialize() {
 
         dashboard = FtcDashboard.getInstance();
-        dashboardTelemetry = dashboard.getTelemetry();
+        currentTelemetry = dashboard.getTelemetry();
+//        currentTelemetry = telemetry;
 
         driverGamepad = new GamepadEx(gamepad1);
         utilityGamepad = new GamepadEx(gamepad2);
 
-//        imu = new RevIMU(hardwareMap, "imu");
 
-        driveSubsystem = new DriveSubsystem(hardwareMap, telemetry);
-        intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
+        driveSubsystem = new DriveSubsystem(hardwareMap, currentTelemetry);
+        intakeSubsystem = new IntakeSubsystem(hardwareMap, currentTelemetry);
 
         driveCommand = new DriveCommand(driveSubsystem, driverGamepad::getLeftX, driverGamepad::getLeftY, driverGamepad::getRightX, () -> Constants.IS_FIELD_CENTRIC);
 
@@ -51,10 +52,10 @@ public class CommandTeleOp extends CommandOpMode {
 //        // "always be runnin this thing"
 //        driveSubsystem.setDefaultCommand(driveCommand);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION, Constants.TEST_DOUBLE, telemetry)
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION, Constants.TEST_DOUBLE, currentTelemetry)
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, Constants.TEST_DOUBLE, telemetry)
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, Constants.TEST_DOUBLE, currentTelemetry)
         );
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() ->
@@ -77,18 +78,15 @@ public class CommandTeleOp extends CommandOpMode {
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER)
-//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT1, Constants.TEST_DOUBLE, telemetry)
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
-//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT0, Constants.TEST_DOUBLE, telemetry)
         );
         // TRANSFER SEQUENCE
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
-                new TransferCommandSequence(intakeSubsystem, telemetry)
-//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.TEST_INT0, Constants.TEST_DOUBLE, telemetry)
+                new TransferCommandSequence(intakeSubsystem, currentTelemetry)
         );
-        schedule(new RunCommand(() -> telemetry.update()));
+        schedule(new RunCommand(() -> currentTelemetry.update()));
 
 //        // whenPressed is rising edge btw
 //        // a to open, b to close claw (if intaking, should be intake arm claw, and if outtaking, etc.)
@@ -98,14 +96,10 @@ public class CommandTeleOp extends CommandOpMode {
 //            driveSubsystem.resetIMU();
 //        }));
 
-//        // initiate transfer command sequence
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-//                new TransferCommandSequence(intakeSubsystem)
-//        );
 
 //        schedule(new InstantCommand(() -> {
-//            telemetry.addData("Command TeleOp", "initialized");
-//            telemetry.update();
+//            currentTelemetry.addData("Command TeleOp", "initialized");
+//            currentTelemetry.update();
 //        }));
 
     }

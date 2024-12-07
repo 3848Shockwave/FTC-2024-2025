@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.Constants;
 public class IntakeSubsystem extends SubsystemBase {
     // first let's do horizontal
     private Telemetry telemetry;
-    public IntakeState currentIntakeState = IntakeState.INTAKE;
 
 
     // horizontal components
@@ -41,6 +40,8 @@ public class IntakeSubsystem extends SubsystemBase {
         DEPOSIT
 
     }
+
+    public IntakeState currentIntakeState = IntakeState.INTAKE;
 
     public IntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
 //        horizontalClawGripServo = robot.horizontalClawGripServo;

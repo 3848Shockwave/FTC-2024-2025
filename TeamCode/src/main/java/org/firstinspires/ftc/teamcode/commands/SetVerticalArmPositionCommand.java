@@ -19,9 +19,6 @@ public class SetVerticalArmPositionCommand extends SequentialCommandGroup {
                         new InstantCommand(() -> {
                             intakeSubsystem.openVerticalClaw();
                             intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION);
-                            // bring back slides
-                            // TODO WE'LL COME BACK TO THIS LATER V
-//                setVerticalSlidePosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);
                             intakeSubsystem.setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION);
                             intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION);
                         })
@@ -31,7 +28,6 @@ public class SetVerticalArmPositionCommand extends SequentialCommandGroup {
                 addCommands(
                         new InstantCommand(() -> {
                             intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION);
-//                setVerticalSlideMotorCurrentTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION);
                             intakeSubsystem.setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_DEPOSIT_POSITION);
                             intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_DEPOSIT_POSITION);
 

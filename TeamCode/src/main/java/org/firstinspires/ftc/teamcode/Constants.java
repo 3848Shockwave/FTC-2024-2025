@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class Constants {
 
-//    public static int TEST_INT0 = 3000;
+    //    public static int TEST_INT0 = 3000;
 //    public static int TEST_INT1 = 2000;
     public static double TEST_DOUBLE = 1;
     public static boolean IS_FIELD_CENTRIC = true;
@@ -30,8 +30,8 @@ public class Constants {
     public static double VERTICAL_CLAW_GRIP_OPEN_POSITION = 75;
     public static double VERTICAL_CLAW_GRIP_CLOSED_POSITION = 130;
 
-    public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = -5450;
-    public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = -1200;
+    public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = 100;
+    public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 4250;
     public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 90;
     public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 90;
     public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 85;
