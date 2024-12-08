@@ -18,7 +18,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // horizontal components
     public ServoEx horizontalSlideServoL, horizontalSlideServoR;
-    public static double currentHorizontalSlidePosition = 0;
+    public static double currentHorizontalSlidePosition = Constants.HORIZONTAL_SLIDE_MIN_EXTENSION;
     public ServoEx horizontalClawGripServo;
     public ServoEx horizontalClawRollServo;
     public ServoEx horizontalClawPitchServo;
