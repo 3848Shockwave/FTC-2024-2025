@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -72,7 +73,10 @@ public class CommandTeleOp extends CommandOpMode {
 
         // put the claw inside the sample but don't close it
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE)
+                new ParallelCommandGroup(
+                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
+                        new InstantCommand(() -> gamepad1.rumble(250))
+                )
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE)
@@ -101,6 +105,7 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new InstantCommand(() -> intakeSubsystem.horizontalClawRollServo.turnToAngle(Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION))
         );
+
         schedule(new MoveHorizontalSlideTouchpadCommand(
                 intakeSubsystem,
                 () -> gamepad1.touchpad_finger_1_x,
