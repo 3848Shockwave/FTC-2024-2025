@@ -10,7 +10,7 @@ import java.util.function.DoubleSupplier;
 public class MicroMoveHorizontalSlideManualCommand extends CommandBase {
 
     public static double HORIZONTAL_SLIDE_SPEED = 0.75;
-    public static double TRIGGER_THRESHOLD = 0.2;
+    public static double TRIGGER_DEADZONE = 0.2;
 
     private IntakeSubsystem intakeSubsystem;
     private DoubleSupplier leftTriggerValue;
@@ -27,7 +27,7 @@ public class MicroMoveHorizontalSlideManualCommand extends CommandBase {
         double leftTriggerValue = this.leftTriggerValue.getAsDouble();
         double rightTriggerValue = this.rightTriggerValue.getAsDouble();
 
-        if (leftTriggerValue > TRIGGER_THRESHOLD || rightTriggerValue > TRIGGER_THRESHOLD) {
+        if (leftTriggerValue > TRIGGER_DEADZONE || rightTriggerValue > TRIGGER_DEADZONE) {
             intakeSubsystem.moveHorizontalSlide((rightTriggerValue - leftTriggerValue) * HORIZONTAL_SLIDE_SPEED);
         }
     }

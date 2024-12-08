@@ -98,6 +98,8 @@ public class IntakeSubsystem extends SubsystemBase {
         telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
         telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
         telemetry.addData("horizontal wrist pitch servo position:", horizontalWristPitchServoL.getPosition());
+        telemetry.addData("current horizontal slide position variable value: ", currentHorizontalSlidePosition);
+        telemetry.addData("current horizontal slide right servo position: ", horizontalSlideServoR);
     }
 
     public void setVerticalSlideMotorsTargetPosition(int targetPosition) {
