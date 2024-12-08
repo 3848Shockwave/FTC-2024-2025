@@ -16,8 +16,9 @@ public class Constants {
     public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 75;
     public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 130;
     // slide
-    public static double HORIZONTAL_SLIDE_INTAKE_POSITION = 0;
     public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 54;
+    public static double HORIZONTAL_SLIDE_MAX_EXTENSION = 112;
+    public static double HORIZONTAL_SLIDE_MIN_EXTENSION = 50;
     public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 82;
     public static int HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION = 23;
     public static int HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION = 83;

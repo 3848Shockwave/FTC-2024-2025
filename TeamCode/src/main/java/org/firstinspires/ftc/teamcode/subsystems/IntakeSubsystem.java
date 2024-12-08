@@ -161,10 +161,10 @@ public class IntakeSubsystem extends SubsystemBase {
         currentHorizontalSlidePosition += speed;
 
         // clamp the position to 0 and 180
-        if (currentHorizontalSlidePosition > 180) {
-            currentHorizontalSlidePosition = 180;
-        } else if (currentHorizontalSlidePosition < 0) {
-            currentHorizontalSlidePosition = 0;
+        if (currentHorizontalSlidePosition > Constants.HORIZONTAL_SLIDE_MAX_EXTENSION) {
+            currentHorizontalSlidePosition = Constants.HORIZONTAL_SLIDE_MAX_EXTENSION;
+        } else if (currentHorizontalSlidePosition < Constants.HORIZONTAL_SLIDE_MIN_EXTENSION) {
+            currentHorizontalSlidePosition = Constants.HORIZONTAL_SLIDE_MIN_EXTENSION;
         }
 
         horizontalSlideServoL.turnToAngle(180 - currentHorizontalSlidePosition);
