@@ -18,6 +18,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // horizontal components
     public ServoEx horizontalSlideServoL, horizontalSlideServoR;
+    public static double currentHorizontalSlidePosition = 0;
     public ServoEx horizontalClawGripServo;
     public ServoEx horizontalClawRollServo;
     public ServoEx horizontalClawPitchServo;
@@ -151,10 +152,12 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setHorizontalSlidePosition(double degrees) {
         horizontalSlideServoL.turnToAngle(180 - degrees);
         horizontalSlideServoR.turnToAngle(degrees);
+        currentHorizontalSlidePosition = degrees;
     }
 
     public void moveHorizontalSlide(double speed) {
-        setHorizontalSlidePosition(horizontalSlideServoR.getAngle() + speed);
+        setHorizontalSlidePosition(currentHorizontalSlidePosition + speed);
+        currentHorizontalSlidePosition += speed;
     }
 
     public void setHorizontalClawRollPosition(double degrees) {
