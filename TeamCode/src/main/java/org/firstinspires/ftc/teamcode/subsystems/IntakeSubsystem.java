@@ -156,15 +156,15 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void moveHorizontalSlide(double speed) {
-        setHorizontalSlidePosition(currentHorizontalSlidePosition + speed);
         currentHorizontalSlidePosition += speed;
-
         // clamp the position to 0 and 180
         if (currentHorizontalSlidePosition > 180) {
             currentHorizontalSlidePosition = 180;
         } else if (currentHorizontalSlidePosition < 0) {
             currentHorizontalSlidePosition = 0;
         }
+
+        setHorizontalSlidePosition(currentHorizontalSlidePosition + speed);
     }
 
     public void setHorizontalClawRollPosition(double degrees) {
