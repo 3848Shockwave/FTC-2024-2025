@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.*;
+import org.firstinspires.ftc.teamcode.commands.horizontalArm.MoveHorizontalSlideManualCommand;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -48,12 +49,12 @@ public class CommandTeleOp extends CommandOpMode {
         register(driveSubsystem, intakeSubsystem);
 //        // "always be runnin this thing"
 //        driveSubsystem.setDefaultCommand(driveCommand);
-        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION, currentTelemetry)
-        );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, currentTelemetry)
-        );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION, currentTelemetry)
+//        );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, currentTelemetry)
+//        );
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.openClawManual(IntakeSubsystem.IntakeState.INTAKE)
@@ -92,18 +93,20 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
                 new SampleTransferCommandSequence(intakeSubsystem, currentTelemetry)
         );
+
         // triggers to control claw roll
-        schedule(new RunCommand(() -> {
-            double leftTriggerValue = driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
-            double rightTriggerValue = driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
-            if (leftTriggerValue > 0) {
-                // rotate roll
-                intakeSubsystem.horizontalClawRollServo.turnToAngle(Constants.HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION);
-            } else if (rightTriggerValue > 0) {
-                // rotate roll
-                intakeSubsystem.horizontalClawRollServo.turnToAngle(Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION);
-            }
-        }));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                new InstantCommand(() -> intakeSubsystem.horizontalClawRollServo.turnToAngle(Constants.HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION))
+        );
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                new InstantCommand(() -> intakeSubsystem.horizontalClawRollServo.turnToAngle(Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION))
+        );
+        schedule(new MoveHorizontalSlideManualCommand(
+                intakeSubsystem,
+                () -> driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER),
+                () -> driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
+        );
+
 
 //        // triggers to control claw roll
 //        schedule(new RunCommand(() -> {

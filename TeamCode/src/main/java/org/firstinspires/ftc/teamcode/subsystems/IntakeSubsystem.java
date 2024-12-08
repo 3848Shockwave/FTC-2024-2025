@@ -153,6 +153,10 @@ public class IntakeSubsystem extends SubsystemBase {
         horizontalSlideServoR.turnToAngle(degrees);
     }
 
+    public void moveHorizontalSlide(double speed) {
+        setHorizontalSlidePosition(horizontalSlideServoR.getAngle() + speed);
+    }
+
     public void setHorizontalClawRollPosition(double degrees) {
         horizontalClawRollServo.turnToAngle(degrees);
     }
