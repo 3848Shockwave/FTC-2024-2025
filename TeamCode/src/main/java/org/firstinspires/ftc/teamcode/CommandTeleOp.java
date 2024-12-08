@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.MicroMoveHorizontalSlideManualCommand;
+import org.firstinspires.ftc.teamcode.commands.horizontalArm.MoveHorizontalSlideTouchpadCommand;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -55,16 +56,16 @@ public class CommandTeleOp extends CommandOpMode {
 //                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, currentTelemetry)
 //        );
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() ->
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.openClawManual(IntakeSubsystem.IntakeState.INTAKE)
         ));
-        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() ->
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.closeClawManual(IntakeSubsystem.IntakeState.INTAKE)
         ));
-        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() ->
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.openClawManual(IntakeSubsystem.IntakeState.DEPOSIT)
         ));
-        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() ->
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.closeClawManual(IntakeSubsystem.IntakeState.DEPOSIT)
         ));
 
@@ -100,11 +101,17 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new InstantCommand(() -> intakeSubsystem.horizontalClawRollServo.turnToAngle(Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION))
         );
+        schedule(new MoveHorizontalSlideTouchpadCommand(
+                intakeSubsystem,
+                () -> gamepad1.touchpad_finger_1_x,
+                () -> gamepad1.touchpad_finger_1
+        ));
+
         schedule(new MicroMoveHorizontalSlideManualCommand(
                 intakeSubsystem,
                 () -> driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER),
-                () -> driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
-        );
+                () -> driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
+        ));
 
 
 //        // triggers to control claw roll
@@ -121,9 +128,9 @@ public class CommandTeleOp extends CommandOpMode {
 //        // a to open, b to close claw (if intaking, should be intake arm claw, and if outtaking, etc.)
 
         // back button resets imu
-//        gamepad.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(() -> {
-//            driveSubsystem.resetIMU();
-//        }));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(() -> {
+            driveSubsystem.resetIMU();
+        }));
 
 
 //        schedule(new InstantCommand(() -> {
