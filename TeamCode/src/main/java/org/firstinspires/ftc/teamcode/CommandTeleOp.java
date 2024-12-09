@@ -88,7 +88,7 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 new ParallelCommandGroup(
                         new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
-                        new InstantCommand(() -> gamepad1.rumble(250))
+                        new InstantCommand(() -> gamepad1.rumble(100))
                 )
         );
         // hover arm over sample
