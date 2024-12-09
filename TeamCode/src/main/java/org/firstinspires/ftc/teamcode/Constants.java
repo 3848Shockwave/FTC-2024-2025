@@ -18,7 +18,7 @@ public class Constants {
     // slide
     public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 54;
     public static double HORIZONTAL_SLIDE_MAX_EXTENSION = 112;
-    public static final double HORIZONTAL_SLIDE_MIDDLE_EXTENSION = 80;
+    public static double HORIZONTAL_SLIDE_MIDDLE_EXTENSION = 80;
     public static double HORIZONTAL_SLIDE_MIN_EXTENSION = 50;
     public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 82;
     public static int HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION = 23;
