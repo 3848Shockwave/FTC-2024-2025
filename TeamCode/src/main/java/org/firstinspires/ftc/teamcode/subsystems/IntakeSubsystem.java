@@ -94,7 +94,6 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        telemetry.addData("claw grippy (periodic)", verticalClawGripServo.getPosition());
         telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
         telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
         telemetry.addData("horizontal wrist pitch servo position:", horizontalWristPitchServoL.getPosition());
