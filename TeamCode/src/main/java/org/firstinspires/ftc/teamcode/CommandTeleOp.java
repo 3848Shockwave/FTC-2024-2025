@@ -88,7 +88,7 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 new ParallelCommandGroup(
                         new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
-                        new InstantCommand(() -> gamepad1.rumble(100))
+                        new InstantCommand(() -> gamepad1.rumble(250))
                 )
         );
         // hover arm over sample
@@ -119,11 +119,11 @@ public class CommandTeleOp extends CommandOpMode {
         );
 
         // move horizontal slide with touchpad lmao
-        schedule(new MoveHorizontalSlideTouchpadCommand(
-                intakeSubsystem,
-                () -> gamepad1.touchpad_finger_1_x,
-                () -> gamepad1.touchpad_finger_1
-        ));
+//        schedule(new MoveHorizontalSlideTouchpadCommand(
+//                intakeSubsystem,
+//                () -> gamepad1.touchpad_finger_1_x,
+//                () -> gamepad1.touchpad_finger_1
+//        ));
 
         // explains itself
         schedule(new MoveHorizontalSlideWithTriggersCommand(

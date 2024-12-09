@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.commands.verticalArm;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
+@Config
 public class SetVerticalSlidePositionCommand extends CommandBase {
 
     private Motor verticalSlideMotorTop;
@@ -13,6 +15,8 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
     private IntakeSubsystem intakeSubsystem;
     private int targetPosition;
     private Telemetry telemetry;
+
+    public static double SLIDE_SLOWDOWN_THRESHOLD = 0.2;
 
 
     public SetVerticalSlidePositionCommand(IntakeSubsystem intakeSubsystem, int targetPosition, Telemetry telemetry) {
@@ -34,16 +38,21 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
 
     @Override
     public void execute() {
+
+        // if the target position is the transfer position (all the way down),
+        // when the motors reach a certain point, slow them down
+        if (targetPosition == Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION) {
+            if ((double) Math.abs(verticalSlideMotorTop.getCurrentPosition() - targetPosition) / targetPosition < SLIDE_SLOWDOWN_THRESHOLD) {
+                verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
+                verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
+            } else {
+                verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+                verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+            }
+        } else {
             verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
             verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-
-//        if ((double) Math.abs(verticalSlideMotorTop.getCurrentPosition() - targetPosition) / targetPosition < 0.5) {
-//            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
-//            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
-//        } else {
-//            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-//            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-//        }
+        }
 
         telemetry.addLine("if you are seeing this and the motors aren't moving, that's bad and it's probably my fault.");
     }
