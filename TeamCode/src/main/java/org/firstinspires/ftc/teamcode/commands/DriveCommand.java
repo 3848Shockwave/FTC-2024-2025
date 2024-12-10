@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+@Config
 public class DriveCommand extends CommandBase {
     private DriveSubsystem driveSubsystem;
     private DoubleSupplier strafeSpeed;
@@ -15,6 +17,8 @@ public class DriveCommand extends CommandBase {
     private DoubleSupplier heading;
     private IMU imu;
     private BooleanSupplier isFieldCentric;
+
+    public static boolean isEnabled = false;
 
     // HAS to be DoubleSuppliers because it never ends. These doubles constantly update but the method does not,
     // so it has to use DoubleSuppliers to get the updated values
@@ -35,6 +39,10 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
+        // don't drive if not enabled
+        if (!isEnabled) return;
+
+
         // MANUALLY REVERSED ROTATION SPEED, I SHOULDN'T HAVE NEEDED TO BUT I HAD TO :(
         if (isFieldCentric.getAsBoolean()) {
             driveSubsystem.driveFieldCentric(strafeSpeed.getAsDouble(), forwardSpeed.getAsDouble(), rotationSpeed.getAsDouble());

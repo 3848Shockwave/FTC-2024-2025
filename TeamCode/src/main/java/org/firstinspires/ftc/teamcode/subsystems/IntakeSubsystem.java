@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -26,13 +25,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // vertical components
     public MotorEx verticalSlideMotorTop, verticalSlideMotorBottom;
+    public int currentVerticalSlideTargetPosition;
     public ServoEx verticalClawGripServo;
     public ServoEx verticalClawRollServo;
     public ServoEx verticalClawPitchServo;
     public ServoEx verticalWristPitchServoL, verticalWristPitchServoR;
 
-    public int initialTopMotorPosition;
-    public int initialBottomMotorPosition;
+    public int initialTopMotorPosition, initialBottomMotorPosition;
 
 
     public enum IntakeState {
@@ -73,15 +72,15 @@ public class IntakeSubsystem extends SubsystemBase {
         // vertical slide motors
         verticalSlideMotorBottom = new MotorEx(hardwareMap, "spoolRight", Motor.GoBILDA.RPM_435);
         verticalSlideMotorBottom.setRunMode(Motor.RunMode.PositionControl);
-        verticalSlideMotorBottom.setPositionCoefficient(0.1);
-        verticalSlideMotorBottom.setPositionTolerance(10);
+        verticalSlideMotorBottom.setPositionCoefficient(Constants.MOTOR_POSITION_COEFFICIENT);
+        verticalSlideMotorBottom.setPositionTolerance(Constants.MOTOR_POSITION_TOLERANCE);
 //        verticalSlideMotorBottom.setTargetPosition(5000);
 //        verticalSlideMotorBottom.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         verticalSlideMotorTop = new MotorEx(hardwareMap, "spoolLeft", Motor.GoBILDA.RPM_435);
         verticalSlideMotorTop.setRunMode(Motor.RunMode.PositionControl);
-        verticalSlideMotorTop.setPositionCoefficient(0.1);
-        verticalSlideMotorTop.setPositionTolerance(10);
+        verticalSlideMotorTop.setPositionCoefficient(Constants.MOTOR_POSITION_COEFFICIENT);
+        verticalSlideMotorTop.setPositionTolerance(Constants.MOTOR_POSITION_TOLERANCE);
 //        verticalSlideMotorTop.setTargetPosition(5000);
         verticalSlideMotorTop.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
@@ -96,15 +95,24 @@ public class IntakeSubsystem extends SubsystemBase {
 
         telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
         telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
-        telemetry.addData("horizontal wrist pitch servo position:", horizontalWristPitchServoL.getPosition());
-        telemetry.addData("current horizontal slide position variable value: ", currentHorizontalSlidePosition);
+        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
+        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
+        telemetry.addData("current horizontal slide left servo position: ", horizontalSlideServoL.getAngle());
         telemetry.addData("current horizontal slide right servo position: ", horizontalSlideServoR.getAngle());
+        telemetry.addData("current horizontal slide position variable value: ", currentHorizontalSlidePosition);
     }
 
     public void setVerticalSlideMotorsTargetPosition(int targetPosition) {
         verticalSlideMotorTop.setTargetPosition(targetPosition);
         verticalSlideMotorBottom.setTargetPosition(-targetPosition);
+        currentVerticalSlideTargetPosition = targetPosition;
     }
+
+    public void setVerticalSlideMotorsVelocity(double velocity) {
+        verticalSlideMotorTop.setVelocity(velocity);
+        verticalSlideMotorTop.setVelocity(-velocity);
+    }
+
 
     public void setCurrentState(IntakeState intakeState) {
         currentIntakeState = intakeState;

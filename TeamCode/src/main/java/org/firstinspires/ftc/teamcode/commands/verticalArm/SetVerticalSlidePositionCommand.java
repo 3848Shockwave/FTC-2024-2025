@@ -39,20 +39,23 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
     @Override
     public void execute() {
 
-        // if the target position is the transfer position (all the way down),
-        // when the motors reach a certain point, slow them down
-        if (targetPosition == Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION) {
-            if ((double) Math.abs(verticalSlideMotorTop.getCurrentPosition() - targetPosition) / targetPosition < SLIDE_SLOWDOWN_THRESHOLD) {
-                verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
-                verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
-            } else {
-                verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-                verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-            }
-        } else {
-            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-        }
+        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+
+//        // if the target position is the transfer position (all the way down),
+//        // when the motors reach a certain point, slow them down
+//        if (targetPosition == Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION) {
+//            if ((double) Math.abs(verticalSlideMotorTop.getCurrentPosition() - targetPosition) / targetPosition < SLIDE_SLOWDOWN_THRESHOLD) {
+//                verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
+//                verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
+//            } else {
+//                verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+//                verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+//            }
+//        } else {
+//            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+//            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+//        }
 
         telemetry.addLine("if you are seeing this and the motors aren't moving, that's bad and it's probably my fault.");
     }

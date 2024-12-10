@@ -9,8 +9,8 @@ import java.util.function.DoubleSupplier;
 @Config
 public class MoveHorizontalSlideWithTriggersCommand extends CommandBase {
 
-    public static double HORIZONTAL_SLIDE_SPEED = 0.75;
-    public static double TRIGGER_DEADZONE = 0.2;
+    public static double HORIZONTAL_SLIDE_SPEED = 1;
+    public static double TRIGGER_DEADZONE = 0.1;
 
     private IntakeSubsystem intakeSubsystem;
     private DoubleSupplier leftTriggerValue;

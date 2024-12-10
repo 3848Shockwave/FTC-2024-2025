@@ -49,7 +49,7 @@ public class CommandTeleOp extends CommandOpMode {
 //        // good practice to register the subsystem before setting default command
         register(driveSubsystem, intakeSubsystem);
 //        // "always be runnin this thing"
-//        driveSubsystem.setDefaultCommand(driveCommand);
+        driveSubsystem.setDefaultCommand(driveCommand);
 //        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
 //                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION, currentTelemetry)
 //        );
@@ -68,6 +68,14 @@ public class CommandTeleOp extends CommandOpMode {
         ));
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.closeClawManual(IntakeSubsystem.IntakeState.DEPOSIT)
+        ));
+
+        // utility gamepad vertical slide controls
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new InstantCommand(() ->
+                intakeSubsystem.setVerticalSlideMotorsVelocity(-Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST)
+        ));
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new InstantCommand(() ->
+                intakeSubsystem.setVerticalSlideMotorsVelocity(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST)
         ));
 
         // horizontal slide min extension
@@ -150,7 +158,6 @@ public class CommandTeleOp extends CommandOpMode {
         }));
 
         schedule(new RunCommand(() -> currentTelemetry.update()));
-
 
 
     }
