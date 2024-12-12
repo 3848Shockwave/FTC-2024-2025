@@ -2,15 +2,13 @@ package org.firstinspires.ftc.teamcode.commands.horizontalArm;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 import java.util.function.DoubleSupplier;
 
 @Config
 public class MoveHorizontalSlideWithTriggersCommand extends CommandBase {
-
-    public static double HORIZONTAL_SLIDE_SPEED = 1;
-    public static double TRIGGER_DEADZONE = 0.1;
 
     private IntakeSubsystem intakeSubsystem;
     private DoubleSupplier leftTriggerValue;
@@ -27,8 +25,8 @@ public class MoveHorizontalSlideWithTriggersCommand extends CommandBase {
         double leftTriggerValue = this.leftTriggerValue.getAsDouble();
         double rightTriggerValue = this.rightTriggerValue.getAsDouble();
 
-        if (leftTriggerValue > TRIGGER_DEADZONE || rightTriggerValue > TRIGGER_DEADZONE) {
-            intakeSubsystem.moveHorizontalSlide((rightTriggerValue - leftTriggerValue) * HORIZONTAL_SLIDE_SPEED);
+        if (leftTriggerValue > Constants.TRIGGER_DEADZONE || rightTriggerValue > Constants.TRIGGER_DEADZONE) {
+            intakeSubsystem.moveHorizontalSlide((rightTriggerValue - leftTriggerValue) * Constants.HORIZONTAL_SLIDE_SPEED_MANUAL);
         }
     }
 }

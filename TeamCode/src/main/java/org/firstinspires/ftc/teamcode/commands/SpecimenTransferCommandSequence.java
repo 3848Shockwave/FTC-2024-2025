@@ -27,14 +27,6 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     public static int WAIT3_5 = 500;
     public static int WAIT4 = 0;
 
-    public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
-    public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 82;
-    public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 40;
-    public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 90;
-    public static int VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 180;
-
-    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION = 1400;
-
     public SpecimenTransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
         this.telemetry = telemetry;
@@ -48,18 +40,18 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                 // set vertical arm to transfer position
                 new InstantCommand(() -> {
                     intakeSubsystem.openVerticalClaw();
-                    intakeSubsystem.setVerticalWristPitchPosition(VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION);
-                    intakeSubsystem.setVerticalClawPitchPosition(VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
+                    intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION);
+                    intakeSubsystem.setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
                     intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION);
                 }),
 //                // (wait until ^ done)
                 new WaitCommand(WAIT0),
                 // set horizontal arm to transfer position
                 new InstantCommand(() -> {
-                    intakeSubsystem.setHorizontalWristPitchPosition(HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION);
+                    intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION);
                     // bring back slides (SPECIMEN)
-                    intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION);
-                    intakeSubsystem.setHorizontalClawPitchPosition(HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
+                    intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION);
+                    intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
                     intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);
                 }),
 //                // (wait until ^ done)
@@ -78,7 +70,7 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                 // set vertical slide position to deposit position, after start of this command: wait 500 ms, then set vertical arm to deposit position
                 new ParallelCommandGroup(
                         // set vertical slide position to transfer position
-                        new SetVerticalSlidePositionCommand(intakeSubsystem, VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION, telemetry),
+                        new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION, telemetry),
                         new SequentialCommandGroup(
                                 new WaitCommand(WAIT4),
                                 // set vertical arm to deposit position

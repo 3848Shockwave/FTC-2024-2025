@@ -153,9 +153,9 @@ public class CommandTeleOp extends CommandOpMode {
 ////            intakeSubsystem.horizontalClawRollServo.rotateByAngle(rightTriggerValue - leftTriggerValue);
 //        }));
 
-        schedule(new InstantCommand(() -> {
-            currentTelemetry.addData("Command TeleOp", "initialized");
-        }));
+//        schedule(new InstantCommand(() -> {
+//            currentTelemetry.addData("Command TeleOp", "initialized");
+//        }));
 
         schedule(new RunCommand(() -> currentTelemetry.update()));
 

@@ -57,7 +57,6 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
 //            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 //        }
 
-        telemetry.addLine("if you are seeing this and the motors aren't moving, that's bad and it's probably my fault.");
     }
 
     @Override

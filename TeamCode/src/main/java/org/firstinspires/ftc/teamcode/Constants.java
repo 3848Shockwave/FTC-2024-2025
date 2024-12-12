@@ -20,8 +20,8 @@ public class Constants {
     public static double HORIZONTAL_SLIDE_MAX_EXTENSION = 120;
     public static double HORIZONTAL_SLIDE_MIDDLE_EXTENSION = 90;
     public static double HORIZONTAL_SLIDE_MIN_EXTENSION = 52;
+    public static double HORIZONTAL_SLIDE_SPEED_MANUAL = 1;
 
-    public static int HORIZONTAL_SLIDE_MANUAL_SPEED = 1;
     public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 82;
     public static int HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION = 23;
     public static int HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION = 83;
@@ -56,6 +56,16 @@ public class Constants {
 
     public static int MOTOR_POSITION_TOLERANCE = 50;
     public static double MOTOR_POSITION_COEFFICIENT = 0.1;
+
+    public static double TRIGGER_DEADZONE = 0.1;
+
+    // specimen values
+    public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
+    public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 82;
+    public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 40;
+    public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 90;
+    public static int VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 180;
+    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION = 1400;
 
 
 //    public static double Kp = 1.8; // proportional gain

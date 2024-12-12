@@ -67,7 +67,7 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalClawRollServo = new SimpleServo(hardwareMap, "vertClawPiv", 0, 180);
         verticalClawPitchServo = new SimpleServo(hardwareMap, "vertClawRot", 0, 180);
         verticalWristPitchServoL = new SimpleServo(hardwareMap, "vertArmRotL", 0, 180);
-        verticalWristPitchServoR = new SimpleServo(hardwareMap, "vertArmRotR", 0, 180);
+        verticalWristPitchServoR = new SimpleServo(hardwareMap, "vertArmRotR", 0, 300);
 
         // vertical slide motors
         verticalSlideMotorBottom = new MotorEx(hardwareMap, "spoolRight", Motor.GoBILDA.RPM_435);
@@ -93,13 +93,13 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
-        telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
-        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
-        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
-        telemetry.addData("current horizontal slide left servo position: ", horizontalSlideServoL.getAngle());
-        telemetry.addData("current horizontal slide right servo position: ", horizontalSlideServoR.getAngle());
-        telemetry.addData("current horizontal slide position variable value: ", currentHorizontalSlidePosition);
+//        telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
+//        telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
+//        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
+//        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
+//        telemetry.addData("current horizontal slide left servo position: ", horizontalSlideServoL.getAngle());
+//        telemetry.addData("current horizontal slide right servo position: ", horizontalSlideServoR.getAngle());
+//        telemetry.addData("current horizontal slide position variable value: ", currentHorizontalSlidePosition);
     }
 
     public void setVerticalSlideMotorsTargetPosition(int targetPosition) {
