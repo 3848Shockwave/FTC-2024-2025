@@ -96,7 +96,7 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 new ParallelCommandGroup(
                         new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
-                        new InstantCommand(() -> gamepad1.rumble(250))
+                        new InstantCommand(() -> gamepad1.rumble(100))
                 )
         );
         // hover arm over sample
@@ -118,7 +118,7 @@ public class CommandTeleOp extends CommandOpMode {
                 new SampleTransferCommandSequence(intakeSubsystem, currentTelemetry)
         );
 
-        // bumpers to control claw roll
+        // bumpers control claw roll
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
                 new InstantCommand(() -> intakeSubsystem.horizontalClawRollServo.turnToAngle(Constants.HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION))
         );
@@ -133,7 +133,7 @@ public class CommandTeleOp extends CommandOpMode {
 //                () -> gamepad1.touchpad_finger_1
 //        ));
 
-        // explains itself
+        // triggers shall move horizontal slides
         schedule(new MoveHorizontalSlideWithTriggersCommand(
                 intakeSubsystem,
                 () -> driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER),
@@ -157,6 +157,7 @@ public class CommandTeleOp extends CommandOpMode {
 //            currentTelemetry.addData("Command TeleOp", "initialized");
 //        }));
 
+        // update telemetry
         schedule(new RunCommand(() -> currentTelemetry.update()));
 
 
