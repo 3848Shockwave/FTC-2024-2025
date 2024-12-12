@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.horizontalArm;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 import java.util.function.BooleanSupplier;

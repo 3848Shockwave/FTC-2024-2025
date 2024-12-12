@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.MoveHorizontalSlideWithTriggersCommand;
-import org.firstinspires.ftc.teamcode.commands.horizontalArm.MoveHorizontalSlideTouchpadCommand;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
+import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
@@ -58,16 +58,16 @@ public class CommandTeleOp extends CommandOpMode {
 //        );
 
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.openClawManual(IntakeSubsystem.IntakeState.INTAKE)
+                intakeSubsystem.openVerticalClaw()
         ));
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.closeClawManual(IntakeSubsystem.IntakeState.INTAKE)
+                intakeSubsystem.closeVerticalClaw()
         ));
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.openClawManual(IntakeSubsystem.IntakeState.DEPOSIT)
+                intakeSubsystem.openHorizontalClaw()
         ));
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.closeClawManual(IntakeSubsystem.IntakeState.DEPOSIT)
+                intakeSubsystem.closeHorizontalClaw()
         ));
 
         // utility gamepad vertical slide controls

@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;

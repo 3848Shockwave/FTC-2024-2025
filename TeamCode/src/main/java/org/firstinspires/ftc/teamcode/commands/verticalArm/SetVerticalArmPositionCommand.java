@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.verticalArm;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 public class SetVerticalArmPositionCommand extends CommandBase {

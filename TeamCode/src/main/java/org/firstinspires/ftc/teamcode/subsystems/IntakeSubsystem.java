@@ -8,7 +8,7 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.constants.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
     // first let's do horizontal
@@ -25,7 +25,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // vertical components
     public MotorEx verticalSlideMotorTop, verticalSlideMotorBottom;
-    public int currentVerticalSlideTargetPosition;
     public ServoEx verticalClawGripServo;
     public ServoEx verticalClawRollServo;
     public ServoEx verticalClawPitchServo;
@@ -105,7 +104,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setVerticalSlideMotorsTargetPosition(int targetPosition) {
         verticalSlideMotorTop.setTargetPosition(targetPosition);
         verticalSlideMotorBottom.setTargetPosition(-targetPosition);
-        currentVerticalSlideTargetPosition = targetPosition;
     }
 
     public void setVerticalSlideMotorsVelocity(double velocity) {

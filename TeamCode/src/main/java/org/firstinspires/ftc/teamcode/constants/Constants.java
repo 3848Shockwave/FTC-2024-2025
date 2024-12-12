@@ -1,13 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.constants;
 
 import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class Constants {
 
-    //    public static int TEST_INT0 = 3000;
-//    public static int TEST_INT1 = 2000;
-    public static double TEST_DOUBLE = 1;
     public static boolean IS_FIELD_CENTRIC = true;
 
 
@@ -58,14 +55,6 @@ public class Constants {
     public static double MOTOR_POSITION_COEFFICIENT = 0.1;
 
     public static double TRIGGER_DEADZONE = 0.1;
-
-    // specimen values
-    public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 0;
-    public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 82;
-    public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 40;
-    public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 90;
-    public static int VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 180;
-    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION = 1400;
 
 
 //    public static double Kp = 1.8; // proportional gain
