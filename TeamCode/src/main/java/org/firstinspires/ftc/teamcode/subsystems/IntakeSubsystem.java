@@ -95,6 +95,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //        verticalSlideMotorTop.setTargetPosition(5000);
         verticalSlideMotorTop.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
+
         initialTopMotorPosition = verticalSlideMotorTop.getCurrentPosition();
         initialBottomMotorPosition = verticalSlideMotorBottom.getCurrentPosition();
 
@@ -104,8 +105,8 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-//        telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
-//        telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
+        telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
+        telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
 //        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
 //        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
 //        telemetry.addData("current horizontal slide left servo position: ", horizontalSlideServoL.getAngle());

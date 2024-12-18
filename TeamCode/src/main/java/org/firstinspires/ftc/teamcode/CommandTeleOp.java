@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.RunCommand;
+import com.arcrobotics.ftclib.command.*;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -12,6 +9,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.MoveHorizontalSlideWithTriggersCommand;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
+import org.firstinspires.ftc.teamcode.commands.verticalArm.RunVerticalSlideCommand;
+import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -84,6 +83,12 @@ public class CommandTeleOp extends CommandOpMode {
         utilityGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION)
         ));
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION)
+        );
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION)
+        );
 
         // horizontal slide min extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() ->
@@ -153,6 +158,15 @@ public class CommandTeleOp extends CommandOpMode {
             driveSubsystem.resetIMU();
         }));
 
+        intakeSubsystem.setVerticalSlideMotorsTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);
+
+        schedule(
+                new RunVerticalSlideCommand(intakeSubsystem, currentTelemetry)
+        );
+
+        // update telemetry
+        schedule(new RunCommand(() -> currentTelemetry.update()));
+
 //        // triggers to control claw roll
 //        schedule(new RunCommand(() -> {
 //            double leftTriggerValue = driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
@@ -164,9 +178,6 @@ public class CommandTeleOp extends CommandOpMode {
 //        schedule(new InstantCommand(() -> {
 //            currentTelemetry.addData("Command TeleOp", "initialized");
 //        }));
-
-        // update telemetry
-        schedule(new RunCommand(() -> currentTelemetry.update()));
 
 
     }
