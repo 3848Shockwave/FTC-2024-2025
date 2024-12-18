@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
-@TeleOp(name = "Command TeleOp")
+@TeleOp(name = "Command TeleOp - Main Drive Code (use this)")
 public class CommandTeleOp extends CommandOpMode {
 
     private DriveSubsystem driveSubsystem;
@@ -78,6 +78,13 @@ public class CommandTeleOp extends CommandOpMode {
                 intakeSubsystem.setVerticalSlideMotorsVelocity(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST)
         ));
 
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() ->
+                intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION)
+        ));
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() ->
+                intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION)
+        ));
+
         // horizontal slide min extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_EXTENSION)
@@ -107,6 +114,7 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 new DropAndResetToIntakeCommandSequence(intakeSubsystem, telemetry)
         );
+
 
         // SPECIMEN TRANSFER SEQUENCE
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(

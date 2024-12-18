@@ -6,6 +6,9 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.constants.Constants;
@@ -28,7 +31,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public ServoEx verticalClawGripServo;
     public ServoEx verticalClawRollServo;
     public ServoEx verticalClawPitchServo;
-    public ServoEx verticalWristPitchServoL, verticalWristPitchServoR;
+    //    public ServoEx verticalWristPitchServoL, verticalWristPitchServoR;
+    public ServoImplEx verticalWristPitchServoL, verticalWristPitchServoR;
 
     public int initialTopMotorPosition, initialBottomMotorPosition;
 
@@ -65,8 +69,16 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalClawGripServo = new SimpleServo(hardwareMap, "vertClawGrip", 0, 180);
         verticalClawRollServo = new SimpleServo(hardwareMap, "vertClawPiv", 0, 180);
         verticalClawPitchServo = new SimpleServo(hardwareMap, "vertClawRot", 0, 180);
-        verticalWristPitchServoL = new SimpleServo(hardwareMap, "vertArmRotL", 0, 180);
-        verticalWristPitchServoR = new SimpleServo(hardwareMap, "vertArmRotR", 0, 300);
+
+//        verticalWristPitchServoL = new SimpleServo(hardwareMap, "vertArmRotL", 0, 180);
+//        verticalWristPitchServoR = new SimpleServo(hardwareMap, "vertArmRotR", 0, 180);
+
+        verticalWristPitchServoL = hardwareMap.get(ServoImplEx.class, "vertArmRotL");
+        verticalWristPitchServoR = hardwareMap.get(ServoImplEx.class, "vertArmRotR");
+        verticalWristPitchServoL.setPwmEnable();
+        verticalWristPitchServoL.setPwmRange(new PwmControl.PwmRange(500, 3000));
+        verticalWristPitchServoR.setPwmEnable();
+        verticalWristPitchServoR.setPwmRange(new PwmControl.PwmRange(500, 3000));
 
         // vertical slide motors
         verticalSlideMotorBottom = new MotorEx(hardwareMap, "spoolRight", Motor.GoBILDA.RPM_435);
@@ -74,7 +86,7 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalSlideMotorBottom.setPositionCoefficient(Constants.MOTOR_POSITION_COEFFICIENT);
         verticalSlideMotorBottom.setPositionTolerance(Constants.MOTOR_POSITION_TOLERANCE);
 //        verticalSlideMotorBottom.setTargetPosition(5000);
-//        verticalSlideMotorBottom.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        verticalSlideMotorBottom.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         verticalSlideMotorTop = new MotorEx(hardwareMap, "spoolLeft", Motor.GoBILDA.RPM_435);
         verticalSlideMotorTop.setRunMode(Motor.RunMode.PositionControl);
@@ -108,7 +120,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setVerticalSlideMotorsVelocity(double velocity) {
         verticalSlideMotorTop.setVelocity(velocity);
-        verticalSlideMotorTop.setVelocity(-velocity);
+        verticalSlideMotorBottom.setVelocity(-velocity);
     }
 
 
@@ -185,8 +197,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setVerticalWristPitchPosition(double degrees) {
-        verticalWristPitchServoL.turnToAngle(180 - degrees);
-        verticalWristPitchServoR.turnToAngle(degrees);
+        double position = degrees / 180;
+//        verticalWristPitchServoL.turnToAngle(180 - degrees);
+//        verticalWristPitchServoR.turnToAngle(degrees);
+        verticalWristPitchServoL.setPosition(1 - position);
+        verticalWristPitchServoR.setPosition(position);
     }
 
 
