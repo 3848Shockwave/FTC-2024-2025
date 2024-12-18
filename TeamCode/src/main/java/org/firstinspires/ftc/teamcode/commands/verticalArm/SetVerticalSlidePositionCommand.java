@@ -27,6 +27,7 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
         this.telemetry = telemetry;
         // THIS MAKES IT BLOCKING: IT R E Q U I R E S THE SUBSYSTEM
 //        addRequirements(intakeSubsystem);
+//        interruptOn(() -> false);
 
     }
 
@@ -69,4 +70,5 @@ public class SetVerticalSlidePositionCommand extends CommandBase {
     public boolean isFinished() {
         return verticalSlideMotorTop.atTargetPosition() || verticalSlideMotorBottom.atTargetPosition();
     }
+
 }

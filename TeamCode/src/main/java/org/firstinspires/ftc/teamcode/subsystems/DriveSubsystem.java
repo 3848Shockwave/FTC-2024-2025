@@ -55,13 +55,13 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void driveFieldCentric(double strafeSpeed, double forwardSpeed, double rotationSpeed) {
-        rotationSpeed = rotationSpeed * 1.1;
+        rotationSpeed *= 1.1;
         heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, rotationSpeed, heading);
     }
 
     public void driveRobotCentric(double strafeSpeed, double forwardSpeed, double rotationSpeed) {
-        rotationSpeed = rotationSpeed * 1.1;
+        rotationSpeed *= 1.1;
         mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, rotationSpeed);
     }
 
