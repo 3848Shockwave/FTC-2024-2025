@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.ElevatorFeedforward;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -11,8 +12,8 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 @Config
 public class RunVerticalSlideCommand extends CommandBase {
 
-    private Motor verticalSlideMotorTop;
-    private Motor verticalSlideMotorBottom;
+    private MotorEx verticalSlideMotorTop;
+    private MotorEx verticalSlideMotorBottom;
     private IntakeSubsystem intakeSubsystem;
     private Telemetry telemetry;
     public static double KV = 1;
@@ -49,6 +50,8 @@ public class RunVerticalSlideCommand extends CommandBase {
 
 //        double velocity = elevatorFeedforward.calculate
 
+//        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+//        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
         verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
         verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 
