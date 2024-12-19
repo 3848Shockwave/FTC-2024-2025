@@ -106,7 +106,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public void periodic() {
 
         telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
+        telemetry.addData("top motor at position:", verticalSlideMotorTop.atTargetPosition());
+
         telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
+        telemetry.addData("bottom motor at position:", verticalSlideMotorBottom.atTargetPosition());
 //        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
 //        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
 //        telemetry.addData("current horizontal slide left servo position: ", horizontalSlideServoL.getAngle());

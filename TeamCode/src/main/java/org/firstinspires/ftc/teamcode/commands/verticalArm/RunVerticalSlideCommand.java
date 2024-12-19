@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.ElevatorFeedforward;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -21,6 +22,7 @@ public class RunVerticalSlideCommand extends CommandBase {
     public static double KG = 0;
     public static double KA = 0;
     public ElevatorFeedforward elevatorFeedforward = new ElevatorFeedforward(KS, KG, KV, KA);
+
 
 
     public RunVerticalSlideCommand(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
@@ -40,22 +42,25 @@ public class RunVerticalSlideCommand extends CommandBase {
 
 //        elevatorFeedforward.calculate(Constants.VERTICAL_SLIDE_MOTOR_SPEED_SLOW);
 //
-//        verticalSlideMotorTop.getCurrentPosition();
 
         if (verticalSlideMotorTop.atTargetPosition() || verticalSlideMotorBottom.atTargetPosition()) {
             verticalSlideMotorTop.stopMotor();
             verticalSlideMotorBottom.stopMotor();
-            return;
+        } else {
+
+            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+
         }
 
-//        double velocity = elevatorFeedforward.calculate
 
-//        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-//        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+
+//        double velocity = elevatorFeedforward.calculate(verticalSlideMotorTop.getCurrentPosition());
+//        verticalSlideMotorTop.setVelocity(velocity);
+//        verticalSlideMotorBottom.setVelocity(-velocity);
 
 
     }
+
 
 }

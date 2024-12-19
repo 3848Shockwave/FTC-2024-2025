@@ -10,7 +10,7 @@ public class Constants {
 
     // horizontal
     // claw
-    public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 75;
+    public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 50;
     public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 130;
     // slide
     public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 63;
@@ -22,9 +22,9 @@ public class Constants {
     public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 82;
     public static int HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION = 23;
     public static int HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION = 83;
-    //    // claw roll speed for manually aligning it with the samples
-//    public static double HORIZONTAL_CLAW_ROLL_SPEED = 1;
-//    //
+    // claw roll speed for manually aligning it with the samples
+    public static double HORIZONTAL_CLAW_ROLL_SPEED = 1;
+    //
     public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 0;
     public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 86;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
@@ -32,7 +32,7 @@ public class Constants {
     public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 100;
 
     // hovers
-    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 160;
+    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 150;
     public static double HORIZONTAL_CLAW_PITCH_HOVER_POSITION = 0;
 
     // vertical
@@ -47,7 +47,7 @@ public class Constants {
     public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 90;
     public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 90;
     public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 38;
-    public static double VERTICAL_CLAW_PITCH_DEPOSIT_POSITION = 40;
+    public static double VERTICAL_CLAW_PITCH_DEPOSIT_POSITION = 70;
     public static double VERTICAL_WRIST_PITCH_TRANSFER_POSITION = 8;
     public static double VERTICAL_WRIST_PITCH_DEPOSIT_POSITION = 180;
 

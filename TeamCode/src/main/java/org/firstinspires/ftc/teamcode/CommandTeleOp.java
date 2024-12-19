@@ -49,12 +49,6 @@ public class CommandTeleOp extends CommandOpMode {
         register(driveSubsystem, intakeSubsystem);
 //        // "always be runnin this thing"
         driveSubsystem.setDefaultCommand(driveCommand);
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION, currentTelemetry)
-//        );
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, currentTelemetry)
-//        );
 
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.openVerticalClaw()
@@ -68,14 +62,19 @@ public class CommandTeleOp extends CommandOpMode {
         utilityGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.closeHorizontalClaw()
         ));
-
-        // utility gamepad vertical slide controls
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.setVerticalSlideMotorsVelocity(-Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST)
-        ));
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.setVerticalSlideMotorsVelocity(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST)
-        ));
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION)
+        );
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION)
+        );
+//        // utility gamepad vertical slide controls
+//        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new InstantCommand(() ->
+//                intakeSubsystem.setVerticalSlideMotorsVelocity(-Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST)
+//        ));
+//        utilityGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new InstantCommand(() ->
+//                intakeSubsystem.setVerticalSlideMotorsVelocity(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST)
+//        ));
 
         utilityGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() ->
                 intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION)
@@ -84,11 +83,20 @@ public class CommandTeleOp extends CommandOpMode {
                 intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION)
         ));
         utilityGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION)
+                new DropAndResetToIntakeCommandSequence(intakeSubsystem, currentTelemetry)
+//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION)
         );
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION)
-        );
+//        utilityGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION)
+//        );
+
+        // triggers to control claw roll
+        schedule(new RunCommand(() -> {
+            double leftTriggerValue = utilityGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
+            double rightTriggerValue = utilityGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
+            intakeSubsystem.horizontalClawRollServo.rotateByAngle(Constants.HORIZONTAL_CLAW_ROLL_SPEED * (leftTriggerValue - rightTriggerValue));
+//            intakeSubsystem.horizontalClawRollServo.rotateByAngle(rightTriggerValue - leftTriggerValue);
+        }));
 
         // horizontal slide min extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() ->
@@ -127,9 +135,12 @@ public class CommandTeleOp extends CommandOpMode {
         );
 
         // SAMPLE TRANSFER SEQUENCE
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 new SampleTransferCommandSequence(intakeSubsystem, currentTelemetry)
         );
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
+//                new SampleTransferCommandSequence(intakeSubsystem, currentTelemetry)
+//        );
 
         // bumpers control claw roll
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
@@ -145,6 +156,10 @@ public class CommandTeleOp extends CommandOpMode {
 //                () -> gamepad1.touchpad_finger_1_x,
 //                () -> gamepad1.touchpad_finger_1
 //        ));
+
+
+        // initially set horizontal arm position to hover
+        schedule(new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE));
 
         // triggers shall move horizontal slides
         schedule(new MoveHorizontalSlideWithTriggersCommand(
@@ -167,13 +182,6 @@ public class CommandTeleOp extends CommandOpMode {
         // update telemetry
         schedule(new RunCommand(() -> currentTelemetry.update()));
 
-//        // triggers to control claw roll
-//        schedule(new RunCommand(() -> {
-//            double leftTriggerValue = driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
-//            double rightTriggerValue = driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
-//            intakeSubsystem.horizontalClawRollServo.rotateByAngle(Constants.HORIZONTAL_CLAW_ROLL_SPEED * (leftTriggerValue - rightTriggerValue));
-////            intakeSubsystem.horizontalClawRollServo.rotateByAngle(rightTriggerValue - leftTriggerValue);
-//        }));
 
 //        schedule(new InstantCommand(() -> {
 //            currentTelemetry.addData("Command TeleOp", "initialized");

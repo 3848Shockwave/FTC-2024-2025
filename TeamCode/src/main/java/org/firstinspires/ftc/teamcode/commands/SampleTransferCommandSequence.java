@@ -24,7 +24,7 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
     public static int WAIT1 = 600;
     public static int WAIT2 = 300;
     public static int WAIT3 = 500;
-    public static int WAIT4 = 500;
+    public static int WAIT4 = 1500;
 
     public SampleTransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
