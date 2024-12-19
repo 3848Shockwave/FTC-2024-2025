@@ -56,7 +56,7 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
                 // set vertical slide position to deposit position, after start of this command: wait 500 ms, then set vertical arm to deposit position
                 new ParallelCommandGroup(
                         // set vertical slide position to transfer position
-                        new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION, telemetry),
+                        new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION),
                         new SequentialCommandGroup(
                                 new WaitCommand(WAIT4),
                                 // set vertical arm to deposit position
