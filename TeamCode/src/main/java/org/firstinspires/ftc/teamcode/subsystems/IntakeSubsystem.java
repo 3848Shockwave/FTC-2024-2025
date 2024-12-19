@@ -86,7 +86,7 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalSlideMotorBottom.setPositionCoefficient(Constants.MOTOR_POSITION_COEFFICIENT);
         verticalSlideMotorBottom.setPositionTolerance(Constants.MOTOR_POSITION_TOLERANCE);
 //        verticalSlideMotorBottom.setTargetPosition(5000);
-        verticalSlideMotorBottom.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+//        verticalSlideMotorBottom.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         verticalSlideMotorTop = new MotorEx(hardwareMap, "spoolLeft", Motor.GoBILDA.RPM_435);
         verticalSlideMotorTop.setRunMode(Motor.RunMode.PositionControl);

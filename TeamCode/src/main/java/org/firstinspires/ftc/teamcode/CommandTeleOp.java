@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.MoveHorizontalSlideWithTriggersCommand;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
+import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -78,12 +79,14 @@ public class CommandTeleOp extends CommandOpMode {
                 intakeSubsystem.setVerticalSlideMotorsVelocity(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST)
         ));
 
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION)
-        ));
-        utilityGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION)
-        ));
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER)
+//                intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION)
+        );
+        utilityGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
+//                intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION)
+        );
 
         // horizontal slide min extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() ->
