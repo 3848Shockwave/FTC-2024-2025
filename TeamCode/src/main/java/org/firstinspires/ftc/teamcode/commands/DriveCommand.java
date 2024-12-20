@@ -18,7 +18,8 @@ public class DriveCommand extends CommandBase {
     private IMU imu;
     private BooleanSupplier isFieldCentric;
 
-    public static boolean isEnabled = false;
+    // WARNING: drive code enabled on startup
+    public static boolean isEnabled = true;
 
     // HAS to be DoubleSuppliers because it never ends. These doubles constantly update but the method does not,
     // so it has to use DoubleSuppliers to get the updated values
@@ -50,6 +51,7 @@ public class DriveCommand extends CommandBase {
             driveSubsystem.driveRobotCentric(strafeSpeed.getAsDouble(), forwardSpeed.getAsDouble(), rotationSpeed.getAsDouble());
         }
     }
+
 
 //    @Override
 //    public void end(boolean interrupted) {

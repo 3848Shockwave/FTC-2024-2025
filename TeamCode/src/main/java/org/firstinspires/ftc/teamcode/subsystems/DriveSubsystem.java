@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 
+@Config
 public class DriveSubsystem extends SubsystemBase {
     private final Motor frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
     private final MecanumDrive mecanumDrive;
@@ -17,6 +19,8 @@ public class DriveSubsystem extends SubsystemBase {
     private Telemetry telemetry;
 
     private double heading;
+
+    public static double VELOCITY_CURVE_EXPONENT = 1;
 
     public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -40,6 +44,7 @@ public class DriveSubsystem extends SubsystemBase {
                 RevHubOrientationOnRobot.UsbFacingDirection.UP
         ));
         imu.initialize(parameters);
+        imu.resetYaw();
 
         mecanumDrive = new MecanumDrive(frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor);
     }
@@ -55,14 +60,26 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void driveFieldCentric(double strafeSpeed, double forwardSpeed, double rotationSpeed) {
+        strafeSpeed = applyVelocityCurves(strafeSpeed);
+        forwardSpeed = applyVelocityCurves(forwardSpeed);
+        rotationSpeed = applyVelocityCurves(rotationSpeed);
+
         rotationSpeed *= 1.1;
         heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, rotationSpeed, heading);
     }
 
     public void driveRobotCentric(double strafeSpeed, double forwardSpeed, double rotationSpeed) {
+        strafeSpeed = applyVelocityCurves(strafeSpeed);
+        forwardSpeed = applyVelocityCurves(forwardSpeed);
+        rotationSpeed = applyVelocityCurves(rotationSpeed);
+
         rotationSpeed *= 1.1;
         mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, rotationSpeed);
+    }
+
+    private double applyVelocityCurves(double inputSpeed) {
+        return Math.signum(inputSpeed) * Math.pow(Math.abs(inputSpeed), VELOCITY_CURVE_EXPONENT);
     }
 
 //    public void driveRobotCentric(double x, double y, double rx) {

@@ -13,8 +13,8 @@ public class Constants {
     public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 50;
     public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 130;
     // slide
-    public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 63;
-    public static double HORIZONTAL_SLIDE_MAX_EXTENSION = 120;
+    public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 62;
+    public static double HORIZONTAL_SLIDE_MAX_EXTENSION = 115;
     public static double HORIZONTAL_SLIDE_MIDDLE_EXTENSION = 90;
     public static double HORIZONTAL_SLIDE_MIN_EXTENSION = 52;
     public static double HORIZONTAL_SLIDE_SPEED_MANUAL = 1;
@@ -26,13 +26,13 @@ public class Constants {
     public static double HORIZONTAL_CLAW_ROLL_SPEED = 1;
     //
     public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 0;
-    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 86;
+    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 80;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
     public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 60;
     public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 100;
 
     // hovers
-    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 150;
+    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 170;
     public static double HORIZONTAL_CLAW_PITCH_HOVER_POSITION = 0;
 
     // vertical
@@ -46,9 +46,9 @@ public class Constants {
     public static double VERTICAL_SLIDE_MOTOR_SPEED_FAST = 1;
     public static double VERTICAL_SLIDE_MOTOR_SPEED_SLOW = 0.5;
     public static double VERTICAL_SLIDE_MOTOR_ACCELERATION = 30;
-    public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 90;
+    public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 94;
     public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 90;
-    public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 38;
+    public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 42;
     public static double VERTICAL_CLAW_PITCH_DEPOSIT_POSITION = 70;
     public static double VERTICAL_WRIST_PITCH_TRANSFER_POSITION = 8;
     public static double VERTICAL_WRIST_PITCH_DEPOSIT_POSITION = 180;
