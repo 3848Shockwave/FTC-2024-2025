@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalArmPositionCommand;
@@ -15,8 +14,6 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 @Config
 public class SampleTransferCommandSequence extends SequentialCommandGroup {
 
-    private IntakeSubsystem intakeSubsystem;
-    private Telemetry telemetry;
 
     // waits are in milliseconds
     public static int CLOSE_CLAW_WAIT = 500;
@@ -26,9 +23,7 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
     public static int WAIT3 = 500;
     public static int WAIT4 = 1500;
 
-    public SampleTransferCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
-        this.intakeSubsystem = intakeSubsystem;
-        this.telemetry = telemetry;
+    public SampleTransferCommandSequence(IntakeSubsystem intakeSubsystem) {
         addCommands(
                 // close horizontal arm claw to pick up the sample
                 new InstantCommand(intakeSubsystem::closeHorizontalClaw),

@@ -28,6 +28,8 @@ public class CommandTeleOp extends CommandOpMode {
 
     private Telemetry currentTelemetry;
 
+    private double requestedSlideVelocity;
+
 
     @Override
     public void initialize() {
@@ -66,7 +68,7 @@ public class CommandTeleOp extends CommandOpMode {
                 new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION)
         );
         utilityGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION)
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_HANG_POSITION)
         );
 //        // utility gamepad vertical slide controls
 //        utilityGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new InstantCommand(() ->
@@ -83,20 +85,26 @@ public class CommandTeleOp extends CommandOpMode {
                 intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_DEPOSIT_POSITION)
         ));
         utilityGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new DropAndResetToIntakeCommandSequence(intakeSubsystem, currentTelemetry)
+                new DropAndResetToIntakeCommandSequence(intakeSubsystem)
 //                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION)
         );
 //        utilityGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
 //                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION)
 //        );
-
         // triggers to control claw roll
         schedule(new RunCommand(() -> {
             double leftTriggerValue = utilityGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
             double rightTriggerValue = utilityGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
             intakeSubsystem.horizontalClawRollServo.rotateByAngle(Constants.HORIZONTAL_CLAW_ROLL_SPEED * (leftTriggerValue - rightTriggerValue));
-//            intakeSubsystem.horizontalClawRollServo.rotateByAngle(rightTriggerValue - leftTriggerValue);
         }));
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whileHeld(new InstantCommand(() ->
+                intakeSubsystem.horizontalClawRollServo.rotateByAngle(Constants.HORIZONTAL_CLAW_ROLL_SPEED)
+        ));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whileHeld(new InstantCommand(() ->
+                intakeSubsystem.horizontalClawRollServo.rotateByAngle(Constants.HORIZONTAL_CLAW_ROLL_SPEED)
+        ));
+
 
         // horizontal slide min extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() ->
@@ -125,18 +133,18 @@ public class CommandTeleOp extends CommandOpMode {
         );
         // drop the sample and reset both arms to intake position
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new DropAndResetToIntakeCommandSequence(intakeSubsystem, telemetry)
+                new DropAndResetToIntakeCommandSequence(intakeSubsystem)
         );
 
 
         // SPECIMEN TRANSFER SEQUENCE
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
-                new SpecimenTransferCommandSequence(intakeSubsystem, currentTelemetry)
+                new SpecimenTransferCommandSequence(intakeSubsystem)
         );
 
         // SAMPLE TRANSFER SEQUENCE
         driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                new SampleTransferCommandSequence(intakeSubsystem, currentTelemetry)
+                new SampleTransferCommandSequence(intakeSubsystem)
         );
 //        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
 //                new SampleTransferCommandSequence(intakeSubsystem, currentTelemetry)
@@ -176,7 +184,7 @@ public class CommandTeleOp extends CommandOpMode {
         intakeSubsystem.setVerticalSlideMotorsTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);
 
         schedule(
-                new RunVerticalSlideCommand(intakeSubsystem, currentTelemetry)
+                new RunVerticalSlideCommand(intakeSubsystem, () -> requestedSlideVelocity, currentTelemetry)
         );
 
         // update telemetry
@@ -186,7 +194,6 @@ public class CommandTeleOp extends CommandOpMode {
 //        schedule(new InstantCommand(() -> {
 //            currentTelemetry.addData("Command TeleOp", "initialized");
 //        }));
-
 
     }
 }

@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalArmPositionCommand;
@@ -17,9 +16,8 @@ public class DropAndResetToIntakeCommandSequence extends SequentialCommandGroup 
     public static int WAIT0 = 500;
     public static int WAIT1 = 250;
     public static int WAIT2 = 0;
-    private IntakeSubsystem intakeSubsystem;
 
-    public DropAndResetToIntakeCommandSequence(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
+    public DropAndResetToIntakeCommandSequence(IntakeSubsystem intakeSubsystem) {
         addCommands(
                 new InstantCommand(intakeSubsystem::openVerticalClaw),
                 new WaitCommand(WAIT0),
