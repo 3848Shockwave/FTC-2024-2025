@@ -98,22 +98,22 @@ public class CommandTeleOp extends CommandOpMode {
 
         auxiliaryGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 new DropAndResetToIntakeCommandSequence(intakeSubsystem)
-//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION)
         );
-        // triggers to control claw roll
-        schedule(new RunCommand(() -> {
-            double leftTriggerValue = auxiliaryGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
-            double rightTriggerValue = auxiliaryGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
-            intakeSubsystem.horizontalClawRollServo.rotateByAngle(Constants.HORIZONTAL_CLAW_ROLL_SPEED * (leftTriggerValue - rightTriggerValue));
+
+        // bumpers finely control claw roll
+        auxiliaryGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whileHeld(new InstantCommand(() -> {
+            // do it if the current angle is greater than the min
+            if (intakeSubsystem.horizontalClawRollServo.getAngle() > Constants.HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION) {
+                intakeSubsystem.horizontalClawRollServo.rotateByAngle(-Constants.HORIZONTAL_CLAW_ROLL_SPEED);
+            }
+        }));
+        auxiliaryGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new InstantCommand(() -> {
+            // do it if the current angle is greater than the min
+            if (intakeSubsystem.horizontalClawRollServo.getAngle() < Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION) {
+                intakeSubsystem.horizontalClawRollServo.rotateByAngle(Constants.HORIZONTAL_CLAW_ROLL_SPEED);
+            }
         }));
 
-//        // bumpers control claw roll speed
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whileHeld(new InstantCommand(() ->
-//                intakeSubsystem.horizontalClawRollServo.rotateByAngle(-Constants.HORIZONTAL_CLAW_ROLL_SPEED)
-//        ));
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whileHeld(new InstantCommand(() ->
-//                intakeSubsystem.horizontalClawRollServo.rotateByAngle(Constants.HORIZONTAL_CLAW_ROLL_SPEED)
-//        ));
 
         // bumpers control claw roll
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
@@ -167,9 +167,6 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 new SampleTransferCommandSequence(intakeSubsystem)
         );
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
-//                new SampleTransferCommandSequence(intakeSubsystem, currentTelemetry)
-//        );
 
 
         // back button resets imu
