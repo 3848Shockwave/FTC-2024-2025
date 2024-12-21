@@ -45,6 +45,7 @@ public class MeepMeepTesting {
                 .setBackgroundAlpha(0.95f);
 
         // CHANGE THIS TO CHANGE THE CURRENT TRAJECTORY SEQUENCE
+//        currentTrajectorySequence = TrajectorySequences::neutralStraysTS;
 //        currentTrajectorySequence = TrajectorySequences::submersibleCycleTS;
         currentTrajectorySequence = TrajectorySequences::pushSamplesTS;
 

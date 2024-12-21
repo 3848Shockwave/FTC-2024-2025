@@ -66,11 +66,15 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                 // set vertical slide position to deposit position, after start of this command: wait 500 ms, then set vertical arm to deposit position
                 new ParallelCommandGroup(
                         // set vertical slide position to transfer position
-                        new SetVerticalSlidePositionCommand(intakeSubsystem, SpecimenConstants.VERTICAL_SLIDE_MOTOR_SPECIMEN_DEPOSIT_POSITION),
+                        new SetVerticalSlidePositionCommand(intakeSubsystem, SpecimenConstants.VERTICAL_SLIDE_MOTOR_SPECIMEN_UP_POSITION),
                         new SequentialCommandGroup(
                                 new WaitCommand(WAIT4),
-                                // set vertical arm to deposit position
-                                new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT),
+                                // set vertical claw to specimen dropoff position
+                                new InstantCommand(() -> {
+                                    intakeSubsystem.setVerticalWristPitchPosition(SpecimenConstants.VERTICAL_WRIST_PITCH_SPECIMEN_DROPOFF_POSITION);
+                                    intakeSubsystem.setVerticalClawPitchPosition(SpecimenConstants.VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION);
+                                    intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_DEPOSIT_POSITION);
+                                }),
                                 // set horizontal arm to be straight up
                                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL)
                         )

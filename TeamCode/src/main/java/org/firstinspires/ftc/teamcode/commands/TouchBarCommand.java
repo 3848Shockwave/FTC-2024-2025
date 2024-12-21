@@ -6,11 +6,11 @@ import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePosit
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
-public class EndgameCommand extends SequentialCommandGroup {
-    public EndgameCommand(IntakeSubsystem intakeSubsystem) {
+public class TouchBarCommand extends SequentialCommandGroup {
+    public TouchBarCommand(IntakeSubsystem intakeSubsystem) {
 
         addCommands(
-//                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION),
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TOUCH_BAR_POSITION),
                 new SetVerticalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.DEPOSIT)
         );
 

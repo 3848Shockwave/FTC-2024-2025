@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.MoveHorizontalSlideWithTriggersCommand;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.RunVerticalSlideCommand;
-import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -85,10 +84,10 @@ public class CommandTeleOp extends CommandOpMode {
                 new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION)
         );
         auxiliaryGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_HANG_POSITION)
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TOUCH_BAR_POSITION)
         );
         auxiliaryGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                new EndgameCommand(intakeSubsystem)
+                new TouchBarCommand(intakeSubsystem)
         );
 //        // auxiliary gamepad vertical slide controls
 //        auxiliaryGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new InstantCommand(() ->
@@ -139,7 +138,7 @@ public class CommandTeleOp extends CommandOpMode {
                 intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_EXTENSION)
         ));
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() ->
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_HANG_POSITION)
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TOUCH_BAR_POSITION)
         ));
 
 

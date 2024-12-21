@@ -1,12 +1,10 @@
-package com.example.meepmeeptesting;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import org.rowlandhall.meepmeep.roadrunner.DriveShim;
-import org.rowlandhall.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
-// import the poses
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-import static com.example.meepmeeptesting.MeepMeepTesting.*;
 
 /**
  * WHEN COPYING THIS CLASS FOR ROADRUNNER IMPLEMENTATION, MAKE SURE TO CHANGE EVERYWHERE YOU SEE:
@@ -31,7 +29,7 @@ public class TrajectorySequences {
     public static COLOR currentColor;
 
     static {
-        currentColor = COLOR.BLUE;
+        currentColor = COLOR.RED;
         redAngleAdjustment = 0;
         redPoseAdjustment = 1;
 
@@ -63,7 +61,7 @@ public class TrajectorySequences {
 
     }
 
-    public static TrajectorySequence pushSamplesTS(DriveShim drive) {
+    public static TrajectorySequence pushSamplesTS(SampleMecanumDrive drive) {
         return drive.trajectorySequenceBuilder(coloredSampleStartPose)
                 // LOOP 1
 
@@ -175,13 +173,13 @@ public class TrajectorySequences {
 //                        ),
 //                        Math.toRadians(180 + redAngleAdjustment)
 //                )
-                .addDisplacementMarker(() -> {
-
-                })
+//                .addDisplacementMarker(() -> {
+//
+//                })
                 .build();
     }
 
-    public static TrajectorySequence neutralStraysTS(DriveShim drive) {
+    public static TrajectorySequence neutralStraysTS(SampleMecanumDrive drive) {
         return drive.trajectorySequenceBuilder(bucketStartPose)
 
                 // drop specimen
@@ -192,6 +190,10 @@ public class TrajectorySequences {
                                 Math.toRadians(-90 + redAngleAdjustment)
                         )
                 )
+
+                .addDisplacementMarker(() -> {
+                    // pick up sample
+                })
 
                 // LOOP 1
                 // go to pickup
@@ -240,7 +242,7 @@ public class TrajectorySequences {
                 .build();
     }
 
-    public static TrajectorySequence submersibleCycleTS(DriveShim drive) {
+    public static TrajectorySequence submersibleCycleTS(SampleMecanumDrive drive) {
         return drive.trajectorySequenceBuilder(bucketStartPose)
 
                 // drop specimen
