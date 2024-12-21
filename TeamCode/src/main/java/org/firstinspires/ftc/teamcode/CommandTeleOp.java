@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.*;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -26,8 +27,6 @@ public class CommandTeleOp extends CommandOpMode {
     private GamepadEx driverGamepad;
     private GamepadEx auxiliaryGamepad;
 
-    private FtcDashboard dashboard;
-
     private Telemetry currentTelemetry;
 
     private double requestedSlideVelocity;
@@ -36,9 +35,7 @@ public class CommandTeleOp extends CommandOpMode {
     @Override
     public void initialize() {
 
-        dashboard = FtcDashboard.getInstance();
-        currentTelemetry = dashboard.getTelemetry();
-//        currentTelemetry = telemetry;
+        currentTelemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
         driverGamepad = new GamepadEx(gamepad1);
         auxiliaryGamepad = new GamepadEx(gamepad2);
