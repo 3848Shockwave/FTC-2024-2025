@@ -52,6 +52,8 @@ public class CommandTeleOp extends CommandOpMode {
         // "always be runnin this thing"
         driveSubsystem.setDefaultCommand(driveCommand);
 
+        // AUXILIARY GAMEPAD!!!!!!!!!
+
 //        // debug controls
 //        auxiliaryGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
 //                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.TRANSFER)
@@ -114,6 +116,13 @@ public class CommandTeleOp extends CommandOpMode {
             }
         }));
 
+        // triggers shall move horizontal slides
+        schedule(new MoveHorizontalSlideWithTriggersCommand(
+                intakeSubsystem,
+                () -> auxiliaryGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER),
+                () -> auxiliaryGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
+        ));
+
 
         // bumpers control claw roll
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
@@ -123,6 +132,7 @@ public class CommandTeleOp extends CommandOpMode {
                 new InstantCommand(() -> intakeSubsystem.horizontalClawRollServo.turnToAngle(Constants.HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION))
         );
 
+        // DRIVER GAMEPAD!!!!!!!!!
 
         // horizontal slide min extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() ->
