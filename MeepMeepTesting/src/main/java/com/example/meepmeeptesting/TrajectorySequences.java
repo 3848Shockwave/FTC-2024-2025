@@ -41,14 +41,14 @@ public class TrajectorySequences {
         }
 
         bucketStartPose = new Pose2d(
-                35 * redPoseAdjustment,
+                11.5 * redPoseAdjustment,
                 62 * redPoseAdjustment,
                 Math.toRadians(-90 + redAngleAdjustment)
         );
         coloredSampleStartPose = new Pose2d(
-                -35 * redPoseAdjustment,
+                -11.5 * redPoseAdjustment,
                 62 * redPoseAdjustment,
-                Math.toRadians(-90 + redAngleAdjustment)
+                Math.toRadians(90 + redAngleAdjustment)
         );
         submersiblePickUpPose = new Pose2d(
                 27 * redPoseAdjustment,
@@ -67,34 +67,31 @@ public class TrajectorySequences {
         return drive.trajectorySequenceBuilder(coloredSampleStartPose)
                 // LOOP 1
 
-                // drop specimen
-                .lineToSplineHeading(
-                        new Pose2d(
-                                0 * redPoseAdjustment,
-                                37 * redPoseAdjustment,
-                                Math.toRadians(-90 + redAngleAdjustment)
+//                // drop specimen
+//                .lineToSplineHeading(
+//                        new Pose2d(
+//                                0 * redPoseAdjustment,
+//                                37 * redPoseAdjustment,
+//                                Math.toRadians(-90 + redAngleAdjustment)
+//                        )
+//                )
+                .lineTo(new Vector2d(
+                        -35 * redPoseAdjustment,
+                        45 * redPoseAdjustment
                         )
                 )
-
-                // go to push right-most sample
-                .setTangent(Math.toRadians(180 + redAngleAdjustment))
-                // straight line
-                .lineTo(new Vector2d(-15 * redPoseAdjustment, 37 * redPoseAdjustment))
-                .splineToSplineHeading(
-                        new Pose2d(
-                                -32 * redPoseAdjustment,
-                                25 * redPoseAdjustment,
-                                Math.toRadians(180 + redAngleAdjustment)
-                        ),
-                        Math.toRadians(-90 + redAngleAdjustment)
+                .lineTo(new Vector2d(
+                                -35 * redPoseAdjustment,
+                                9 * redPoseAdjustment
+                        )
                 )
-                .splineToLinearHeading(
+//                // lil spline
+                .lineToLinearHeading(
                         new Pose2d(
                                 -45 * redPoseAdjustment,
                                 9 * redPoseAdjustment,
                                 Math.toRadians(180 + redAngleAdjustment)
-                        ),
-                        Math.toRadians(180 + redAngleAdjustment)
+                        )
                 )
                 // push sample 1 toward observation zone
                 .lineToConstantHeading(
@@ -175,10 +172,10 @@ public class TrajectorySequences {
 //                        ),
 //                        Math.toRadians(180 + redAngleAdjustment)
 //                )
-                .addDisplacementMarker(() -> {
-
-                })
-                .build();
+//                .addDisplacementMarker(() -> {
+//
+//                })
+                                .build();
     }
 
     public static TrajectorySequence neutralStraysTS(DriveShim drive) {
@@ -192,6 +189,10 @@ public class TrajectorySequences {
                                 Math.toRadians(-90 + redAngleAdjustment)
                         )
                 )
+
+                .addDisplacementMarker(() -> {
+                    // pick up sample
+                })
 
                 // LOOP 1
                 // go to pickup

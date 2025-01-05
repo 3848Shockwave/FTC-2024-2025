@@ -17,7 +17,7 @@ public class RunVerticalSlideCommand extends CommandBase {
     private MotorEx verticalSlideMotorBottom;
     private IntakeSubsystem intakeSubsystem;
     private Telemetry telemetry;
-    public static double KV = 0.2;
+    public static double KV = 0.1;
     public static double KS = 0;
     public static double KG = 0;
     public static double KA = 0;

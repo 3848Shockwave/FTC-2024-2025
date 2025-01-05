@@ -55,9 +55,10 @@ public class MeepMeepTesting {
 
 
             RoadRunnerBotEntity newBot = new DefaultBotBuilder(meepMeep)
-                    .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                    .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 10.8)
 //                    .followTrajectorySequence(TrajectorySequences::coloredStraysTS);
                     .followTrajectorySequence(currentTrajectorySequence::apply);
+
 
 //            bots.add(newBot);
             if (currentBot!=null) {

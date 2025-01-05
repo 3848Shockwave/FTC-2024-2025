@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
+@Config
 /**
  * WHEN COPYING THIS CLASS FOR ROADRUNNER IMPLEMENTATION, MAKE SURE TO CHANGE EVERYWHERE YOU SEE:
  * "DriveShim"
@@ -22,14 +24,14 @@ public class TrajectorySequences {
     public static Pose2d submersiblePickUpPose;
     public static Pose2d dropSamplePose;
 
-    public enum COLOR {
+    public static enum COLOR {
         RED, BLUE;
     }
 
     public static COLOR currentColor;
 
     static {
-        currentColor = COLOR.RED;
+        currentColor = COLOR.BLUE;
         redAngleAdjustment = 0;
         redPoseAdjustment = 1;
 
@@ -39,12 +41,12 @@ public class TrajectorySequences {
         }
 
         bucketStartPose = new Pose2d(
-                35 * redPoseAdjustment,
+                11.5 * redPoseAdjustment,
                 62 * redPoseAdjustment,
                 Math.toRadians(-90 + redAngleAdjustment)
         );
         coloredSampleStartPose = new Pose2d(
-                -35 * redPoseAdjustment,
+                -11.5 * redPoseAdjustment,
                 62 * redPoseAdjustment,
                 Math.toRadians(-90 + redAngleAdjustment)
         );
@@ -65,27 +67,43 @@ public class TrajectorySequences {
         return drive.trajectorySequenceBuilder(coloredSampleStartPose)
                 // LOOP 1
 
-                // drop specimen
-                .lineToSplineHeading(
-                        new Pose2d(
-                                0 * redPoseAdjustment,
-                                37 * redPoseAdjustment,
-                                Math.toRadians(-90 + redAngleAdjustment)
+//                // drop specimen
+//                .lineToSplineHeading(
+//                        new Pose2d(
+//                                0 * redPoseAdjustment,
+//                                37 * redPoseAdjustment,
+//                                Math.toRadians(-90 + redAngleAdjustment)
+//                        )
+//                )
+
+//                // go to push right-most sample
+//                .setTangent(Math.toRadians(180 + redAngleAdjustment))
+//                // straight line
+//                .lineTo(new Vector2d(-15 * redPoseAdjustment, 37 * redPoseAdjustment))
+//                .splineToSplineHeading(
+//                        new Pose2d(
+//                                -36 * redPoseAdjustment,
+//                                25 * redPoseAdjustment,
+//                                Math.toRadians(180 + redAngleAdjustment)
+//                        ),
+//                        Math.toRadians(-90 + redAngleAdjustment)
+//                )
+                .lineTo(new Vector2d(-35, 60))
+                .lineToConstantHeading(
+                        new Vector2d(
+                                -35 * redPoseAdjustment,
+                                9 * redPoseAdjustment
                         )
                 )
-
-                // go to push right-most sample
-                .setTangent(Math.toRadians(180 + redAngleAdjustment))
-                // straight line
-                .lineTo(new Vector2d(-15 * redPoseAdjustment, 37 * redPoseAdjustment))
-                .splineToSplineHeading(
-                        new Pose2d(
-                                -32 * redPoseAdjustment,
-                                25 * redPoseAdjustment,
-                                Math.toRadians(180 + redAngleAdjustment)
-                        ),
-                        Math.toRadians(-90 + redAngleAdjustment)
-                )
+//                // lil spline
+//                .splineToLinearHeading(
+//                        new Pose2d(
+//                                -55 * redPoseAdjustment,
+//                                9 * redPoseAdjustment,
+//                                Math.toRadians(180 + redAngleAdjustment)
+//                        ),
+//                        Math.toRadians(180 + redAngleAdjustment)
+//                )
                 .splineToLinearHeading(
                         new Pose2d(
                                 -45 * redPoseAdjustment,
