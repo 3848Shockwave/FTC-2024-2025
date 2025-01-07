@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 @Config
 public class TriggerPickupAndTransferCommandSequence extends SequentialCommandGroup {
-    public static int PICKUP_TRANSFER_WAIT = 200;
+    public static int PICKUP_TRANSFER_WAIT = 100;
     public TriggerPickupAndTransferCommandSequence(IntakeSubsystem intakeSubsystem) {
         addCommands(
                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),

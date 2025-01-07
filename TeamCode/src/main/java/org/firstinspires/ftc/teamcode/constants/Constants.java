@@ -32,7 +32,7 @@ public class Constants {
     public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 100;
 
     // hovers
-    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 170;
+    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 165;
     public static double HORIZONTAL_CLAW_PITCH_HOVER_POSITION = 0;
 
     // vertical

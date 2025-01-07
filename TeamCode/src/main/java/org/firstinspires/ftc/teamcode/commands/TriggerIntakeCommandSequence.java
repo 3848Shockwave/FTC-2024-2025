@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 @Config
 public class TriggerIntakeCommandSequence extends SequentialCommandGroup {
 
-    public static int EXTEND_HOVER_WAIT = 600;
+    public static int EXTEND_HOVER_WAIT = 500;
 
     public TriggerIntakeCommandSequence(IntakeSubsystem intakeSubsystem) {
         addCommands(
