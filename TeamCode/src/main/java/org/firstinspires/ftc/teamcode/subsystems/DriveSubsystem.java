@@ -71,11 +71,11 @@ public class DriveSubsystem extends SubsystemBase {
     public void periodic() {
         localizer.update();
 
-        telemetry.addData("Current Heading:", AngleUnit.normalizeDegrees(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)));
-        telemetry.addData("is field centric:", Constants.IS_FIELD_CENTRIC);
-        telemetry.addData("roadrunner localizer (odo pods) heading: ", Math.toDegrees(localizer.getPoseEstimate().getHeading()));
-        telemetry.addData("roadrunner localizer (odo pods) x: ", localizer.getPoseEstimate().getX());
-        telemetry.addData("roadrunner localizer (odo pods) y: ", localizer.getPoseEstimate().getY());
+//        telemetry.addData("Current Heading:", AngleUnit.normalizeDegrees(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)));
+//        telemetry.addData("is field centric:", Constants.IS_FIELD_CENTRIC);
+//        telemetry.addData("roadrunner localizer (odo pods) heading: ", Math.toDegrees(localizer.getPoseEstimate().getHeading()));
+//        telemetry.addData("roadrunner localizer (odo pods) x: ", localizer.getPoseEstimate().getX());
+//        telemetry.addData("roadrunner localizer (odo pods) y: ", localizer.getPoseEstimate().getY());
 
 //        odometry.updatePose();
     }

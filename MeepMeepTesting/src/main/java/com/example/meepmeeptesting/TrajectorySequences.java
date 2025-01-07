@@ -48,7 +48,7 @@ public class TrajectorySequences {
         coloredSampleStartPose = new Pose2d(
                 -11.5 * redPoseAdjustment,
                 62 * redPoseAdjustment,
-                Math.toRadians(90 + redAngleAdjustment)
+                Math.toRadians(-90 + redAngleAdjustment)
         );
         submersiblePickUpPose = new Pose2d(
                 27 * redPoseAdjustment,

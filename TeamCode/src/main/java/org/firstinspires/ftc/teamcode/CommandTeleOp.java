@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.MoveHorizontalSlideWithTriggersCommand;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.RunVerticalSlideCommand;
+import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -200,13 +201,6 @@ public class CommandTeleOp extends CommandOpMode {
                 new InstantCommand(() -> gamepad1.rumble(200)
                 )));
 
-        // move horizontal slide with touchpad lmao
-//        schedule(new MoveHorizontalSlideTouchpadCommand(
-//                intakeSubsystem,
-//                () -> gamepad1.touchpad_finger_1_x,
-//                () -> gamepad1.touchpad_finger_1
-//        ));
-
 
         // initially set horizontal arm position to hover
         schedule(new InstantCommand(() -> {
@@ -217,30 +211,23 @@ public class CommandTeleOp extends CommandOpMode {
         // triggers for intake
         TriggerReader rightTriggerReader = new TriggerReader(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER);
         schedule(new RunCommand(() -> {
+            rightTriggerReader.readValue();
+//            currentTelemetry.addData("trigger value: " ,rightTriggerReader.readValue());
             // TRIGGER PRESSED: set horizontal slide to middle extension and hover over sample
             if (rightTriggerReader.wasJustPressed()) {
-                schedule(new ParallelCommandGroup(
-                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIDDLE_EXTENSION)),
-                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE)
-                ));
+                schedule(
+                        new TriggerIntakeCommandSequence(intakeSubsystem)
+                );
             }
 
             // TRIGGER RELEASED: drop claw and pick up sample
             if (rightTriggerReader.wasJustReleased()) {
-                schedule(new SequentialCommandGroup(
-                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
-                        new WaitCommand(500),
-                        new SampleTransferCommandSequence(intakeSubsystem)
-                ));
+                schedule(
+                        new TriggerPickupAndTransferCommandSequence(intakeSubsystem)
+                );
             }
         }));
 
-//        // triggers shall move horizontal slides
-//        schedule(new MoveHorizontalSlideWithTriggersCommand(
-//                intakeSubsystem,
-//                () -> driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER),
-//                () -> driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
-//        ));
 
         intakeSubsystem.setVerticalSlideMotorsTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);
 
@@ -251,6 +238,19 @@ public class CommandTeleOp extends CommandOpMode {
         // update telemetry
         schedule(new RunCommand(() -> currentTelemetry.update()));
 
+//        // triggers shall move horizontal slides
+//        schedule(new MoveHorizontalSlideWithTriggersCommand(
+//                intakeSubsystem,
+//                () -> driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER),
+//                () -> driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
+//        ));
+
+        // move horizontal slide with touchpad lmao
+//        schedule(new MoveHorizontalSlideTouchpadCommand(
+//                intakeSubsystem,
+//                () -> gamepad1.touchpad_finger_1_x,
+//                () -> gamepad1.touchpad_finger_1
+//        ));
 
 //        schedule(new InstantCommand(() -> {
 //            currentTelemetry.addData("Command TeleOp", "initialized");

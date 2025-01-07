@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
-@Config
+/*
 /**
  * WHEN COPYING THIS CLASS FOR ROADRUNNER IMPLEMENTATION, MAKE SURE TO CHANGE EVERYWHERE YOU SEE:
  * "DriveShim"
@@ -24,7 +23,7 @@ public class TrajectorySequences {
     public static Pose2d submersiblePickUpPose;
     public static Pose2d dropSamplePose;
 
-    public static enum COLOR {
+    public enum COLOR {
         RED, BLUE;
     }
 
@@ -75,42 +74,23 @@ public class TrajectorySequences {
 //                                Math.toRadians(-90 + redAngleAdjustment)
 //                        )
 //                )
-
-//                // go to push right-most sample
-//                .setTangent(Math.toRadians(180 + redAngleAdjustment))
-//                // straight line
-//                .lineTo(new Vector2d(-15 * redPoseAdjustment, 37 * redPoseAdjustment))
-//                .splineToSplineHeading(
-//                        new Pose2d(
-//                                -36 * redPoseAdjustment,
-//                                25 * redPoseAdjustment,
-//                                Math.toRadians(180 + redAngleAdjustment)
-//                        ),
-//                        Math.toRadians(-90 + redAngleAdjustment)
-//                )
-                .lineTo(new Vector2d(-35, 60))
-                .lineToConstantHeading(
-                        new Vector2d(
+                .lineTo(new Vector2d(
+                                -35 * redPoseAdjustment,
+                                45 * redPoseAdjustment
+                        )
+                )
+                .lineTo(new Vector2d(
                                 -35 * redPoseAdjustment,
                                 9 * redPoseAdjustment
                         )
                 )
 //                // lil spline
-//                .splineToLinearHeading(
-//                        new Pose2d(
-//                                -55 * redPoseAdjustment,
-//                                9 * redPoseAdjustment,
-//                                Math.toRadians(180 + redAngleAdjustment)
-//                        ),
-//                        Math.toRadians(180 + redAngleAdjustment)
-//                )
-                .splineToLinearHeading(
+                .lineToLinearHeading(
                         new Pose2d(
                                 -45 * redPoseAdjustment,
                                 9 * redPoseAdjustment,
                                 Math.toRadians(180 + redAngleAdjustment)
-                        ),
-                        Math.toRadians(180 + redAngleAdjustment)
+                        )
                 )
                 // push sample 1 toward observation zone
                 .lineToConstantHeading(

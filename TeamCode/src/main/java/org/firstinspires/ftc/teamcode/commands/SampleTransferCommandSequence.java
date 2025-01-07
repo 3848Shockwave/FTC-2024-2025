@@ -16,7 +16,7 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
 
 
     // waits are in milliseconds
-    public static int CLOSE_CLAW_WAIT = 500;
+    public static int CLOSE_CLAW_WAIT = 250;
     public static int WAIT0 = 0;
     public static int WAIT1 = 600;
     public static int WAIT2 = 300;
