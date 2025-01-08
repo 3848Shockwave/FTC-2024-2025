@@ -39,27 +39,34 @@ public class TrajectorySequences {
             Math.toRadians(180 + 45)
     );
 
+    public static Pose2d hangSpecimenPose = new Pose2d(
+            0,
+            37,
+            Math.toRadians(-90)
+    );
 
-    public static Vector2d rightColoredSampleVector2d = new Vector2d(-48, 27);
-    public static Vector2d middleColoredSampleVector2d = new Vector2d(-58, 27);
-    public static Vector2d leftColoredSampleVector2d = new Vector2d(-68, 27);
-    public static Vector2d placedSpecimenVector2d = new Vector2d(47, -57);
 
-    public static TrajectorySequence completeSpecimenTS(DriveShim drive) {
+    public static Vector2d rightColoredSampleVector = new Vector2d(-48, 27);
+    public static Vector2d middleColoredSampleVector = new Vector2d(-58, 27);
+    public static Vector2d leftColoredSampleVector = new Vector2d(-68, 27);
+    public static Vector2d placedSpecimenVector = new Vector2d(-47, 58);
+    public static Pose2d pickUpSpecimenPose = new Pose2d(
+            -37, 41,
+            Math.atan2(
+                    -(placedSpecimenVector.getX() - (-37)),
+                    -(placedSpecimenVector.getY() - (41))
+            ) - Math.toRadians(20)
+    );
+
+
+    public static TrajectorySequence moveAndHangSpecimensTS(DriveShim drive) {
         return drive.trajectorySequenceBuilder(coloredSampleStartPose)
-//                // drop specimen
-                .lineToSplineHeading(
-                        new Pose2d(
-                                0,
-                                37,
-                                Math.toRadians(-90)
-                        )
-                )
+                // hang specimen
+                .lineToSplineHeading(hangSpecimenPose)
                 .addDisplacementMarker(() -> {
-                    // drop specimen
-
+                    // hang specimen
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(3)
 
                 // sample 1
                 .lineToLinearHeading(
@@ -67,8 +74,8 @@ public class TrajectorySequences {
                                 -28,
                                 45,
                                 Math.atan2(
-                                        rightColoredSampleVector2d.getX() - (-28),
-                                        rightColoredSampleVector2d.getY() - (45)
+                                        rightColoredSampleVector.getX() - (-28),
+                                        rightColoredSampleVector.getY() - (45)
                                 )
                         )
                 )
@@ -94,8 +101,8 @@ public class TrajectorySequences {
                                 -40,
                                 45,
                                 Math.atan2(
-                                        middleColoredSampleVector2d.getX() - (-40),
-                                        middleColoredSampleVector2d.getY() - (45)
+                                        middleColoredSampleVector.getX() - (-40),
+                                        middleColoredSampleVector.getY() - (45)
                                 )
                         )
                 )
@@ -120,8 +127,8 @@ public class TrajectorySequences {
                                 -50,
                                 45,
                                 Math.atan2(
-                                        leftColoredSampleVector2d.getX() - (-50),
-                                        leftColoredSampleVector2d.getY() - (45)
+                                        leftColoredSampleVector.getX() - (-50),
+                                        leftColoredSampleVector.getY() - (45)
                                 )
                         )
                 )
@@ -142,17 +149,48 @@ public class TrajectorySequences {
                 .waitSeconds(0.5)
 
                 // PICK UP SPECIMEN
-                .lineToLinearHeading(
-                        new Pose2d(
-                                -37,
-                                41,
-                                Math.atan2(
-                                        placedSpecimenVector2d.getX() - (-37),
-                                        placedSpecimenVector2d.getY() - (41)
-                                )
-                        )
-                )
+                .lineToLinearHeading(pickUpSpecimenPose)
+                .addDisplacementMarker(() -> {
+                    // pick up specimen
+                })
                 .waitSeconds(0.5)
+
+                // hang specimen
+                .lineToSplineHeading(hangSpecimenPose)
+                .addDisplacementMarker(() -> {
+                    // hang specimen
+                })
+                .waitSeconds(3)
+
+                // PICK UP SPECIMEN 2
+                .lineToLinearHeading(pickUpSpecimenPose)
+                .addDisplacementMarker(() -> {
+                    // pick up specimen
+                })
+                .waitSeconds(0.5)
+
+                // hang specimen
+                .lineToSplineHeading(hangSpecimenPose)
+                .addDisplacementMarker(() -> {
+                    // hang specimen
+                })
+                .waitSeconds(3)
+
+                // PICK UP SPECIMEN 3
+                .lineToLinearHeading(pickUpSpecimenPose)
+                .addDisplacementMarker(() -> {
+                    // pick up specimen
+                })
+                .waitSeconds(0.5)
+
+                // hang specimen
+                .lineToSplineHeading(hangSpecimenPose)
+                .addDisplacementMarker(() -> {
+                    // hang specimen
+                })
+                .waitSeconds(3)
+
+                // TODO: park
 
                 .build();
     }
@@ -161,14 +199,13 @@ public class TrajectorySequences {
         return drive.trajectorySequenceBuilder(coloredSampleStartPose)
                 // LOOP 1
 
-//                // drop specimen
-//                .lineToSplineHeading(
-//                        new Pose2d(
-//                                0,
-//                                37,
-//                                Math.toRadians(-90)
-//                        )
-//                )
+                // hang specimen
+                .lineToSplineHeading(hangSpecimenPose)
+                .addDisplacementMarker(() -> {
+                    // hang specimen
+                })
+                .waitSeconds(3)
+
                 .lineTo(new Vector2d(
                                 -35,
                                 45
@@ -240,6 +277,9 @@ public class TrajectorySequences {
                                 58
                         )
                 )
+
+                // TODO: park
+
 //                .setTangent(-45)
 //                .splineToSplineHeading(
 //                        new Pose2d(
@@ -275,14 +315,12 @@ public class TrajectorySequences {
     public static TrajectorySequence neutralStraysTS(DriveShim drive) {
         return drive.trajectorySequenceBuilder(bucketStartPose)
 
-                // drop specimen
-                .lineToSplineHeading(
-                        new Pose2d(
-                                0,
-                                37,
-                                Math.toRadians(-90)
-                        )
-                )
+                // hang specimen
+                .lineToSplineHeading(hangSpecimenPose)
+                .addDisplacementMarker(() -> {
+                    // hang specimen
+                })
+                .waitSeconds(3)
 
                 .addDisplacementMarker(() -> {
                     // pick up sample
@@ -338,14 +376,12 @@ public class TrajectorySequences {
     public static TrajectorySequence submersibleCycleTS(DriveShim drive) {
         return drive.trajectorySequenceBuilder(bucketStartPose)
 
-                // drop specimen
-                .lineToSplineHeading(
-                        new Pose2d(
-                                0,
-                                37,
-                                Math.toRadians(-90)
-                        )
-                )
+                // hang specimen
+                .lineToSplineHeading(hangSpecimenPose)
+                .addDisplacementMarker(() -> {
+                    // hang specimen
+                })
+                .waitSeconds(3)
 
                 .addDisplacementMarker(() -> {
                     // pick up sample
