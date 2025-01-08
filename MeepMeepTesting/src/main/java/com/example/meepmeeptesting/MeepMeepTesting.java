@@ -1,13 +1,11 @@
 package com.example.meepmeeptesting;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import org.rowlandhall.meepmeep.MeepMeep;
 import org.rowlandhall.meepmeep.roadrunner.DefaultBotBuilder;
 import org.rowlandhall.meepmeep.roadrunner.DriveShim;
 import org.rowlandhall.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 import org.rowlandhall.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 
-import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.function.Function;
 
@@ -45,9 +43,10 @@ public class MeepMeepTesting {
                 .setBackgroundAlpha(0.95f);
 
         // CHANGE THIS TO CHANGE THE CURRENT TRAJECTORY SEQUENCE
-        currentTrajectorySequence = TrajectorySequences::neutralStraysTS;
-//        currentTrajectorySequence = TrajectorySequences::submersibleCycleTS;
+        currentTrajectorySequence = TrajectorySequences::completeSpecimenTS;
 //        currentTrajectorySequence = TrajectorySequences::pushSamplesTS;
+//        currentTrajectorySequence = TrajectorySequences::neutralStraysTS;
+//        currentTrajectorySequence = TrajectorySequences::submersibleCycleTS;
 
         RoadRunnerBotEntity currentBot = null;
 

@@ -6,7 +6,6 @@ import org.rowlandhall.meepmeep.roadrunner.DriveShim;
 import org.rowlandhall.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 // import the poses
 
-import static com.example.meepmeeptesting.MeepMeepTesting.*;
 
 /**
  * WHEN COPYING THIS CLASS FOR ROADRUNNER IMPLEMENTATION, MAKE SURE TO CHANGE EVERYWHERE YOU SEE:
@@ -61,6 +60,124 @@ public class TrajectorySequences {
                 Math.toRadians(180 + 45 + redAngleAdjustment)
         );
 
+
+    }
+
+    public static Vector2d rightColoredSampleVector2d = new Vector2d(-48 * redPoseAdjustment, 27 * redPoseAdjustment);
+    public static Vector2d middleColoredSampleVector2d = new Vector2d(-58 * redPoseAdjustment, 27 * redPoseAdjustment);
+    public static Vector2d leftColoredSampleVector2d = new Vector2d(-68 * redPoseAdjustment, 27 * redPoseAdjustment);
+    public static Vector2d placedSpecimenVector2d = new Vector2d(47 * redPoseAdjustment, -57 * redPoseAdjustment);
+
+    public static TrajectorySequence completeSpecimenTS(DriveShim drive) {
+        return drive.trajectorySequenceBuilder(coloredSampleStartPose)
+//                // drop specimen
+                .lineToSplineHeading(
+                        new Pose2d(
+                                0 * redPoseAdjustment,
+                                37 * redPoseAdjustment,
+                                Math.toRadians(-90 + redAngleAdjustment)
+                        )
+                )
+                .addDisplacementMarker(() -> {
+                    // drop specimen
+
+                })
+                .waitSeconds(0.5)
+
+                // sample 1
+                .lineToLinearHeading(
+                        new Pose2d(
+                                -28 * redPoseAdjustment,
+                                45 * redPoseAdjustment,
+                                Math.atan2(
+                                        rightColoredSampleVector2d.getX() - (-28 * redPoseAdjustment),
+                                        rightColoredSampleVector2d.getY() - (45 * redPoseAdjustment)
+                                )
+                        )
+                )
+                .addDisplacementMarker(() -> {
+                    // pick up specimen
+
+                })
+                .waitSeconds(0.5)
+
+                .turn(
+                        Math.toRadians(-90)
+                )
+                .addDisplacementMarker(() -> {
+                    // drop specimen
+
+                })
+
+                .waitSeconds(0.5)
+
+                // sample 2
+                .lineToLinearHeading(
+                        new Pose2d(
+                                -40 * redPoseAdjustment,
+                                45 * redPoseAdjustment,
+                                Math.atan2(
+                                        middleColoredSampleVector2d.getX() - (-40 * redPoseAdjustment),
+                                        middleColoredSampleVector2d.getY() - (45 * redPoseAdjustment)
+                                )
+                        )
+                )
+                .addDisplacementMarker(() -> {
+                    // pick up specimen
+
+                })
+                .waitSeconds(0.5)
+
+                .turn(
+                        Math.toRadians(-90)
+                )
+                .addDisplacementMarker(() -> {
+                    // drop specimen
+
+                })
+                .waitSeconds(0.5)
+
+                // sample 3
+                .lineToLinearHeading(
+                        new Pose2d(
+                                -50 * redPoseAdjustment,
+                                45 * redPoseAdjustment,
+                                Math.atan2(
+                                        leftColoredSampleVector2d.getX() - (-50 * redPoseAdjustment),
+                                        leftColoredSampleVector2d.getY() - (45 * redPoseAdjustment)
+                                )
+                        )
+                )
+                .addDisplacementMarker(() -> {
+                    // pick up specimen
+
+                })
+
+                .waitSeconds(0.5)
+                .turn(
+                        Math.toRadians(-90)
+                )
+
+                .addDisplacementMarker(() -> {
+                    // drop specimen
+
+                })
+                .waitSeconds(0.5)
+
+                // PICK UP SPECIMEN
+                .lineToLinearHeading(
+                        new Pose2d(
+                                -37 * redPoseAdjustment,
+                                41 * redPoseAdjustment,
+                                Math.atan2(
+                                        placedSpecimenVector2d.getX() - (-37 * redPoseAdjustment),
+                                        placedSpecimenVector2d.getY() - (41 * redPoseAdjustment)
+                                )
+                        )
+                )
+                .waitSeconds(0.5)
+
+                .build();
     }
 
     public static TrajectorySequence pushSamplesTS(DriveShim drive) {
@@ -76,8 +193,8 @@ public class TrajectorySequences {
 //                        )
 //                )
                 .lineTo(new Vector2d(
-                        -35 * redPoseAdjustment,
-                        45 * redPoseAdjustment
+                                -35 * redPoseAdjustment,
+                                45 * redPoseAdjustment
                         )
                 )
                 .lineTo(new Vector2d(
@@ -175,7 +292,7 @@ public class TrajectorySequences {
 //                .addDisplacementMarker(() -> {
 //
 //                })
-                                .build();
+                .build();
     }
 
     public static TrajectorySequence neutralStraysTS(DriveShim drive) {
@@ -289,7 +406,8 @@ public class TrajectorySequences {
                 // LOOP 2
                 // go back to pickup
                 .setTangent(Math.toRadians(180 + 20 + redAngleAdjustment))
-                .splineToLinearHeading(submersiblePickUpPose,
+                .splineToLinearHeading(
+                        submersiblePickUpPose,
                         Math.toRadians(-110 + redAngleAdjustment)
                 )
                 .addDisplacementMarker(() -> {
