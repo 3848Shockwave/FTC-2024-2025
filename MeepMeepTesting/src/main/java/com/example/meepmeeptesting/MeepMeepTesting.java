@@ -11,9 +11,6 @@ import java.util.function.Function;
 
 public class MeepMeepTesting {
 
-
-
-
     public static MeepMeep meepMeep;
 
     public static Function<DriveShim, TrajectorySequence> currentTrajectorySequence;

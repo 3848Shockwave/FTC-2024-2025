@@ -11,56 +11,35 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
  * WHEN COPYING THIS CLASS FOR ROADRUNNER IMPLEMENTATION, MAKE SURE TO CHANGE EVERYWHERE YOU SEE:
  * "DriveShim"
  * TO THE NAME OF YOUR DRIVE CLASS, E.G. "SampleMechanumDrive"
+
+ * ALL OF THIS CODE ASSUMES THE ROBOT IS BLUE, but since the field is symmetric it should work for red as well
  */
 public class TrajectorySequences {
     // reference: https://github.com/technototes/IntoTheDeep2024/blob/main/MeepMeepTesting/src/main/java/com/example/meepmeeptesting/ViggoTesting.java#L19
 
     // import "drive" as an argument to return the desired Trajectory Sequence
-    public static int redAngleAdjustment;
-    public static int redPoseAdjustment;
-    public static Pose2d bucketStartPose;
-    public static Pose2d coloredSampleStartPose;
-    public static Pose2d submersiblePickUpPose;
-    public static Pose2d dropSamplePose;
 
-    public enum COLOR {
-        RED, BLUE;
-    }
+    public static Pose2d bucketStartPose = new Pose2d(
+            11.5,
+            62,
+            Math.toRadians(-90)
+    );
+    public static Pose2d coloredSampleStartPose = new Pose2d(
+            -11.5,
+            62,
+            Math.toRadians(-90)
+    );
+    public static Pose2d submersiblePickUpPose = new Pose2d(
+            27,
+            0,
+            Math.toRadians(180)
+    );
+    public static Pose2d dropSamplePose = new Pose2d(
+            50,
+            50,
+            Math.toRadians(180 + 45)
+    );
 
-    public static COLOR currentColor;
-
-    static {
-        currentColor = COLOR.BLUE;
-        redAngleAdjustment = 0;
-        redPoseAdjustment = 1;
-
-        if (currentColor == COLOR.RED) {
-            redAngleAdjustment = 180;
-            redPoseAdjustment = -1;
-        }
-
-        bucketStartPose = new Pose2d(
-                11.5 * redPoseAdjustment,
-                62 * redPoseAdjustment,
-                Math.toRadians(-90 + redAngleAdjustment)
-        );
-        coloredSampleStartPose = new Pose2d(
-                -11.5 * redPoseAdjustment,
-                62 * redPoseAdjustment,
-                Math.toRadians(-90 + redAngleAdjustment)
-        );
-        submersiblePickUpPose = new Pose2d(
-                27 * redPoseAdjustment,
-                0 * redPoseAdjustment,
-                Math.toRadians(180 + redAngleAdjustment)
-        );
-        dropSamplePose = new Pose2d(
-                50 * redPoseAdjustment,
-                50 * redPoseAdjustment,
-                Math.toRadians(180 + 45 + redAngleAdjustment)
-        );
-
-    }
 
     public static TrajectorySequence pushSamplesTS(SampleMecanumDrive drive) {
         return drive.trajectorySequenceBuilder(coloredSampleStartPose)
@@ -71,85 +50,85 @@ public class TrajectorySequences {
 //                        new Pose2d(
 //                                0 * redPoseAdjustment,
 //                                37 * redPoseAdjustment,
-//                                Math.toRadians(-90 + redAngleAdjustment)
+//                                Math.toRadians(-90)
 //                        )
 //                )
                 .lineTo(new Vector2d(
-                                -35 * redPoseAdjustment,
-                                45 * redPoseAdjustment
+                                -35,
+                                45
                         )
                 )
                 .lineTo(new Vector2d(
-                                -35 * redPoseAdjustment,
-                                9 * redPoseAdjustment
+                                -35,
+                                9
                         )
                 )
 //                // lil spline
                 .lineToLinearHeading(
                         new Pose2d(
-                                -45 * redPoseAdjustment,
-                                9 * redPoseAdjustment,
-                                Math.toRadians(180 + redAngleAdjustment)
+                                -45,
+                                9,
+                                Math.toRadians(180)
                         )
                 )
                 // push sample 1 toward observation zone
                 .lineToConstantHeading(
                         new Vector2d(
-                                -45 * redPoseAdjustment,
-                                58 * redPoseAdjustment
+                                -45,
+                                58
                         )
                 )
                 // go to sample 2
                 .lineToConstantHeading(
                         new Vector2d(
-                                -45 * redPoseAdjustment,
-                                15 * redPoseAdjustment
+                                -45,
+                                15
                         )
                 )
                 // lil spline
                 .splineToLinearHeading(
                         new Pose2d(
-                                -55 * redPoseAdjustment,
-                                9 * redPoseAdjustment,
-                                Math.toRadians(180 + redAngleAdjustment)
+                                -55,
+                                9,
+                                Math.toRadians(180)
                         ),
-                        Math.toRadians(180 + redAngleAdjustment)
+                        Math.toRadians(180)
                 )
                 // push sample 2 toward observation zone
                 .lineToConstantHeading(
                         new Vector2d(
-                                -55 * redPoseAdjustment,
-                                58 * redPoseAdjustment
+                                -55,
+                                58
                         )
                 )
                 // go to sample 3
                 .lineToConstantHeading(
                         new Vector2d(
-                                -55 * redPoseAdjustment,
-                                15 * redPoseAdjustment
+                                -55,
+                                15
                         )
                 )
                 // lil spline
                 .splineToLinearHeading(
                         new Pose2d(
-                                -61 * redPoseAdjustment,
-                                9 * redPoseAdjustment,
-                                Math.toRadians(180 + redAngleAdjustment)
+                                -61,
+                                9,
+                                Math.toRadians(180)
                         ),
-                        Math.toRadians(180 + redAngleAdjustment)
+                        Math.toRadians(180)
                 )
                 // push sample 3 toward observation zone
                 .lineToConstantHeading(
                         new Vector2d(
-                                -61 * redPoseAdjustment,
-                                58 * redPoseAdjustment
+                                -61,
+                                58
                         )
                 )
 //                .setTangent(-45)
 //                .splineToSplineHeading(
 //                        new Pose2d(
-//                                0 * redPoseAdjustment,
-//                                45 * redPoseAdjustment,
+//                                0 ,
+//                                45 ,
 //                                Math.toRadians(-180 + redAngleAdjustment)
 //                        ),
 //                        Math.toRadians(0 + redAngleAdjustment)
@@ -157,16 +136,16 @@ public class TrajectorySequences {
 //                // go to the middle zone for a level 1 hang (i forgot what it's called)
 //                .splineToSplineHeading(
 //                        new Pose2d(
-//                                35 * redPoseAdjustment,
-//                                25 * redPoseAdjustment,
+//                                35 ,
+//                                25 ,
 //                                Math.toRadians(90 + redAngleAdjustment)
 //                        ),
 //                        Math.toRadians(-90 + redAngleAdjustment)
 //                )
 //                .splineToSplineHeading(
 //                        new Pose2d(
-//                                23 * redPoseAdjustment,
-//                                10 * redPoseAdjustment,
+//                                23 ,
+//                                10 ,
 //                                Math.toRadians(0 + redAngleAdjustment)
 //                        ),
 //                        Math.toRadians(180 + redAngleAdjustment)
@@ -183,9 +162,9 @@ public class TrajectorySequences {
                 // drop specimen
                 .lineToSplineHeading(
                         new Pose2d(
-                                0 * redPoseAdjustment,
-                                37 * redPoseAdjustment,
-                                Math.toRadians(-90 + redAngleAdjustment)
+                                0,
+                                37,
+                                Math.toRadians(-90)
                         )
                 )
 
@@ -196,9 +175,9 @@ public class TrajectorySequences {
                 // LOOP 1
                 // go to pickup
                 .lineToSplineHeading(new Pose2d(
-                        48 * redPoseAdjustment,
-                        39 * redPoseAdjustment,
-                        Math.toRadians(-90 + redAngleAdjustment)
+                        48,
+                        39,
+                        Math.toRadians(-90)
                 ))
                 .addDisplacementMarker(() -> {
                     // pick up sample
@@ -212,9 +191,9 @@ public class TrajectorySequences {
 
                 // LOOP 2
                 .lineToLinearHeading(new Pose2d(
-                        58 * redPoseAdjustment,
-                        43 * redPoseAdjustment,
-                        Math.toRadians(-90 + redAngleAdjustment)
+                        58,
+                        43,
+                        Math.toRadians(-90)
                 ))
                 .addDisplacementMarker(() -> {
                     // pick up sample
@@ -226,9 +205,9 @@ public class TrajectorySequences {
 
                 // LOOP 3
                 .lineToLinearHeading(new Pose2d(
-                        52 * redPoseAdjustment,
-                        27 * redPoseAdjustment,
-                        Math.toRadians(0 + redAngleAdjustment)
+                        52,
+                        27,
+                        Math.toRadians(0)
                 ))
                 .addDisplacementMarker(() -> {
                     // pick up sample
@@ -246,9 +225,9 @@ public class TrajectorySequences {
                 // drop specimen
                 .lineToSplineHeading(
                         new Pose2d(
-                                0 * redPoseAdjustment,
-                                37 * redPoseAdjustment,
-                                Math.toRadians(-90 + redAngleAdjustment)
+                                0,
+                                37,
+                                Math.toRadians(-90)
                         )
                 )
 
@@ -257,7 +236,7 @@ public class TrajectorySequences {
                 })
 
                 // go to dropoff
-                .setTangent(Math.toRadians(90 + redAngleAdjustment))
+                .setTangent(Math.toRadians(90))
                 .lineToLinearHeading(
                         dropSamplePose
                 )
@@ -267,19 +246,19 @@ public class TrajectorySequences {
 
                 // LOOP 1
                 // go back to pickup
-                .setTangent(Math.toRadians(180 + 20 + redAngleAdjustment))
+                .setTangent(Math.toRadians(180 + 20))
                 .splineToLinearHeading(
                         submersiblePickUpPose,
-                        Math.toRadians(-110 + redAngleAdjustment)
+                        Math.toRadians(-110)
                 )
                 .addDisplacementMarker(() -> {
                     // pick up sample
                 })
                 // go back dropoff
-                .setTangent(Math.toRadians(90 + redAngleAdjustment))
+                .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(
                         dropSamplePose,
-                        Math.toRadians(30 + redAngleAdjustment)
+                        Math.toRadians(30)
                 )
                 .addDisplacementMarker(() -> {
                     // drop off sample
@@ -287,18 +266,18 @@ public class TrajectorySequences {
 
                 // LOOP 2
                 // go back to pickup
-                .setTangent(Math.toRadians(180 + 20 + redAngleAdjustment))
+                .setTangent(Math.toRadians(180 + 20))
                 .splineToLinearHeading(submersiblePickUpPose,
-                        Math.toRadians(-110 + redAngleAdjustment)
+                        Math.toRadians(-110)
                 )
                 .addDisplacementMarker(() -> {
                     // pick up sample
                 })
                 // go back dropoff
-                .setTangent(Math.toRadians(90 + redAngleAdjustment))
+                .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(
                         dropSamplePose,
-                        Math.toRadians(30 + redAngleAdjustment)
+                        Math.toRadians(30)
                 )
                 .addDisplacementMarker(() -> {
                     // drop off sample
