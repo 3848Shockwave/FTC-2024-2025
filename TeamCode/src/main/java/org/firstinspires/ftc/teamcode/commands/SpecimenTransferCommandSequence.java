@@ -17,7 +17,7 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
 
 
     // waits are in milliseconds
-    public static double HORIZONTAL_SLIDE_SLIGHTLY_OUT_POSITION;
+    public static double HORIZONTAL_SLIDE_SLIGHTLY_OUT_POSITION = 66 + 5;
     public static int CLOSE_CLAW_WAIT = 0;
     public static int WAIT0 = 300;
     public static int WAIT1 = 500;
@@ -51,15 +51,15 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                     intakeSubsystem.setHorizontalClawPitchPosition(SpecimenConstants.HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
                     intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);
                 }),
-//                // (wait until ^ done)
+                // (wait until ^ done)
                 new WaitCommand(WAIT1),
-//                // close vertical arm claw
+                // close vertical arm claw
                 new InstantCommand(intakeSubsystem::closeVerticalClaw),
-//                // (wait until ^ done)
+                // (wait until ^ done)
                 new WaitCommand(WAIT2),
-//                // open horizontal arm claw
+                // open horizontal arm claw
                 new InstantCommand(intakeSubsystem::openHorizontalClaw),
-//                // (wait until ^ done)
+                // (wait until ^ done)
                 new WaitCommand(WAIT3),
                 // set horizontal slide out a little
                 new InstantCommand(() ->
@@ -78,7 +78,7 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                                 new InstantCommand(() -> {
                                     intakeSubsystem.setVerticalWristPitchPosition(SpecimenConstants.VERTICAL_WRIST_PITCH_SPECIMEN_DROPOFF_POSITION);
                                     intakeSubsystem.setVerticalClawPitchPosition(SpecimenConstants.VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION);
-                                    intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_DEPOSIT_POSITION);
+                                    intakeSubsystem.setVerticalClawRollPosition(SpecimenConstants.VERTICAL_CLAW_ROLL_SPECIMEN_DROPOFF_POSITION);
                                 }),
                                 // set horizontal arm to be straight up
                                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL)

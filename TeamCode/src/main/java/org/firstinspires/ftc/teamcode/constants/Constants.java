@@ -47,7 +47,7 @@ public class Constants {
     public static double VERTICAL_SLIDE_MOTOR_SPEED_SLOW = 0.5;
     public static double VERTICAL_SLIDE_MOTOR_ACCELERATION = 30;
     public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 94;
-    public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 90;
+    public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 180;
     public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 42;
     public static double VERTICAL_CLAW_PITCH_DEPOSIT_POSITION = 70;
     public static double VERTICAL_WRIST_PITCH_TRANSFER_POSITION = 8;

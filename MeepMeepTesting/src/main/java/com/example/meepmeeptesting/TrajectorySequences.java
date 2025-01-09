@@ -26,7 +26,7 @@ public class TrajectorySequences {
     public static Pose2d coloredSampleStartPose = new Pose2d(
             -11.5,
             62,
-            Math.toRadians(-90)
+            Math.toRadians(90)
     );
     public static Pose2d submersiblePickUpPose = new Pose2d(
             27,
@@ -42,7 +42,7 @@ public class TrajectorySequences {
     public static Pose2d hangSpecimenPose = new Pose2d(
             0,
             37,
-            Math.toRadians(-90)
+            Math.toRadians(90)
     );
 
 
@@ -370,6 +370,9 @@ public class TrajectorySequences {
                 .addDisplacementMarker(() -> {
                     // drop off sample
                 })
+
+                // TODO: park
+
                 .build();
     }
 
