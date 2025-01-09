@@ -42,12 +42,12 @@ public class Constants {
 
     public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = 2;
     public static int VERTICAL_SLIDE_MOTOR_TOUCH_BAR_POSITION = 200;
-    public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 4250;
+    public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 4070;
     public static double VERTICAL_SLIDE_MOTOR_SPEED_FAST = 1;
     public static double VERTICAL_SLIDE_MOTOR_SPEED_SLOW = 0.5;
     public static double VERTICAL_SLIDE_MOTOR_ACCELERATION = 30;
     public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 94;
-    public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 180;
+    public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 152;
     public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 42;
     public static double VERTICAL_CLAW_PITCH_DEPOSIT_POSITION = 70;
     public static double VERTICAL_WRIST_PITCH_TRANSFER_POSITION = 8;

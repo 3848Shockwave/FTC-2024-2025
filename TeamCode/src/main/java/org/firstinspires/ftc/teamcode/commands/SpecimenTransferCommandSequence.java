@@ -61,29 +61,15 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                 new InstantCommand(intakeSubsystem::openHorizontalClaw),
                 // (wait until ^ done)
                 new WaitCommand(WAIT3),
-                // set horizontal slide out a little
-                new InstantCommand(() ->
-                        intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_SLIGHTLY_OUT_POSITION)
-                ),
+//                // set horizontal slide out a little
+//                new InstantCommand(() ->
+//                        intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_SLIGHTLY_OUT_POSITION)
+//                ),
 
                 new WaitCommand(WAIT3_5),
 
-                // set vertical slide position to deposit position, after start of this command: wait 500 ms, then set vertical arm to deposit position
-                new ParallelCommandGroup(
-                        // set vertical slide position to transfer position
-                        new SetVerticalSlidePositionCommand(intakeSubsystem, SpecimenConstants.VERTICAL_SLIDE_MOTOR_SPECIMEN_UP_POSITION),
-                        new SequentialCommandGroup(
-                                new WaitCommand(WAIT4),
-                                // set vertical claw to specimen dropoff position
-                                new InstantCommand(() -> {
-                                    intakeSubsystem.setVerticalWristPitchPosition(SpecimenConstants.VERTICAL_WRIST_PITCH_SPECIMEN_DROPOFF_POSITION);
-                                    intakeSubsystem.setVerticalClawPitchPosition(SpecimenConstants.VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION);
-                                    intakeSubsystem.setVerticalClawRollPosition(SpecimenConstants.VERTICAL_CLAW_ROLL_SPECIMEN_DROPOFF_POSITION);
-                                }),
-                                // set horizontal arm to be straight up
-                                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL)
-                        )
-                )
+                // set vertical slide position to deposit position, after start of this command: wait, then set vertical arm to deposit position
+                new VerticalArmToSpecimenDropoffCommandSequence(intakeSubsystem, WAIT4)
                 // DONE!
         );
         addRequirements(intakeSubsystem);

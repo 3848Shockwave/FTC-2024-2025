@@ -30,7 +30,6 @@ public class CommandTeleOp extends CommandOpMode {
 
     private Telemetry currentTelemetry;
 
-    private double requestedSlideVelocity;
 
 
     @Override
@@ -238,7 +237,7 @@ public class CommandTeleOp extends CommandOpMode {
         intakeSubsystem.setVerticalSlideMotorsTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);
 
         schedule(
-                new RunVerticalSlideCommand(intakeSubsystem, () -> requestedSlideVelocity, currentTelemetry)
+                new RunVerticalSlideCommand(intakeSubsystem, currentTelemetry)
         );
 
         // update telemetry

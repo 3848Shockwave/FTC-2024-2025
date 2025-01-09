@@ -22,7 +22,6 @@ public class RunVerticalSlideCommand extends CommandBase {
     public static double KG = 0;
     public static double KA = 0;
     private ElevatorFeedforward elevatorFeedforward;
-    private DoubleSupplier manualVelocity;
 
 
     /**
@@ -30,15 +29,13 @@ public class RunVerticalSlideCommand extends CommandBase {
      * The motors will automatically run to their internal target positions, set by SetVerticalSlidePositionCommand.
      * This command acts as a control loop to set the motors' speeds
      * @param intakeSubsystem
-     * @param manualVelocity
      * @param telemetry
      */
-    public RunVerticalSlideCommand(IntakeSubsystem intakeSubsystem, DoubleSupplier manualVelocity, Telemetry telemetry) {
+    public RunVerticalSlideCommand(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
         verticalSlideMotorTop = intakeSubsystem.verticalSlideMotorTop;
         verticalSlideMotorBottom = intakeSubsystem.verticalSlideMotorTop;
         this.telemetry = telemetry;
-        this.manualVelocity = manualVelocity;
         elevatorFeedforward = new ElevatorFeedforward(KS, KG, KV, KA);
         // THIS MAKES IT BLOCKING: IT R E Q U I R E S THE SUBSYSTEM
 //        addRequirements(intakeSubsystem);
@@ -53,11 +50,6 @@ public class RunVerticalSlideCommand extends CommandBase {
         setMotorsVelocities();
 
 
-        telemetry.addData("Manual Velocity: ", manualVelocity.getAsDouble());
-
-
-
-
     }
 
     private void setMotorsVelocities() {
@@ -68,6 +60,7 @@ public class RunVerticalSlideCommand extends CommandBase {
 
         verticalSlideMotorTop.set(velocity);
         verticalSlideMotorBottom.set(velocity);
+
 
         // OLD:
 //        if (verticalSlideMotorTop.atTargetPosition() || verticalSlideMotorBottom.atTargetPosition()) {
