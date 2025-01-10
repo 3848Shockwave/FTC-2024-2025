@@ -47,7 +47,8 @@ public class fieldCentricTest extends LinearOpMode {
     private double wristPosition1;
     private double wristPosition2;
     private double wristPosition3;
-    private
+    private double intake;
+    private double release;
 
 
     @Override
@@ -134,6 +135,14 @@ public class fieldCentricTest extends LinearOpMode {
             }
 
             //code for claw
+            intake = gamepad1.left_trigger;
+            release = gamepad1.right_trigger;
+
+            if (intake > 0){
+                //claw.setPosition(0.5);
+            } else if (release > 0){
+                //claw.setPosition(0.0);
+            }
 
 
 
