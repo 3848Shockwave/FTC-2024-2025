@@ -42,6 +42,10 @@ public class fieldCentricTest extends LinearOpMode {
     private double botHeading;
     private double rotX;
     private double rotY;
+    private boolean armUp;
+    private boolean armDown;
+
+
     @Override
     public void runOpMode() {
 
@@ -53,6 +57,7 @@ public class fieldCentricTest extends LinearOpMode {
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        armMotor = hardwareMap.get(DcMotor.class, "armMotor");
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
 
@@ -62,6 +67,7 @@ public class fieldCentricTest extends LinearOpMode {
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         emu.resetYaw();
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -71,7 +77,7 @@ public class fieldCentricTest extends LinearOpMode {
         while (opModeIsActive()) {
             y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             x = gamepad1.left_stick_x; // Counteract imperfect strafing
-            rx = gamepad1.right_stick_x;
+            rx = - gamepad1.right_stick_x;
 
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
@@ -95,6 +101,15 @@ public class fieldCentricTest extends LinearOpMode {
             backLeftPower = (rotY - rotX + rx) / denominator;
             frontRightPower = (rotY - rotX - rx) / denominator;
             backRightPower = (rotY + rotX - rx) / denominator;
+
+
+            if (gamepad1.left_bumper) {
+                armMotor.setPower(0.5);
+            } else if (gamepad1.right_bumper) {
+                armMotor.setPower(-0.5);
+            } else {
+                armMotor.setPower(0);
+            }
 
             // Send calculated power to wheels
             frontLeft.setPower(frontLeftPower);
