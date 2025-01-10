@@ -34,6 +34,8 @@ public class fieldCentricTest extends LinearOpMode {
     private double backLeftPower;
     private double frontRightPower;
     private double backRightPower;
+    private Servo wrist;
+    private Servo claw;
     private IMU emu;
 
     private double y; // Remember, Y stick value is reversed
@@ -127,11 +129,11 @@ public class fieldCentricTest extends LinearOpMode {
             wristPosition3 = 1.0;
 
             if (gamepad1.y){
-                //wrist.setPosition(wristPosition1);
+                wrist.setPosition(wristPosition1);
             } else if (gamepad1.b){
-                //wrist.setPosition(wristPosition2);
+                wrist.setPosition(wristPosition2);
             } else if (gamepad1.x){
-                //wrist.setPosition(wristPosition3);
+                wrist.setPosition(wristPosition3);
             }
 
             //code for claw
@@ -139,9 +141,9 @@ public class fieldCentricTest extends LinearOpMode {
             release = gamepad1.right_trigger;
 
             if (intake > 0){
-                //claw.setPosition(0.5);
+                claw.setPosition(0.5);
             } else if (release > 0){
-                //claw.setPosition(0.0);
+                claw.setPosition(0.0);
             }
 
 
