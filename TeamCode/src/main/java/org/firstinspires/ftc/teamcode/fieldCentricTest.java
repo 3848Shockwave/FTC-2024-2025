@@ -44,6 +44,10 @@ public class fieldCentricTest extends LinearOpMode {
     private double rotY;
     private boolean armUp;
     private boolean armDown;
+    private double wristPosition1;
+    private double wristPosition2;
+    private double wristPosition3;
+    private
 
 
     @Override
@@ -103,13 +107,35 @@ public class fieldCentricTest extends LinearOpMode {
             backRightPower = (rotY + rotX - rx) / denominator;
 
 
-            if (gamepad1.left_bumper) {
+            //code for arm
+            armUp = gamepad1.left_bumper;
+            armDown = gamepad1.right_bumper;
+
+            if (armUp) {
                 armMotor.setPower(0.5);
-            } else if (gamepad1.right_bumper) {
+            } else if (armDown) {
                 armMotor.setPower(-0.5);
             } else {
                 armMotor.setPower(0);
             }
+
+
+            //code for wrist
+            wristPosition1 = 0.0;
+            wristPosition2 = 0.5;
+            wristPosition3 = 1.0;
+
+            if (gamepad1.y){
+                //wrist.setPosition(wristPosition1);
+            } else if (gamepad1.b){
+                //wrist.setPosition(wristPosition2);
+            } else if (gamepad1.x){
+                //wrist.setPosition(wristPosition3);
+            }
+
+            //code for claw
+
+
 
             // Send calculated power to wheels
             frontLeft.setPower(frontLeftPower);
