@@ -12,6 +12,9 @@ public class RunTrajectorySequenceCommand extends CommandBase {
     private TrajectorySequence trajectorySequence;
     private SampleMecanumDrive drive;
     public RunTrajectorySequenceCommand(IntakeSubsystem intakeSubsystem, TrajectorySequence trajectorySequence, SampleMecanumDrive drive) {
+        this.intakeSubsystem = intakeSubsystem;
+        this.trajectorySequence = trajectorySequence;
+        this.drive = drive;
 
     }
 
