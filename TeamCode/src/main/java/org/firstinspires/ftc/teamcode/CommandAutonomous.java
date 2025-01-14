@@ -12,6 +12,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.commands.RunTrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.commands.SpecimenDropCommandSequence;
 import org.firstinspires.ftc.teamcode.commands.SpecimenTransferCommandSequence;
 import org.firstinspires.ftc.teamcode.commands.VerticalArmToSpecimenDropoffCommandSequence;
@@ -30,6 +31,7 @@ import static org.firstinspires.ftc.teamcode.commands.SampleTransferCommandSeque
 @Autonomous(name = "COMMAND AUTONOMOUS (use this please now!)")
 @Config
 public class CommandAutonomous extends CommandOpMode {
+
 
     IntakeSubsystem intakeSubsystem;
 //    DriveSubsystem driveSubsystem;
@@ -51,12 +53,12 @@ public class CommandAutonomous extends CommandOpMode {
         Pose2d startPose = coloredSampleStartPose;
         drive.setPoseEstimate(startPose);
 
-//        register(driveSubsystem, intakeSubsystem);
         register(intakeSubsystem);
 
 
         // initially set horizontal arm position to hover
         schedule(new InstantCommand(() -> {
+
             intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_EXTENSION);
 //            intakeSubsystem.setVerticalWristPitchPosition(SpecimenConstants.VERTICAL_WRIST_PITCH_SPECIMEN_DROPOFF_POSITION);
 //            intakeSubsystem.setVerticalClawPitchPosition(SpecimenConstants.VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION);
@@ -73,31 +75,35 @@ public class CommandAutonomous extends CommandOpMode {
         schedule(
                 new RunCommand(() -> {
 
-                    currentTelemetry.addData("is ran?", isRan);
+                    telemetry.addLine("is running");
+
                     currentTelemetry.update();
                 })
         );
 
-        switch (CURRENT_TRAJECTORY_SEQUENCE) {
-            case 0:
-                drive.followTrajectorySequence(pushSamplesTS(drive));
-                break;
-            case 1:
-                drive.followTrajectorySequence(neutralStraysTS(drive));
-                break;
-            case 2:
-                drive.followTrajectorySequence(submersibleCycleTS(drive));
-                break;
-            case 3:
-                drive.followTrajectorySequence(moveAndHangSpecimensTS(drive));
-                break;
+        waitForStart();
 
+        if (isStarted()) {
+                switch (CURRENT_TRAJECTORY_SEQUENCE) {
+                    case 0:
+                        schedule(new RunTrajectorySequenceCommand(intakeSubsystem, pushSamplesTS(drive), drive));
+                        break;
+                    case 1:
+                        schedule(new RunTrajectorySequenceCommand(intakeSubsystem, neutralStraysTS(drive), drive));
+                        break;
+                    case 2:
+                        schedule(new RunTrajectorySequenceCommand(intakeSubsystem, submersibleCycleTS(drive), drive));
+                        break;
+                    case 3:
+                        schedule(new RunTrajectorySequenceCommand(intakeSubsystem, moveAndHangSpecimensTS(drive), drive));
+                        break;
+
+                }
         }
 
 
     }
 
-    public boolean isRan = false;
 
     // TRAJECTORY SEQUENCE STUFF
     public static Pose2d bucketStartPose = new Pose2d(
@@ -145,12 +151,12 @@ public class CommandAutonomous extends CommandOpMode {
         return drive.trajectorySequenceBuilder(coloredSampleStartPose)
                 // put vertical arm to specimen dropoff
                 .addDisplacementMarker(() -> {
-                    isRan = true;
                     schedule(
                             new VerticalArmToSpecimenDropoffCommandSequence(intakeSubsystem, SpecimenTransferCommandSequence.WAIT4)
                     );
 
                 })
+                .waitSeconds(3)
 
                 // go to specimen dropoff pose
                 .lineToSplineHeading(hangSpecimenPose)
