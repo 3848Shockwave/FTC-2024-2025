@@ -53,13 +53,15 @@ public class RunVerticalSlideCommand extends CommandBase {
     }
 
     private void setMotorsVelocities() {
-        double velocity = elevatorFeedforward.calculate(
-                Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST,
-                Constants.VERTICAL_SLIDE_MOTOR_ACCELERATION
-        );
+//        double velocity = elevatorFeedforward.calculate(
+//                Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST,
+//                Constants.VERTICAL_SLIDE_MOTOR_ACCELERATION
+//        );
+//        verticalSlideMotorTop.set(velocity);
+//        verticalSlideMotorBottom.set(velocity);
+        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 
-        verticalSlideMotorTop.set(velocity);
-        verticalSlideMotorBottom.set(velocity);
 
 
         // OLD:

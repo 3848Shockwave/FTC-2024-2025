@@ -1,10 +1,11 @@
 package com.example.meepmeeptesting;
 
-import org.rowlandhall.meepmeep.MeepMeep;
-import org.rowlandhall.meepmeep.roadrunner.DefaultBotBuilder;
-import org.rowlandhall.meepmeep.roadrunner.DriveShim;
-import org.rowlandhall.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
-import org.rowlandhall.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
+
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.noahbres.meepmeep.MeepMeep;
+import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
+import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 import java.util.Scanner;
 import java.util.function.Function;
@@ -13,8 +14,7 @@ public class MeepMeepTesting {
 
     public static MeepMeep meepMeep;
 
-    public static Function<DriveShim, TrajectorySequence> currentTrajectorySequence;
-
+    public static Action currentTrajectoryAction;
 
 
     public static void main(String[] args) {
@@ -22,65 +22,37 @@ public class MeepMeepTesting {
         Scanner scanner = new Scanner(System.in);
 //        endHeading = 0;
         String endHeadingInput;
-//        LinkedList<RoadRunnerBotEntity> bots = new LinkedList<>();
-
-//        // switch to red prompt
-//        System.out.print("Switch to red? (Y/N): ");
-//        String switchToRed = scanner.nextLine();
-//        if (switchToRed.equalsIgnoreCase("y")) {
-//            currentColor = COLOR.RED;
-//        }
-//        System.out.println("current color: " + currentColor.toString());
 
 
         meepMeep = new MeepMeep(600);
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f);
 
         // CHANGE THIS TO CHANGE THE CURRENT TRAJECTORY SEQUENCE
-        currentTrajectorySequence = TrajectorySequences::moveAndHangSpecimensTS;
 //        currentTrajectorySequence = TrajectorySequences::pushSamplesTS;
 //        currentTrajectorySequence = TrajectorySequences::neutralStraysTS;
 //        currentTrajectorySequence = TrajectorySequences::submersibleCycleTS;
 
-        RoadRunnerBotEntity currentBot = null;
+        RoadRunnerBotEntity currentBot = new DefaultBotBuilder(meepMeep)
+                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 10.8)
+                .build();
 
-        while (true) {
-
-
-            RoadRunnerBotEntity newBot = new DefaultBotBuilder(meepMeep)
-                    .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 10.8)
-//                    .followTrajectorySequence(TrajectorySequences::coloredStraysTS);
-                    .followTrajectorySequence(currentTrajectorySequence::apply);
+        currentTrajectoryAction = TrajectoryActions.moveAndHangSpecimensTA(currentBot);
 
 
-//            bots.add(newBot);
-            if (currentBot!=null) {
-                meepMeep.removeEntity(currentBot);
-            }
-            meepMeep.addEntity(newBot);
+        currentBot.runAction(currentTrajectoryAction);
 
-            meepMeep.start();
+////            bots.add(newBot);
+//        if (currentBot != null) {
+//            meepMeep.removeEntity(currentBot);
+//        }
+        meepMeep.addEntity(currentBot);
 
-
-//            try {
-//                System.out.print("enter new end heading(deg): ");
-                endHeadingInput = scanner.nextLine();
-//                endHeading = (endHeadingInput.isEmpty()) ? endHeading : Integer.parseInt(endHeadingInput);
-//            } catch (Exception e) {
-//                System.out.println("exception occurred. try again");
-//            }
-            System.out.println();
+        meepMeep.start();
 
 
-            System.out.println("next cycle");
-//            // temp
-//            return;
-//            //
-            currentBot = newBot;
-        }
     }
 
 

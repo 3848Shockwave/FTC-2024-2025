@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.localization.Localizer;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -11,11 +9,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.constants.Constants;
-import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Config
 public class DriveSubsystem extends SubsystemBase {
@@ -25,7 +18,7 @@ public class DriveSubsystem extends SubsystemBase {
     private Telemetry telemetry;
 
     private double heading;
-    private StandardTrackingWheelLocalizer localizer;
+//    private StandardTrackingWheelLocalizer localizer;
 
 //    private HolonomicOdometry odometry;
 
@@ -61,15 +54,17 @@ public class DriveSubsystem extends SubsystemBase {
 
         mecanumDrive = new MecanumDrive(frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor);
 
-        //TODO: https://learnroadrunner.com/advanced.html#using-road-runner-in-teleop
-        localizer = new StandardTrackingWheelLocalizer(hardwareMap, new ArrayList<>(), new ArrayList<>());
-        localizer.setPoseEstimate(new Pose2d(0, 0, 0));
+//        TODO: https://learnroadrunner.com/advanced.html#using-road-runner-in-teleop
+        //TODO: use localizer
+//        localizer = new StandardTrackingWheelLocalizer(hardwareMap, new ArrayList<>(), new ArrayList<>());
+//        localizer.setPoseEstimate(new Pose2d(0, 0, 0));
 
     }
 
     @Override
     public void periodic() {
-        localizer.update();
+        //TODO: use localizer
+//        localizer.update();
 
 //        telemetry.addData("Current Heading:", AngleUnit.normalizeDegrees(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)));
 //        telemetry.addData("is field centric:", Constants.IS_FIELD_CENTRIC);
@@ -91,15 +86,16 @@ public class DriveSubsystem extends SubsystemBase {
 
         rotationSpeed *= 1.1;
         double imuHeading = AngleUnit.normalizeDegrees(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-        double odoHeading = Math.toDegrees(localizer.getPoseEstimate().getHeading());
-        double weight = IMU_WEIGHT;
-        if (imuHeading == 0.0) weight = 0;
+//        double odoHeading = Math.toDegrees(localizer.getPoseEstimate().getHeading());
+//        double weight = IMU_WEIGHT;
+//        if (imuHeading == 0.0) weight = 0;
 //        if (USE_IMU_OVER_DEAD_WHEELS) {
 //            heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 //        } else {
 //            heading = Math.toDegrees(localizer.getPoseEstimate().getHeading());
 //        }
-        heading = weight * imuHeading + (1 - weight) * odoHeading;
+//        heading = weight * imuHeading + (1 - weight) * odoHeading;
+        heading = imuHeading;
 
         mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, rotationSpeed, heading);
     }

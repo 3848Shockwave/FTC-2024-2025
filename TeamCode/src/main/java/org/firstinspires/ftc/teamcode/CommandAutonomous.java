@@ -3,13 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.RunTrajectorySequenceCommand;
@@ -18,12 +17,8 @@ import org.firstinspires.ftc.teamcode.commands.SpecimenTransferCommandSequence;
 import org.firstinspires.ftc.teamcode.commands.VerticalArmToSpecimenDropoffCommandSequence;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.RunVerticalSlideCommand;
-import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
-import org.firstinspires.ftc.teamcode.constants.SpecimenConstants;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import static org.firstinspires.ftc.teamcode.commands.SampleTransferCommandSequence.CLOSE_CLAW_WAIT;
 
@@ -49,9 +44,8 @@ public class CommandAutonomous extends CommandOpMode {
 
         currentTelemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         Pose2d startPose = coloredSampleStartPose;
-        drive.setPoseEstimate(startPose);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, coloredSampleStartPose);
 
         register(intakeSubsystem);
 
@@ -141,14 +135,14 @@ public class CommandAutonomous extends CommandOpMode {
     public static Pose2d pickUpSpecimenPose = new Pose2d(
             -37, 41,
             Math.atan2(
-                    -(placedSpecimenVector.getX() - (-37)),
-                    -(placedSpecimenVector.getY() - (41))
+                    -(placedSpecimenVector.x - (-37)),
+                    -(placedSpecimenVector.y - (41))
             ) - Math.toRadians(20)
     );
 
 
-    public TrajectorySequence moveAndHangSpecimensTS(SampleMecanumDrive drive) {
-        return drive.trajectorySequenceBuilder(coloredSampleStartPose)
+    public TrajectorySequence moveAndHangSpecimensTS(MecanumDrive drive) {
+        return drive.traj(coloredSampleStartPose)
                 // put vertical arm to specimen dropoff
                 .addDisplacementMarker(() -> {
                     schedule(
