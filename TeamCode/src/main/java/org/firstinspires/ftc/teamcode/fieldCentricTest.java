@@ -65,6 +65,8 @@ public class fieldCentricTest extends LinearOpMode {
         backRight = hardwareMap.get(DcMotor.class, "backRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
+        wrist = hardwareMap.get(Servo.class, "wrist");
+        claw = hardwareMap.get(Servo.class, "claw");
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
 
@@ -124,7 +126,7 @@ public class fieldCentricTest extends LinearOpMode {
 
 
             //code for wrist
-            wristPosition1 = 0.0;
+            wristPosition1 = 0;
             wristPosition2 = 0.5;
             wristPosition3 = 1.0;
 
