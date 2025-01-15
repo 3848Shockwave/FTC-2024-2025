@@ -3,16 +3,16 @@ package org.firstinspires.ftc.teamcode.opModes;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.*;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.ActionCommand;
+import org.firstinspires.ftc.teamcode.commands.PickUpSampleCommandSequence;
 import org.firstinspires.ftc.teamcode.commands.SpecimenDropCommandSequence;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.RunVerticalSlideCommand;
@@ -20,17 +20,16 @@ import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
+import java.lang.Math;
 import java.util.HashSet;
 
-//@Photon
 @Autonomous(name = "COMMAND AUTONOMOUS (use this please now!)")
 @Config
+// TODO: change to LinearOpMode if we have to
 public class CommandAutonomous extends CommandOpMode {
 
 
     IntakeSubsystem intakeSubsystem;
-//    DriveSubsystem driveSubsystem;
-
     Telemetry currentTelemetry;
 
     public static int CURRENT_TRAJECTORY_SEQUENCE = 3;
@@ -77,21 +76,41 @@ public class CommandAutonomous extends CommandOpMode {
 
         waitForStart();
 
-        Action hangSpecimen = drive.actionBuilder(coloredSampleStartPose)
-                .setTangent(-45)
-                .splineToLinearHeading(hangSpecimenPose, -45)
-                .build();
+        // TABS go here
+        TrajectoryActionBuilder goToHangSpecimenTAB = drive.actionBuilder(coloredSampleStartPose)
+                .strafeToLinearHeading(
+                        hangSpecimenPose.component1(),
+                        hangSpecimenPose.component2()
+                )
+                .endTrajectory();
 
-        Action goToFirstSample = drive.actionBuilder(hangSpecimenPose)
-                .setTangent(-45)
-                .splineToLinearHeading(hangSpecimenPose, -45)
-                .build();
+        TrajectoryActionBuilder goToRightSampleTAB = goToHangSpecimenTAB
+                .fresh()
+                // sample 1
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                -28,
+                                45
+                        ),
+                        Math.atan2(
+                                rightColoredSampleVector.x - (-28),
+                                rightColoredSampleVector.y - (45)
+                        ) - Math.toRadians(5)
+                )
+                .endTrajectory();
 
-        schedule(new ActionCommand(hangSpecimen, new HashSet<>()));
-        schedule(new SpecimenDropCommandSequence(intakeSubsystem));
-        schedule(new ActionCommand(goToFirstSample, new HashSet<>()));
-        schedule(/* ... */);
+        TrajectoryActionBuilder turn90_0TAB = goToRightSampleTAB
+                .fresh()
+                .turn(Math.toRadians(-90))
+                .endTrajectory();
 
+        schedule(new SequentialCommandGroup(
+                new ActionCommand(goToHangSpecimenTAB.build(), new HashSet<>()),
+                new SpecimenDropCommandSequence(intakeSubsystem),
+                new ActionCommand(goToRightSampleTAB.build(), new HashSet<>()),
+                new PickUpSampleCommandSequence(intakeSubsystem),
+                new ActionCommand(turn90_0TAB.build(), new HashSet<>())
+        ));
 
 
         if (isStarted()) {
