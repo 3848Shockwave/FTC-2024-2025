@@ -107,6 +107,22 @@ public class MeepMeepTesting {
                 .turn(Math.toRadians(-90))
                 .endTrajectory();
 
+        // push samples
+        TrajectoryActionBuilder pushSamplesTAB = goToHangSpecimenTAB
+                .fresh()
+                .strafeTo(
+                        new Vector2d(-37, 37)
+                )
+                .strafeToConstantHeading(
+                        new Vector2d(-37, 15)
+                )
+                .splineToConstantHeading(
+                        new Vector2d(-40, 10),
+                        Math.toRadians(-180)
+                )
+//                .lineToYConstantHeading(50)
+                .endTrajectory();
+
         // TODO: after these TABs should be the TABS to pick up specimens and hang them, but i'm not sure we're advanced enough to actually execute those
         // TODO: park
 
@@ -116,12 +132,17 @@ public class MeepMeepTesting {
         drive.runAction(
                 new SequentialAction(
                         goToHangSpecimenTAB.build(),
-                        goToRightSampleTAB.build(),
-                        turn90_0TAB.build(),
-                        goToMiddleSampleTAB.build(),
-                        turn90_1TAB.build(),
-                        goToLeftSampleTAB.build(),
-                        turn90_2TAB.build()
+                        pushSamplesTAB.build()
+//                        goToRightSampleTAB.build(),
+//                        turn90_0TAB.build(),
+//                        goToMiddleSampleTAB.build(),
+//                        turn90_1TAB.build(),
+//                        goToLeftSampleTAB.build(),
+//                        turn90_2TAB.build(),
+//                        turn90_2TAB
+//                                .fresh()
+//                                .endTrajectory()
+//                                .build()
                 )
         );
 
@@ -172,7 +193,6 @@ public class MeepMeepTesting {
                     -(placedSpecimenVector.y - (41))
             ) - Math.toRadians(20)
     );
-
 
 
 //    public static TrajectoryActionBuilder moveAndHangSpecimensTA(RoadRunnerBotEntity drive) {

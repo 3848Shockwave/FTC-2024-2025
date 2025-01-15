@@ -5,11 +5,10 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.*;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.RunCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.*;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.ActionCommand;
 import org.firstinspires.ftc.teamcode.commands.PickUpSampleCommandSequence;
@@ -26,7 +25,7 @@ import java.util.HashSet;
 @Autonomous(name = "COMMAND AUTONOMOUS (use this please now!)")
 @Config
 // TODO: change to LinearOpMode if we have to
-public class CommandAutonomous extends CommandOpMode {
+public class CommandAutonomous extends OpMode {
 
 
     IntakeSubsystem intakeSubsystem;
@@ -36,7 +35,7 @@ public class CommandAutonomous extends CommandOpMode {
 
 
     @Override
-    public void initialize() {
+    public void init() {
 
         intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
 //        driveSubsystem = new DriveSubsystem(hardwareMap, currentTelemetry);
@@ -46,26 +45,18 @@ public class CommandAutonomous extends CommandOpMode {
         Pose2d startPose = coloredSampleStartPose;
         MecanumDrive drive = new MecanumDrive(hardwareMap, coloredSampleStartPose);
 
-        register(intakeSubsystem);
-
+        CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
 
         // initially set horizontal arm position to hover
-        schedule(new InstantCommand(() -> {
+        CommandScheduler.getInstance().schedule(
+                new InstantCommand(() -> {
 
-            intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_EXTENSION);
-//            intakeSubsystem.setVerticalWristPitchPosition(SpecimenConstants.VERTICAL_WRIST_PITCH_SPECIMEN_DROPOFF_POSITION);
-//            intakeSubsystem.setVerticalClawPitchPosition(SpecimenConstants.VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION);
-//            intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_DEPOSIT_POSITION);
-            intakeSubsystem.closeVerticalClaw();
+                    intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_EXTENSION);
+                    intakeSubsystem.closeVerticalClaw();
 
-        }), new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL));
-
-        schedule(
-                new RunVerticalSlideCommand(intakeSubsystem, currentTelemetry)
-        );
-
-        // update telemetry
-        schedule(
+                }),
+                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL),
+                new RunVerticalSlideCommand(intakeSubsystem, currentTelemetry),
                 new RunCommand(() -> {
 
                     telemetry.addLine("is running");
@@ -74,7 +65,6 @@ public class CommandAutonomous extends CommandOpMode {
                 })
         );
 
-        waitForStart();
 
         // TABS go here
         TrajectoryActionBuilder goToHangSpecimenTAB = drive.actionBuilder(coloredSampleStartPose)
@@ -104,7 +94,7 @@ public class CommandAutonomous extends CommandOpMode {
                 .turn(Math.toRadians(-90))
                 .endTrajectory();
 
-        schedule(new SequentialCommandGroup(
+        CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
                 new ActionCommand(goToHangSpecimenTAB.build(), new HashSet<>()),
                 new SpecimenDropCommandSequence(intakeSubsystem),
                 new ActionCommand(goToRightSampleTAB.build(), new HashSet<>()),
@@ -113,24 +103,29 @@ public class CommandAutonomous extends CommandOpMode {
         ));
 
 
-        if (isStarted()) {
-            switch (CURRENT_TRAJECTORY_SEQUENCE) {
+//        if (isStarted()) {
+//            switch (CURRENT_TRAJECTORY_SEQUENCE) {
 //                    case 0:
-//                        schedule(new RunTrajectorySequenceCommand(intakeSubsystem, pushSamplesTS(drive), drive));
+//                        CommandScheduler.getInstance().schedule(new RunTrajectorySequenceCommand(intakeSubsystem, pushSamplesTS(drive), drive));
 //                        break;
 //                    case 1:
-//                        schedule(new RunTrajectorySequenceCommand(intakeSubsystem, neutralStraysTS(drive), drive));
+//                        CommandScheduler.getInstance().schedule(new RunTrajectorySequenceCommand(intakeSubsystem, neutralStraysTS(drive), drive));
 //                        break;
 //                    case 2:
-//                        schedule(new RunTrajectorySequenceCommand(intakeSubsystem, submersibleCycleTS(drive), drive));
+//                        CommandScheduler.getInstance().schedule(new RunTrajectorySequenceCommand(intakeSubsystem, submersibleCycleTS(drive), drive));
 //                        break;
 //                    case 3:
-//                        schedule(new RunTrajectorySequenceCommand(intakeSubsystem, moveAndHangSpecimensTS(drive), drive));
+//                        CommandScheduler.getInstance().schedule(new RunTrajectorySequenceCommand(intakeSubsystem, moveAndHangSpecimensTS(drive), drive));
 //                        break;
+//
+//            }
+//        }
 
-            }
-        }
 
+    }
+
+    @Override
+    public void loop() {
 
     }
 
