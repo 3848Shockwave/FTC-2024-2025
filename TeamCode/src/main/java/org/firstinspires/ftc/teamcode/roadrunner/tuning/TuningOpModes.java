@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tuning;
+package org.firstinspires.ftc.teamcode.roadrunner.tuning;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.reflection.ReflectionConfig;
@@ -11,14 +11,14 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
-import org.firstinspires.ftc.teamcode.*;
+import org.firstinspires.ftc.teamcode.roadrunner.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public final class TuningOpModes {
-    public static final Class<?> DRIVE_CLASS = SparkFunOTOSDrive.class; // TODO: change to your drive class i.e. PinpointDrive if using pinpoint
+    public static final Class<?> DRIVE_CLASS = PinpointDrive.class; // TODO: change to your drive class i.e. PinpointDrive if using pinpoint
 
     public static final String GROUP = "quickstart";
     public static final boolean DISABLED = false;

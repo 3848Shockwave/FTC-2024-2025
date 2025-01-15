@@ -3,10 +3,15 @@ package com.example.meepmeeptesting;
 // import the poses
 
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Function;
 
 /**
  * WHEN COPYING THIS CLASS FOR ROADRUNNER IMPLEMENTATION, MAKE SURE TO CHANGE EVERYWHERE YOU SEE:
@@ -59,141 +64,117 @@ public class TrajectoryActions {
             ) - Math.toRadians(20)
     );
 
-
-    public static Action moveAndHangSpecimensTA(RoadRunnerBotEntity drive) {
+    public static TrajectoryActionBuilder goToHangSpecimenPose(RoadRunnerBotEntity drive) {
         return drive.getDrive().actionBuilder(coloredSampleStartPose)
-//                // hang specimen
-//                .lineToSplineHeading(hangSpecimenPose)
-//                .addDisplacementMarker(() -> {
-//                    // hang specimen
-//                })
-//                .waitSeconds(3)
-//
-//                // sample 1
-//                .lineToLinearHeading(
-//                        new Pose2d(
-//                                -28,
-//                                45,
-//                                Math.atan2(
-//                                        rightColoredSampleVector.getX() - (-28),
-//                                        rightColoredSampleVector.getY() - (45)
-//                                )
-//                        )
-//                )
-//                .addDisplacementMarker(() -> {
-//                    // pick up specimen
-//
-//                })
-//                .waitSeconds(0.5)
-//
-//                .turn(
-//                        Math.toRadians(-90)
-//                )
-//                .addDisplacementMarker(() -> {
-//                    // drop specimen
-//
-//                })
-//
-//                .waitSeconds(0.5)
-//
-//                // sample 2
-//                .lineToLinearHeading(
-//                        new Pose2d(
-//                                -40,
-//                                45,
-//                                Math.atan2(
-//                                        middleColoredSampleVector.getX() - (-40),
-//                                        middleColoredSampleVector.getY() - (45)
-//                                )
-//                        )
-//                )
-//                .addDisplacementMarker(() -> {
-//                    // pick up specimen
-//
-//                })
-//                .waitSeconds(0.5)
-//
-//                .turn(
-//                        Math.toRadians(-90)
-//                )
-//                .addDisplacementMarker(() -> {
-//                    // drop specimen
-//
-//                })
-//                .waitSeconds(0.5)
-//
-//                // sample 3
-//                .lineToLinearHeading(
-//                        new Pose2d(
-//                                -50,
-//                                45,
-//                                Math.atan2(
-//                                        leftColoredSampleVector.getX() - (-50),
-//                                        leftColoredSampleVector.getY() - (45)
-//                                )
-//                        )
-//                )
-//                .addDisplacementMarker(() -> {
-//                    // pick up specimen
-//
-//                })
-//
-//                .waitSeconds(0.5)
-//                .turn(
-//                        Math.toRadians(-90)
-//                )
-//
-//                .addDisplacementMarker(() -> {
-//                    // drop specimen
-//
-//                })
-//                .waitSeconds(0.5)
-//
+                .strafeToLinearHeading(
+                        hangSpecimenPose.component1(),
+                        hangSpecimenPose.component2()
+                )
+                .endTrajectory();
+    }
+
+    public static TrajectoryActionBuilder goToRightSample(RoadRunnerBotEntity drive) {
+        return goToHangSpecimenPose(drive)
+                .fresh()
+                // sample 1
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                -28,
+                                45
+                        ),
+                        Math.atan2(
+                                rightColoredSampleVector.x - (-28),
+                                rightColoredSampleVector.y - (45)
+                        ) - Math.toRadians(5)
+                )
+                .endTrajectory();
+    }
+
+    public static TrajectoryActionBuilder turn(RoadRunnerBotEntity drive, TrajectoryActionBuilder previousTAB, double degrees) {
+        return previousTAB
+                .fresh()
+                .turn(Math.toRadians(degrees))
+                .endTrajectory();
+    }
+
+    public static TrajectoryActionBuilder goToMiddleSample(RoadRunnerBotEntity drive) {
+        return goToHangSpecimenPose(drive)
+                .fresh()
+                // sample 1
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                -28,
+                                45
+                        ),
+                        Math.atan2(
+                                rightColoredSampleVector.x - (-28),
+                                rightColoredSampleVector.y - (45)
+                        ) - Math.toRadians(5)
+                )
+                .endTrajectory();
+    }
+
+    public static TrajectoryActionBuilder moveAndHangSpecimensTA(RoadRunnerBotEntity drive) {
+        return drive.getDrive().actionBuilder(coloredSampleStartPose)
+
+                // sample 3
+                .setTangent(Math.toRadians(180))
+                .splineToLinearHeading(
+                        new Pose2d(
+                                -50,
+                                45,
+                                Math.atan2(
+                                        leftColoredSampleVector.x - (-50),
+                                        leftColoredSampleVector.y - (45)
+                                ) - Math.toRadians(5)
+                        ),
+                        Math.toRadians(180)
+                )
+                // pick up specimen
+
+                .turn(
+                        Math.toRadians(-90)
+                );
+        // drop specimen
+
 //                // PICK UP SPECIMEN
 //                .lineToLinearHeading(pickUpSpecimenPose)
 //                .addDisplacementMarker(() -> {
 //                    // pick up specimen
 //                })
-//                .waitSeconds(0.5)
 //
 //                // hang specimen
 //                .lineToSplineHeading(hangSpecimenPose)
 //                .addDisplacementMarker(() -> {
 //                    // hang specimen
 //                })
-//                .waitSeconds(3)
 //
 //                // PICK UP SPECIMEN 2
 //                .lineToLinearHeading(pickUpSpecimenPose)
 //                .addDisplacementMarker(() -> {
 //                    // pick up specimen
 //                })
-//                .waitSeconds(0.5)
 //
 //                // hang specimen
 //                .lineToSplineHeading(hangSpecimenPose)
 //                .addDisplacementMarker(() -> {
 //                    // hang specimen
 //                })
-//                .waitSeconds(3)
 //
 //                // PICK UP SPECIMEN 3
 //                .lineToLinearHeading(pickUpSpecimenPose)
 //                .addDisplacementMarker(() -> {
 //                    // pick up specimen
 //                })
-//                .waitSeconds(0.5)
 //
 //                // hang specimen
 //                .lineToSplineHeading(hangSpecimenPose)
 //                .addDisplacementMarker(() -> {
 //                    // hang specimen
 //                })
-//                .waitSeconds(3)
 //
 //                // TODO: park
 //
-                .build();
     }
 
 //    public static Action pushSamplesTS(RoadRunnerBotEntity drive) {

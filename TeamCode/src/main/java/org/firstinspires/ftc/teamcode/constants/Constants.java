@@ -54,7 +54,7 @@ public class Constants {
     public static double VERTICAL_WRIST_PITCH_DEPOSIT_POSITION = 180;
 
     public static int MOTOR_POSITION_TOLERANCE = 50;
-    public static double MOTOR_POSITION_COEFFICIENT = 0.1;
+    public static double MOTOR_POSITION_COEFFICIENT = 0.01;
 
     public static double TRIGGER_DEADZONE = 0.1;
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.roadrunner;
 
 
 
@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.messages.PoseMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage;
 
 /**
  * Experimental extension of MecanumDrive that uses the Gobilda Pinpoint sensor for localization.
@@ -29,7 +29,7 @@ import org.firstinspires.ftc.teamcode.messages.PoseMessage;
 public class PinpointDrive extends MecanumDrive {
     public static class Params {
         /*
-        Set this to the name that your Pinpoint is configured as in your hardware config.
+        TODO: Set this to the name that your Pinpoint is configured as in your hardware config.
          */
         public String pinpointDeviceName = "pinpoint";
         /*

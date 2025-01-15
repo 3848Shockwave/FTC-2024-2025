@@ -59,21 +59,10 @@ public class RunVerticalSlideCommand extends CommandBase {
 //        );
 //        verticalSlideMotorTop.set(velocity);
 //        verticalSlideMotorBottom.set(velocity);
+
         verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
         verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 
-
-
-        // OLD:
-//        if (verticalSlideMotorTop.atTargetPosition() || verticalSlideMotorBottom.atTargetPosition()) {
-//            verticalSlideMotorTop.stopMotor();
-//            verticalSlideMotorBottom.stopMotor();
-//        } else {
-//
-//            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-//            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-//
-//        }
     }
 
 
