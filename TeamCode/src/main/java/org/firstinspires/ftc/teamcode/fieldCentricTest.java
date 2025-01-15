@@ -130,7 +130,7 @@ public class fieldCentricTest extends LinearOpMode {
             wristPosition2 = 0.5;
             wristPosition3 = 1.0;
 
-            if (gamepad1.y){
+            if (gamepad1.a){
                 wrist.setPosition(wristPosition1);
             } else if (gamepad1.b){
                 wrist.setPosition(wristPosition2);
@@ -145,7 +145,7 @@ public class fieldCentricTest extends LinearOpMode {
             if (intake > 0){
                 claw.setPosition(0.5);
             } else if (release > 0){
-                claw.setPosition(0.0);
+                claw.setPosition(-0.5);
             }
 
 
