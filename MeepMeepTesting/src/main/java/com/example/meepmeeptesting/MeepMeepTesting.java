@@ -35,6 +35,8 @@ public class MeepMeepTesting {
         // and here starts the TrajectoryActionBuilders.....
         // complete roadrunner TrajectoryBuilder reference: https://cookbook.dairy.foundation/roadrunner_10/complete_trajectorybuilder_reference.html
         // sample actual roadrunner opMode: https://rr.brott.dev/docs/v1-0/guides/centerstage-auto/
+
+        // meepmeep installation and sample file: https://github.com/acmerobotics/MeepMeep
         // TODO: head over to https://rr.brott.dev/docs/v1-0/tuning/ if you want to tune our bot for roadrunner!
         TrajectoryActionBuilder goToHangSpecimenTAB = drive.getDrive().actionBuilder(coloredSampleStartPose)
                 .strafeToLinearHeading(
