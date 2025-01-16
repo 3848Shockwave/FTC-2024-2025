@@ -56,17 +56,6 @@ public class RunVerticalSlideCommand extends CommandBase {
             verticalSlideMotorBottom.stopMotor();
         }
 
-//        double velocity = slidePIDFController.calculate(
-//                verticalSlideMotorTop.getCurrentPosition(),
-//                targetPosition.getAsInt()
-//        );
-//
-//        verticalSlideMotorTop.setVelocity(velocity);
-//        verticalSlideMotorBottom.setVelocity(-velocity);
-//
-//        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-//        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-
     }
 
 }
