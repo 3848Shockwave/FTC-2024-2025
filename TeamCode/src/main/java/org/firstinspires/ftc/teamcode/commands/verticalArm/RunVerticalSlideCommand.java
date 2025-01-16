@@ -19,13 +19,6 @@ public class RunVerticalSlideCommand extends CommandBase {
     private MotorEx verticalSlideMotorBottom;
     private IntakeSubsystem intakeSubsystem;
     private Telemetry telemetry;
-    public static double KP = 0.001;
-    public static double KI = 0;
-    public static double KD = 0;
-    public static double KF = 0;
-
-    public PIDFController slidePIDFController = new PIDFController(KP, KI, KD, KF);
-
     public IntSupplier targetPosition;
 
 
@@ -48,13 +41,18 @@ public class RunVerticalSlideCommand extends CommandBase {
     @Override
     public void execute() {
 
-        if (!verticalSlideMotorTop.atTargetPosition()) {
-            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-        } else {
-            verticalSlideMotorTop.stopMotor();
-            verticalSlideMotorBottom.stopMotor();
-        }
+        // always give motors power
+        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+
+        // motors have no power when reached position, BAD
+//        if (!verticalSlideMotorTop.atTargetPosition()) {
+//            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+//            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+//        } else {
+//            verticalSlideMotorTop.stopMotor();
+//            verticalSlideMotorBottom.stopMotor();
+//        }
 
     }
 
