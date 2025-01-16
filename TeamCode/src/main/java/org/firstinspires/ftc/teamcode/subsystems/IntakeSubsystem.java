@@ -5,10 +5,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PwmControl;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.constants.Constants;
@@ -27,7 +24,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public ServoEx horizontalWristPitchServoL, horizontalWristPitchServoR;
 
     // vertical components
+//    public MotorEx verticalSlideMotorTop, verticalSlideMotorBottom;
+//    public DcMotorEx verticalSlideMotorTop, verticalSlideMotorBottom;
     public MotorEx verticalSlideMotorTop, verticalSlideMotorBottom;
+    private static int verticalSlideMotorsTargetPosition = 0;
     public ServoEx verticalClawGripServo;
     public ServoEx verticalClawRollServo;
     public ServoEx verticalClawPitchServo;
@@ -80,6 +80,14 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalWristPitchServoR.setPwmEnable();
         verticalWristPitchServoR.setPwmRange(new PwmControl.PwmRange(500, 3000));
 
+//        verticalSlideMotorBottom = hardwareMap.get(DcMotorEx.class, "spoolRight");
+//        verticalSlideMotorBottom.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        verticalSlideMotorBottom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        verticalSlideMotorTop = hardwareMap.get(DcMotorEx.class, "spoolLeft");
+//        verticalSlideMotorTop.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        verticalSlideMotorTop.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         // vertical slide motors
         verticalSlideMotorBottom = new MotorEx(hardwareMap, "spoolRight", Motor.GoBILDA.RPM_1150);
         verticalSlideMotorBottom.setRunMode(Motor.RunMode.PositionControl);
@@ -116,14 +124,19 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setVerticalSlideMotorsTargetPosition(int targetPosition) {
-        verticalSlideMotorTop.setTargetPosition(targetPosition);
-        verticalSlideMotorBottom.setTargetPosition(-targetPosition);
+        verticalSlideMotorsTargetPosition = targetPosition;
+//        verticalSlideMotorTop.setTargetPosition(targetPosition);
+//        verticalSlideMotorBottom.setTargetPosition(-targetPosition);
     }
 
-    public void setVerticalSlideMotorsVelocity(double velocity) {
-        verticalSlideMotorTop.setVelocity(velocity);
-        verticalSlideMotorBottom.setVelocity(-velocity);
+    public int getVerticalSlideMotorsTargetPosition() {
+        return verticalSlideMotorsTargetPosition;
     }
+
+//    public void setVerticalSlideMotorsVelocity(double velocity) {
+//        verticalSlideMotorTop.setVelocity(velocity);
+//        verticalSlideMotorBottom.setVelocity(-velocity);
+//    }
 
 
     public void setCurrentState(IntakeState intakeState) {

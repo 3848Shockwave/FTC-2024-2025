@@ -12,7 +12,7 @@ public class MeepMeepTesting {
 
     public static MeepMeep meepMeep;
 
-    public static Action currentTrajectoryAction;
+    public static Action currentSequentialAction;
 
 
     public static void main(String[] args) {
@@ -24,7 +24,7 @@ public class MeepMeepTesting {
 
         meepMeep = new MeepMeep(600);
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_OFFICIAL)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f);
 
@@ -62,12 +62,12 @@ public class MeepMeepTesting {
                 )
                 .endTrajectory();
 
-        TrajectoryActionBuilder turn90_0TAB = goToRightSampleTAB
+        TrajectoryActionBuilder turn90TAB_0 = goToRightSampleTAB
                 .fresh()
                 .turn(Math.toRadians(-90))
                 .endTrajectory();
 
-        TrajectoryActionBuilder goToMiddleSampleTAB = turn90_0TAB
+        TrajectoryActionBuilder goToMiddleSampleTAB = turn90TAB_0
                 .fresh()
                 // sample 1
                 .strafeToLinearHeading(
@@ -82,12 +82,12 @@ public class MeepMeepTesting {
                 )
                 .endTrajectory();
 
-        TrajectoryActionBuilder turn90_1TAB = goToMiddleSampleTAB
+        TrajectoryActionBuilder turn90TAB_1 = goToMiddleSampleTAB
                 .fresh()
                 .turn(Math.toRadians(-90))
                 .endTrajectory();
 
-        TrajectoryActionBuilder goToLeftSampleTAB = turn90_1TAB
+        TrajectoryActionBuilder goToLeftSampleTAB = turn90TAB_1
                 .fresh()
                 // sample 1
                 .strafeToLinearHeading(
@@ -102,14 +102,20 @@ public class MeepMeepTesting {
                 )
                 .endTrajectory();
 
-        TrajectoryActionBuilder turn90_2TAB = goToLeftSampleTAB
+        TrajectoryActionBuilder turn90TAB_2 = goToLeftSampleTAB
                 .fresh()
                 .turn(Math.toRadians(-90))
+                .endTrajectory();
+
+        TrajectoryActionBuilder parkPTS_TAB = turn90TAB_2
+                .fresh()
+                .strafeToLinearHeading(new Vector2d(-57, 60), Math.toRadians(90))
                 .endTrajectory();
 
         // push samples
         TrajectoryActionBuilder pushSamplesTAB = goToHangSpecimenTAB
                 .fresh()
+                // right sample
                 .strafeTo(
                         new Vector2d(-37, 37)
                 )
@@ -120,32 +126,123 @@ public class MeepMeepTesting {
                         new Vector2d(-40, 10),
                         Math.toRadians(-180)
                 )
-//                .lineToYConstantHeading(50)
+                .splineToConstantHeading(
+                        new Vector2d(-45, 15),
+                        Math.toRadians(90)
+                )
+                .lineToYConstantHeading(55)
+
+                // middle sample
+                .strafeToConstantHeading(
+                        new Vector2d(-37 - 9, 15)
+                )
+                .splineToConstantHeading(
+                        new Vector2d(-40 - 9, 10),
+                        Math.toRadians(-180)
+                )
+                .splineToConstantHeading(
+                        new Vector2d(-45 - 9, 15),
+                        Math.toRadians(90)
+                )
+                .lineToYConstantHeading(55)
+                // left sample
+                .strafeToConstantHeading(
+                        new Vector2d(-37 - 18, 15)
+                )
+                .splineToConstantHeading(
+                        new Vector2d(-40 - 18, 10),
+                        Math.toRadians(-180)
+                )
+                .splineToConstantHeading(
+                        new Vector2d(-45 - 16, 15),
+                        Math.toRadians(90)
+                )
+                .lineToYConstantHeading(55)
                 .endTrajectory();
+
+        // hang specimens
+        TrajectoryActionBuilder pickUpSpecimenTAB_0 = pushSamplesTAB
+                .fresh()
+                .strafeToLinearHeading(new Vector2d(-57, 44), Math.toRadians(90))
+                .endTrajectory();
+
+        TrajectoryActionBuilder hangSpecimenTAB_0 = pickUpSpecimenTAB_0
+                .fresh()
+                .strafeToLinearHeading(hangSpecimenPose.component1(), hangSpecimenPose.component2())
+                .endTrajectory();
+
+        TrajectoryActionBuilder pickUpSpecimenTAB_1 = hangSpecimenTAB_0
+                .fresh()
+                .strafeToLinearHeading(new Vector2d(-57, 44), Math.toRadians(90))
+                .endTrajectory();
+
+        TrajectoryActionBuilder hangSpecimenTAB_1 = pickUpSpecimenTAB_1
+                .fresh()
+                .strafeToLinearHeading(hangSpecimenPose.component1(), hangSpecimenPose.component2())
+                .endTrajectory();
+
+        TrajectoryActionBuilder pickUpSpecimenTAB_2 = hangSpecimenTAB_1
+                .fresh()
+                .strafeToLinearHeading(new Vector2d(-57, 44), Math.toRadians(90))
+                .endTrajectory();
+
+        TrajectoryActionBuilder hangSpecimenTAB_2 = pickUpSpecimenTAB_2
+                .fresh()
+                .strafeToLinearHeading(hangSpecimenPose.component1(), hangSpecimenPose.component2())
+                .endTrajectory();
+
+        TrajectoryActionBuilder parkPSHS_TAB = hangSpecimenTAB_2
+                .fresh()
+                .strafeToLinearHeading(new Vector2d(-57, 60), Math.toRadians(90))
+                .endTrajectory();
+
+
 
         // TODO: after these TABs should be the TABS to pick up specimens and hang them, but i'm not sure we're advanced enough to actually execute those
         // TODO: park
 
-        // TODO: in the actual code you will not be using drive.runAction(), instead, this is what it will look like:
+        // TODO: in the actual code you will not be using drive.runAction(). instead, this is what it will look like:
         // schedule(new ActionCommand(goToHangSpecimenTab.build(), new HashSet<>()));
         // schedule(new HangSpecimenCommand(...));
-        drive.runAction(
-                new SequentialAction(
-                        goToHangSpecimenTAB.build(),
-                        pushSamplesTAB.build()
-//                        goToRightSampleTAB.build(),
-//                        turn90_0TAB.build(),
-//                        goToMiddleSampleTAB.build(),
-//                        turn90_1TAB.build(),
-//                        goToLeftSampleTAB.build(),
-//                        turn90_2TAB.build(),
-//                        turn90_2TAB
-//                                .fresh()
-//                                .endTrajectory()
-//                                .build()
-                )
+
+        SequentialAction pushSamplesAndHangSpecimensSA = new SequentialAction(
+                // transfer preloaded specimen
+                goToHangSpecimenTAB.build(),
+                // hang specimen
+                pushSamplesTAB.build(),
+
+                // intake to pickup position
+                pickUpSpecimenTAB_0.build(),
+                // pick up specimen
+                // transfer specimen
+                hangSpecimenTAB_0.build(),
+                // hang specimen
+
+                // repeat x2
+                pickUpSpecimenTAB_1.build(),
+                hangSpecimenTAB_1.build(),
+                pickUpSpecimenTAB_2.build(),
+                hangSpecimenTAB_2.build(),
+
+                // park
+                parkPSHS_TAB.build()
         );
 
+        SequentialAction pickUpAndTransferSamplesSA = new SequentialAction(
+                goToHangSpecimenTAB.build(),
+                goToRightSampleTAB.build(),
+                turn90TAB_0.build(),
+                goToMiddleSampleTAB.build(),
+                turn90TAB_1.build(),
+                goToLeftSampleTAB.build(),
+                turn90TAB_2.build(),
+                parkPTS_TAB.build()
+        );
+
+//        currentSequentialAction = pickUpAndTransferSamplesSA;
+        currentSequentialAction = pushSamplesAndHangSpecimensSA;
+
+        drive.runAction(currentSequentialAction);
 
         meepMeep.addEntity(drive);
 

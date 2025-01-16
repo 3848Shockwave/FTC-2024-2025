@@ -56,7 +56,7 @@ public class CommandAutonomous extends OpMode {
 
                 }),
                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL),
-                new RunVerticalSlideCommand(intakeSubsystem, currentTelemetry),
+                new RunVerticalSlideCommand(intakeSubsystem, intakeSubsystem::getVerticalSlideMotorsTargetPosition, currentTelemetry),
                 new RunCommand(() -> {
 
                     telemetry.addLine("is running");
@@ -94,13 +94,15 @@ public class CommandAutonomous extends OpMode {
                 .turn(Math.toRadians(-90))
                 .endTrajectory();
 
-        CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
-                new ActionCommand(goToHangSpecimenTAB.build(), new HashSet<>()),
-                new SpecimenDropCommandSequence(intakeSubsystem),
-                new ActionCommand(goToRightSampleTAB.build(), new HashSet<>()),
-                new PickUpSampleCommandSequence(intakeSubsystem),
-                new ActionCommand(turn90_0TAB.build(), new HashSet<>())
-        ));
+        CommandScheduler.getInstance().schedule(
+                new SequentialCommandGroup(
+                        new ActionCommand(goToHangSpecimenTAB.build(), new HashSet<>()),
+                        new SpecimenDropCommandSequence(intakeSubsystem),
+                        new ActionCommand(goToRightSampleTAB.build(), new HashSet<>()),
+                        new PickUpSampleCommandSequence(intakeSubsystem),
+                        new ActionCommand(turn90_0TAB.build(), new HashSet<>())
+                )
+        );
 
 
 //        if (isStarted()) {

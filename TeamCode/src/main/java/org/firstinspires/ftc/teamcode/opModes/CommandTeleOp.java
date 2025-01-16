@@ -237,7 +237,7 @@ public class CommandTeleOp extends CommandOpMode {
         intakeSubsystem.setVerticalSlideMotorsTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);
 
         schedule(
-                new RunVerticalSlideCommand(intakeSubsystem, currentTelemetry)
+                new RunVerticalSlideCommand(intakeSubsystem, intakeSubsystem::getVerticalSlideMotorsTargetPosition, currentTelemetry)
         );
 
         // update telemetry

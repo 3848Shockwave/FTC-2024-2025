@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.verticalArm;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.ElevatorFeedforward;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
 
 @Config
 public class RunVerticalSlideCommand extends CommandBase {
@@ -17,11 +19,14 @@ public class RunVerticalSlideCommand extends CommandBase {
     private MotorEx verticalSlideMotorBottom;
     private IntakeSubsystem intakeSubsystem;
     private Telemetry telemetry;
-    public static double KV = 0.1;
-    public static double KS = 0;
-    public static double KG = 0;
-    public static double KA = 0;
-    private ElevatorFeedforward elevatorFeedforward;
+    public static double KP = 0.1;
+    public static double KI = 0;
+    public static double KD = 0;
+    public static double KF = 0;
+
+    public PIDFController slidePIDFController = new PIDFController(KP, KI, KD, KF);
+
+    public IntSupplier targetPosition;
 
 
     /**
@@ -31,15 +36,14 @@ public class RunVerticalSlideCommand extends CommandBase {
      * @param intakeSubsystem
      * @param telemetry
      */
-    public RunVerticalSlideCommand(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
+    public RunVerticalSlideCommand(IntakeSubsystem intakeSubsystem, IntSupplier targetPosition, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
         verticalSlideMotorTop = intakeSubsystem.verticalSlideMotorTop;
         verticalSlideMotorBottom = intakeSubsystem.verticalSlideMotorTop;
         this.telemetry = telemetry;
-        elevatorFeedforward = new ElevatorFeedforward(KS, KG, KV, KA);
+        this.targetPosition = targetPosition;
         // THIS MAKES IT BLOCKING: IT R E Q U I R E S THE SUBSYSTEM
 //        addRequirements(intakeSubsystem);
-//        interruptOn(() -> false);
 
     }
 
@@ -49,19 +53,18 @@ public class RunVerticalSlideCommand extends CommandBase {
 
         setMotorsVelocities();
 
-
     }
 
     private void setMotorsVelocities() {
-//        double velocity = elevatorFeedforward.calculate(
-//                Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST,
-//                Constants.VERTICAL_SLIDE_MOTOR_ACCELERATION
-//        );
-//        verticalSlideMotorTop.set(velocity);
-//        verticalSlideMotorBottom.set(velocity);
+        double velocity = slidePIDFController.calculate(
+                verticalSlideMotorTop.getCurrentPosition(),
+                targetPosition.getAsInt()
+        );
+        verticalSlideMotorTop.set(velocity);
+        verticalSlideMotorBottom.set(-velocity);
 
-        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+//        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+//        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 
     }
 
