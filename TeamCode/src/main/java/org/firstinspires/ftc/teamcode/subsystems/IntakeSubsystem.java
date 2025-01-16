@@ -24,7 +24,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public ServoEx horizontalWristPitchServoL, horizontalWristPitchServoR;
 
     // vertical components
-//    public MotorEx verticalSlideMotorTop, verticalSlideMotorBottom;
 //    public DcMotorEx verticalSlideMotorTop, verticalSlideMotorBottom;
     public MotorEx verticalSlideMotorTop, verticalSlideMotorBottom;
     private static int verticalSlideMotorsTargetPosition = 0;
@@ -46,8 +45,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     }
-
-    public IntakeState currentIntakeState = IntakeState.INTAKE;
 
     public IntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
 //        horizontalClawGripServo = robot.horizontalClawGripServo;
@@ -80,6 +77,7 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalWristPitchServoR.setPwmEnable();
         verticalWristPitchServoR.setPwmRange(new PwmControl.PwmRange(500, 3000));
 
+        // hardwareMap motors (instead of ftclib)
 //        verticalSlideMotorBottom = hardwareMap.get(DcMotorEx.class, "spoolRight");
 //        verticalSlideMotorBottom.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        verticalSlideMotorBottom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -91,12 +89,14 @@ public class IntakeSubsystem extends SubsystemBase {
         // vertical slide motors
         verticalSlideMotorBottom = new MotorEx(hardwareMap, "spoolRight", Motor.GoBILDA.RPM_1150);
         verticalSlideMotorBottom.setRunMode(Motor.RunMode.PositionControl);
+//        verticalSlideMotorBottom.setRunMode(Motor.RunMode.VelocityControl);
         verticalSlideMotorBottom.setPositionCoefficient(Constants.MOTOR_POSITION_COEFFICIENT);
         verticalSlideMotorBottom.setPositionTolerance(Constants.MOTOR_POSITION_TOLERANCE);
 //        verticalSlideMotorBottom.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         verticalSlideMotorTop = new MotorEx(hardwareMap, "spoolLeft", Motor.GoBILDA.RPM_1150);
         verticalSlideMotorTop.setRunMode(Motor.RunMode.PositionControl);
+//        verticalSlideMotorTop.setRunMode(Motor.RunMode.VelocityControl);
         verticalSlideMotorTop.setPositionCoefficient(Constants.MOTOR_POSITION_COEFFICIENT);
         verticalSlideMotorTop.setPositionTolerance(Constants.MOTOR_POSITION_TOLERANCE);
 //        verticalSlideMotorTop.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -116,6 +116,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
         telemetry.addData("bottom motor at position:", verticalSlideMotorBottom.atTargetPosition());
+        telemetry.addData("target position: ", getVerticalSlideMotorsTargetPosition());
 //        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
 //        telemetry.addData("horizontal wrist pitch left servo position:", horizontalWristPitchServoL.getPosition());
 //        telemetry.addData("current horizontal slide left servo position: ", horizontalSlideServoL.getAngle());
@@ -125,8 +126,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setVerticalSlideMotorsTargetPosition(int targetPosition) {
         verticalSlideMotorsTargetPosition = targetPosition;
-//        verticalSlideMotorTop.setTargetPosition(targetPosition);
-//        verticalSlideMotorBottom.setTargetPosition(-targetPosition);
+        verticalSlideMotorTop.setTargetPosition(targetPosition);
+        verticalSlideMotorBottom.setTargetPosition(-targetPosition);
     }
 
     public int getVerticalSlideMotorsTargetPosition() {
@@ -138,28 +139,6 @@ public class IntakeSubsystem extends SubsystemBase {
 //        verticalSlideMotorBottom.setVelocity(-velocity);
 //    }
 
-
-    public void setCurrentState(IntakeState intakeState) {
-        currentIntakeState = intakeState;
-    }
-
-
-    // add a bajillion more methods here for the commands class
-    public void closeClawManual(IntakeState intakeState) {
-        if (intakeState == IntakeState.INTAKE) {
-            closeHorizontalClaw();
-        } else if (intakeState == IntakeState.DEPOSIT) {
-            closeVerticalClaw();
-        }
-    }
-
-    public void openClawManual(IntakeState intakeState) {
-        if (intakeState == IntakeState.INTAKE) {
-            openHorizontalClaw();
-        } else if (intakeState == IntakeState.DEPOSIT) {
-            openVerticalClaw();
-        }
-    }
 
     public void openVerticalClaw() {
         verticalClawGripServo.turnToAngle(Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION, AngleUnit.DEGREES);

@@ -22,9 +22,9 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import java.lang.Math;
 import java.util.HashSet;
 
-@Autonomous(name = "COMMAND AUTONOMOUS (use this please now!)")
-@Config
 // TODO: change to LinearOpMode if we have to
+@Config
+@Autonomous(name = "COMMAND AUTONOMOUS (use this please now!)")
 public class CommandAutonomous extends OpMode {
 
 

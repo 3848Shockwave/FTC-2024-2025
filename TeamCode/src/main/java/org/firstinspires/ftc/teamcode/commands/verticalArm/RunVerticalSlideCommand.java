@@ -19,7 +19,7 @@ public class RunVerticalSlideCommand extends CommandBase {
     private MotorEx verticalSlideMotorBottom;
     private IntakeSubsystem intakeSubsystem;
     private Telemetry telemetry;
-    public static double KP = 0.1;
+    public static double KP = 0.001;
     public static double KI = 0;
     public static double KD = 0;
     public static double KF = 0;
@@ -42,31 +42,31 @@ public class RunVerticalSlideCommand extends CommandBase {
         verticalSlideMotorBottom = intakeSubsystem.verticalSlideMotorTop;
         this.telemetry = telemetry;
         this.targetPosition = targetPosition;
-        // THIS MAKES IT BLOCKING: IT R E Q U I R E S THE SUBSYSTEM
-//        addRequirements(intakeSubsystem);
-
     }
 
 
     @Override
     public void execute() {
 
-        setMotorsVelocities();
+        if (!verticalSlideMotorTop.atTargetPosition()) {
+            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+        } else {
+            verticalSlideMotorTop.stopMotor();
+            verticalSlideMotorBottom.stopMotor();
+        }
 
-    }
-
-    private void setMotorsVelocities() {
-        double velocity = slidePIDFController.calculate(
-                verticalSlideMotorTop.getCurrentPosition(),
-                targetPosition.getAsInt()
-        );
-        verticalSlideMotorTop.set(velocity);
-        verticalSlideMotorBottom.set(-velocity);
-
+//        double velocity = slidePIDFController.calculate(
+//                verticalSlideMotorTop.getCurrentPosition(),
+//                targetPosition.getAsInt()
+//        );
+//
+//        verticalSlideMotorTop.setVelocity(velocity);
+//        verticalSlideMotorBottom.setVelocity(-velocity);
+//
 //        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 //        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 
     }
-
 
 }
