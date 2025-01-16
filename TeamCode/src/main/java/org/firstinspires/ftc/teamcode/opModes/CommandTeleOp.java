@@ -9,7 +9,6 @@ import com.arcrobotics.ftclib.gamepad.TriggerReader;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.*;
-import org.firstinspires.ftc.teamcode.commands.horizontalArm.MoveHorizontalSlideWithTriggersCommand;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.RunVerticalSlideCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
@@ -92,13 +91,6 @@ public class CommandTeleOp extends CommandOpMode {
                 intakeSubsystem.horizontalClawRollServo.rotateByAngle(Constants.HORIZONTAL_CLAW_ROLL_SPEED);
             }
         }));
-
-        // triggers shall move horizontal slides
-        schedule(new MoveHorizontalSlideWithTriggersCommand(
-                intakeSubsystem,
-                () -> auxiliaryGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER),
-                () -> auxiliaryGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
-        ));
 
 
         // control claw roll
@@ -193,7 +185,7 @@ public class CommandTeleOp extends CommandOpMode {
                 new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION),
 
                 // run vertical slides
-                new RunVerticalSlideCommand(intakeSubsystem, intakeSubsystem::getVerticalSlideMotorsTargetPosition, currentTelemetry),
+                new RunVerticalSlideCommand(intakeSubsystem, currentTelemetry),
 
                 // update telemetry
                 new RunCommand(() -> currentTelemetry.update())

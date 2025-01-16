@@ -56,7 +56,7 @@ public class CommandAutonomous extends OpMode {
 
                 }),
                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL),
-                new RunVerticalSlideCommand(intakeSubsystem, intakeSubsystem::getVerticalSlideMotorsTargetPosition, currentTelemetry),
+                new RunVerticalSlideCommand(intakeSubsystem, currentTelemetry),
                 new RunCommand(() -> {
 
                     telemetry.addLine("is running");

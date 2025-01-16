@@ -19,7 +19,6 @@ public class RunVerticalSlideCommand extends CommandBase {
     private MotorEx verticalSlideMotorBottom;
     private IntakeSubsystem intakeSubsystem;
     private Telemetry telemetry;
-    public IntSupplier targetPosition;
 
 
     /**
@@ -29,12 +28,11 @@ public class RunVerticalSlideCommand extends CommandBase {
      * @param intakeSubsystem
      * @param telemetry
      */
-    public RunVerticalSlideCommand(IntakeSubsystem intakeSubsystem, IntSupplier targetPosition, Telemetry telemetry) {
+    public RunVerticalSlideCommand(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
         verticalSlideMotorTop = intakeSubsystem.verticalSlideMotorTop;
         verticalSlideMotorBottom = intakeSubsystem.verticalSlideMotorTop;
         this.telemetry = telemetry;
-        this.targetPosition = targetPosition;
     }
 
 
@@ -44,15 +42,6 @@ public class RunVerticalSlideCommand extends CommandBase {
         // always give motors power
         verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
         verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-
-        // motors have no power when reached position, BAD
-//        if (!verticalSlideMotorTop.atTargetPosition()) {
-//            verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-//            verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-//        } else {
-//            verticalSlideMotorTop.stopMotor();
-//            verticalSlideMotorBottom.stopMotor();
-//        }
 
     }
 
