@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPos
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
-import org.firstinspires.ftc.teamcode.constants.SpecimenConstants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 @Config
@@ -20,7 +19,7 @@ public class SpecimenDropCommandSequence extends SequentialCommandGroup {
     public SpecimenDropCommandSequence(IntakeSubsystem intakeSubsystem) {
         addCommands(
                 // put vertical slides back down
-                new SetVerticalSlidePositionCommand(intakeSubsystem, SpecimenConstants.VERTICAL_SLIDE_MOTOR_SPECIMEN_ON_BAR_POSITION),
+                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_SPECIMEN_ON_BAR_POSITION),
                 // STOP! wait a minute
                 new WaitCommand(WAIT0),
                 // open vertical claw (redundant)

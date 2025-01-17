@@ -3,22 +3,18 @@ package org.firstinspires.ftc.teamcode.constants;
 import com.acmerobotics.dashboard.config.Config;
 
 @Config
-public class Constants {
+public final class Constants {
 
     public static boolean IS_FIELD_CENTRIC = true;
-
-
     // horizontal
     // claw
     public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 50;
     public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 130;
     // slide
-    public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 62;
-    public static double HORIZONTAL_SLIDE_MAX_EXTENSION = 115;
-    public static double HORIZONTAL_SLIDE_MIDDLE_EXTENSION = 90;
-    public static double HORIZONTAL_SLIDE_MIN_EXTENSION = 52;
-    public static double HORIZONTAL_SLIDE_SPEED_MANUAL = 1;
-
+    public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 87;
+    public static double HORIZONTAL_SLIDE_MAX_POSITION = 170;
+    public static double HORIZONTAL_SLIDE_MIDDLE_POSITION = 135;
+    public static double HORIZONTAL_SLIDE_MIN_POSITION = 75;
     public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 82;
     public static int HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION = 23;
     public static int HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION = 83;
@@ -26,32 +22,41 @@ public class Constants {
     public static double HORIZONTAL_CLAW_ROLL_SPEED = 1;
     //
     public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 0;
-    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 85;
+    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 94;
+//    public static double HORIZONTAL_CLAW_PITCH_VERTICAL_POSITION = 70;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
     public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 60;
     public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 100;
-
     // hovers
-    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 160;
+    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 155;
     public static double HORIZONTAL_CLAW_PITCH_HOVER_POSITION = 0;
-
+    // SPECIMEN
+    public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 66;
+    public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 90;
+    public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 60;
     // vertical
     //claw
     public static double VERTICAL_CLAW_GRIP_OPEN_POSITION = 75;
     public static double VERTICAL_CLAW_GRIP_CLOSED_POSITION = 130;
-
     public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = 2;
     public static int VERTICAL_SLIDE_MOTOR_TOUCH_BAR_POSITION = 100;
-    public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 1500;
+    public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 1520;
     public static double VERTICAL_SLIDE_MOTOR_SPEED_FAST = 1;
-    public static double VERTICAL_SLIDE_MOTOR_SPEED_SLOW = 0.5;
-    public static int MOTOR_POSITION_TOLERANCE = 50;
-    public static double MOTOR_POSITION_COEFFICIENT = 0.003;
+    public static int VERTICAL_SLIDE_MOTOR_POSITION_TOLERANCE = 50;
+    public static double VERTICAL_SLIDE_MOTOR_POSITION_COEFFICIENT = 0.003;
     public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 94;
     public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 152;
-    public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 42;
+    public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 45;
     public static double VERTICAL_CLAW_PITCH_DEPOSIT_POSITION = 70;
     public static double VERTICAL_WRIST_PITCH_TRANSFER_POSITION = 8;
     public static double VERTICAL_WRIST_PITCH_DEPOSIT_POSITION = 180;
+    // SPECIMEN
+    public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 42;
+    public static int VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 8;
+    public static int VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION = 180;
+    public static int VERTICAL_CLAW_ROLL_SPECIMEN_DROPOFF_POSITION = 94;
+    public static int VERTICAL_WRIST_PITCH_SPECIMEN_DROPOFF_POSITION = 180;
+    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_UP_POSITION = 1200;
+    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_ON_BAR_POSITION = 100;
 
 }

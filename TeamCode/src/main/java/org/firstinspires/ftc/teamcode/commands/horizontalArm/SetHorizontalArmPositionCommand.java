@@ -40,6 +40,8 @@ public class SetHorizontalArmPositionCommand extends CommandBase {
                 break;
             case VERTICAL:
                 intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION);
+                intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION);
+//                intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_VERTICAL_POSITION);
                 break;
         }
     }

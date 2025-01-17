@@ -18,7 +18,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // horizontal components
     public ServoEx horizontalSlideServoL, horizontalSlideServoR;
-    public static double currentHorizontalSlidePosition = Constants.HORIZONTAL_SLIDE_MIN_EXTENSION;
     public ServoEx horizontalClawGripServo;
     public ServoEx horizontalClawRollServo;
     public ServoEx horizontalClawPitchServo;
@@ -59,6 +58,8 @@ public class IntakeSubsystem extends SubsystemBase {
         // slides
         horizontalSlideServoL = new SimpleServo(hardwareMap, "horzExtL", 0, 180);
         horizontalSlideServoR = new SimpleServo(hardwareMap, "horzExtR", 0, 180);
+        horizontalSlideServoL.setInverted(true);
+        horizontalSlideServoR.setInverted(true);
 
         // vertical
         // arm
@@ -76,14 +77,14 @@ public class IntakeSubsystem extends SubsystemBase {
         // vertical slide motors
         verticalSlideMotorBottom = new MotorEx(hardwareMap, "spoolRight", Motor.GoBILDA.RPM_1150);
         verticalSlideMotorBottom.setRunMode(Motor.RunMode.PositionControl);
-        verticalSlideMotorBottom.setPositionCoefficient(Constants.MOTOR_POSITION_COEFFICIENT);
-        verticalSlideMotorBottom.setPositionTolerance(Constants.MOTOR_POSITION_TOLERANCE);
+        verticalSlideMotorBottom.setPositionCoefficient(Constants.VERTICAL_SLIDE_MOTOR_POSITION_COEFFICIENT);
+        verticalSlideMotorBottom.setPositionTolerance(Constants.VERTICAL_SLIDE_MOTOR_POSITION_TOLERANCE);
 //        verticalSlideMotorBottom.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         verticalSlideMotorTop = new MotorEx(hardwareMap, "spoolLeft", Motor.GoBILDA.RPM_1150);
         verticalSlideMotorTop.setRunMode(Motor.RunMode.PositionControl);
-        verticalSlideMotorTop.setPositionCoefficient(Constants.MOTOR_POSITION_COEFFICIENT);
-        verticalSlideMotorTop.setPositionTolerance(Constants.MOTOR_POSITION_TOLERANCE);
+        verticalSlideMotorTop.setPositionCoefficient(Constants.VERTICAL_SLIDE_MOTOR_POSITION_COEFFICIENT);
+        verticalSlideMotorTop.setPositionTolerance(Constants.VERTICAL_SLIDE_MOTOR_POSITION_TOLERANCE);
 //        verticalSlideMotorTop.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
 
@@ -145,22 +146,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setHorizontalSlidePosition(double degrees) {
         horizontalSlideServoL.turnToAngle(180 - degrees);
         horizontalSlideServoR.turnToAngle(degrees);
-        currentHorizontalSlidePosition = degrees;
     }
 
-    public void moveHorizontalSlide(double speed) {
-        currentHorizontalSlidePosition += speed;
-
-        // clamp the position to 0 and 180
-        if (currentHorizontalSlidePosition > Constants.HORIZONTAL_SLIDE_MAX_EXTENSION) {
-            currentHorizontalSlidePosition = Constants.HORIZONTAL_SLIDE_MAX_EXTENSION;
-        } else if (currentHorizontalSlidePosition < Constants.HORIZONTAL_SLIDE_MIN_EXTENSION) {
-            currentHorizontalSlidePosition = Constants.HORIZONTAL_SLIDE_MIN_EXTENSION;
-        }
-
-        horizontalSlideServoL.turnToAngle(180 - currentHorizontalSlidePosition);
-        horizontalSlideServoR.turnToAngle(currentHorizontalSlidePosition);
-    }
 
     public void setHorizontalClawRollPosition(double degrees) {
         horizontalClawRollServo.turnToAngle(degrees);

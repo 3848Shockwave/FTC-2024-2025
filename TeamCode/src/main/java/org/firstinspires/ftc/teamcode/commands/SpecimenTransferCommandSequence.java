@@ -2,14 +2,9 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
-import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
-import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalArmPositionCommand;
-import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
-import org.firstinspires.ftc.teamcode.constants.SpecimenConstants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 @Config
@@ -37,18 +32,18 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                 // set vertical arm to transfer position
                 new InstantCommand(() -> {
                     intakeSubsystem.openVerticalClaw();
-                    intakeSubsystem.setVerticalWristPitchPosition(SpecimenConstants.VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION);
-                    intakeSubsystem.setVerticalClawPitchPosition(SpecimenConstants.VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
+                    intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION);
+                    intakeSubsystem.setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
                     intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION);
                 }),
 //                // (wait until ^ done)
                 new WaitCommand(WAIT0),
                 // set horizontal arm to transfer position
                 new InstantCommand(() -> {
-                    intakeSubsystem.setHorizontalWristPitchPosition(SpecimenConstants.HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION);
+                    intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION);
                     // bring back slides (SPECIMEN)
-                    intakeSubsystem.setHorizontalSlidePosition(SpecimenConstants.HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION);
-                    intakeSubsystem.setHorizontalClawPitchPosition(SpecimenConstants.HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
+                    intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION);
+                    intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
                     intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);
                 }),
                 // (wait until ^ done)

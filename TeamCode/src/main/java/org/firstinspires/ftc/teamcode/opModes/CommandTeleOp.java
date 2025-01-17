@@ -105,15 +105,15 @@ public class CommandTeleOp extends CommandOpMode {
 
         // horizontal slide min extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_EXTENSION)
+                intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION)
         ));
         // horizontal slide middle extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIDDLE_EXTENSION)
+                intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIDDLE_POSITION)
         ));
         // horizontal slide max extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() ->
-                intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_EXTENSION)
+                intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_POSITION)
         ));
 
 
@@ -132,10 +132,13 @@ public class CommandTeleOp extends CommandOpMode {
         );
 
         // back button resets imu
-        driverGamepad.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new ParallelCommandGroup(
-                new InstantCommand(driveSubsystem::resetIMU),
-                new InstantCommand(() -> gamepad1.rumble(200)
-                )));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(
+                new ParallelCommandGroup(
+                        new InstantCommand(driveSubsystem::resetIMU),
+                        new InstantCommand(() -> gamepad1.rumble(200)
+                        )
+                )
+        );
 
 
         // triggers for intake
