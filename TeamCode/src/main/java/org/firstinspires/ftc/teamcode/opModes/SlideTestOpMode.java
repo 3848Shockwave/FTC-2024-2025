@@ -8,17 +8,20 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 @Config
 @TeleOp(name = "Test op mode")
-public class TestOpMode extends LinearOpMode {
+public class SlideTestOpMode extends LinearOpMode {
 
     // PID(F) declaration
     // kp = 0, ki = 0, kd = 0, kf = 0;
-    public static double KP = 0.1;
+    public static double KP = 0.003;
     public static double KI = 0;
     public static double KD = 0;
     public static double KF = 0;
+    public static int bottomPosition = 0;
+    public static int topPosition = 2000;
     private PIDFController examplePIDF = new PIDFController(KP, KI, KD, KF);
 
     @Override
@@ -39,8 +42,8 @@ public class TestOpMode extends LinearOpMode {
         resetRuntime();
 
         while (opModeIsActive()) {
-            if (gamepad1.a) targetPosition = 3000;
-            if (gamepad1.b) targetPosition = 1000;
+            if (gamepad1.a) targetPosition = topPosition;
+            if (gamepad1.b) targetPosition = bottomPosition;
 
                         /*
             Calculates PID based only on one encoder.
@@ -55,6 +58,8 @@ public class TestOpMode extends LinearOpMode {
             telemetry.addData("target position: ", targetPosition);
             telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
             telemetry.addData("bottom motor position: ", verticalSlideMotorBottom.getCurrentPosition());
+            telemetry.addData("top motor current: ", verticalSlideMotorTop.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("bottom motor current: ", verticalSlideMotorBottom.getCurrent(CurrentUnit.AMPS));
             telemetry.update();
         }
 

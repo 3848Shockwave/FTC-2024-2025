@@ -41,33 +41,17 @@ public class Constants {
     public static double VERTICAL_CLAW_GRIP_CLOSED_POSITION = 130;
 
     public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = 2;
-    public static int VERTICAL_SLIDE_MOTOR_TOUCH_BAR_POSITION = 200;
-    public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 4070;
+    public static int VERTICAL_SLIDE_MOTOR_TOUCH_BAR_POSITION = 100;
+    public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 1500;
     public static double VERTICAL_SLIDE_MOTOR_SPEED_FAST = 1;
     public static double VERTICAL_SLIDE_MOTOR_SPEED_SLOW = 0.5;
-    public static double VERTICAL_SLIDE_MOTOR_ACCELERATION = 30;
+    public static int MOTOR_POSITION_TOLERANCE = 50;
+    public static double MOTOR_POSITION_COEFFICIENT = 0.003;
     public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 94;
     public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 152;
     public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 42;
     public static double VERTICAL_CLAW_PITCH_DEPOSIT_POSITION = 70;
     public static double VERTICAL_WRIST_PITCH_TRANSFER_POSITION = 8;
     public static double VERTICAL_WRIST_PITCH_DEPOSIT_POSITION = 180;
-
-    public static int MOTOR_POSITION_TOLERANCE = 50;
-    public static double MOTOR_POSITION_COEFFICIENT = 0.001;
-
-    public static double TRIGGER_DEADZONE = 0.1;
-
-
-//    public static double Kp = 1.8; // proportional gain
-//    public static double Ki = 0; // integral gain
-//    public static double Kd = 0.031; // derivative gain
-//
-//    public static double UP = 1;
-//    public static double DOWN = 0;
-//    public static double PWM_LOW = 1700;
-//    public static double PWM_HIGH = 2000;
-//    public static double ANGLE_SPEED = 0.001;
-
 
 }

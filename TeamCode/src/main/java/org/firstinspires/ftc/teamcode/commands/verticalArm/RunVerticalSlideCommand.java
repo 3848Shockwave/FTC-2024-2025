@@ -31,7 +31,7 @@ public class RunVerticalSlideCommand extends CommandBase {
     public RunVerticalSlideCommand(IntakeSubsystem intakeSubsystem, Telemetry telemetry) {
         this.intakeSubsystem = intakeSubsystem;
         verticalSlideMotorTop = intakeSubsystem.verticalSlideMotorTop;
-        verticalSlideMotorBottom = intakeSubsystem.verticalSlideMotorTop;
+        verticalSlideMotorBottom = intakeSubsystem.verticalSlideMotorBottom;
         this.telemetry = telemetry;
     }
 
