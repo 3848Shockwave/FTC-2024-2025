@@ -30,6 +30,7 @@ public class fieldCentricTest extends LinearOpMode {
     private DcMotor backRight;
     private DcMotor backLeft;
     private DcMotor armMotor;
+    private DcMotor armMotorExpand;
     private double frontLeftPower;
     private double backLeftPower;
     private double frontRightPower;
@@ -52,6 +53,9 @@ public class fieldCentricTest extends LinearOpMode {
     private double intake;
     private double release;
 
+    private boolean armExpand;
+    private boolean armContract;
+
 
     @Override
     public void runOpMode() {
@@ -67,6 +71,7 @@ public class fieldCentricTest extends LinearOpMode {
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
         wrist = hardwareMap.get(Servo.class, "wrist");
         claw = hardwareMap.get(Servo.class, "claw");
+        armMotorExpand = hardwareMap.get(DcMotor.class, "armMotorExpand");
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
 
@@ -77,6 +82,7 @@ public class fieldCentricTest extends LinearOpMode {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotorExpand.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         emu.resetYaw();
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -122,6 +128,17 @@ public class fieldCentricTest extends LinearOpMode {
                 armMotor.setPower(-0.5);
             } else {
                 armMotor.setPower(0);
+            }
+
+            //code for arm expansion
+            armExpand = gamepad1.dpad_up;
+            armContract = gamepad1.dpad_down;
+            if(armExpand){
+                armMotorExpand.setPower(-0.5);
+            } else if(armContract){
+                armMotorExpand.setPower(0.5);
+            } else {
+                armMotorExpand.setPower(0);
             }
 
 
