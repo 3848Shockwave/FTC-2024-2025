@@ -16,9 +16,11 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
 
 
     // waits are in milliseconds
-    public static int CLOSE_CLAW_WAIT = 0;
+    public static int CLOSE_CLAW_WAIT = 100;
+    public static int HORIZONTAL_SLIDE_RETRACT_WAIT = 350;
+    public static int HORIZONTAL_SLIDE_RETRACT_OFFSET = 20;
     public static int WAIT0 = 200;
-    public static int WAIT1 = 600;
+    public static int WAIT1 = 175;
     public static int WAIT2 = 200;
     public static int WAIT3 = 0;
     public static int WAIT4 = 200;
@@ -42,8 +44,12 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
                 new WaitCommand(WAIT0),
                 new InstantCommand(() -> {
                     intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION);
-                    intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION);
+                    intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION + HORIZONTAL_SLIDE_RETRACT_OFFSET);
                     intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);
+                }),
+                new WaitCommand(HORIZONTAL_SLIDE_RETRACT_WAIT),
+                new InstantCommand(() -> {
+                    intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION);
                 }
                 ),
 //                // (wait until ^ done)

@@ -83,72 +83,11 @@ public class MeepMeepTesting {
                 )
                 .endTrajectory();
 
+        // specimen
+
+
         // to continue off a previous command, you do:
         // TAB tab = previousTAB.fresh(). [insert trajectories here] .endTrajectory();
-        TrajectoryActionBuilder goToRightSampleTAB = goToHangSpecimenTAB
-                .fresh()
-                // sample 1
-                .strafeToLinearHeading(
-                        new Vector2d(
-                                -28,
-                                45
-                        ),
-                        Math.atan2(
-                                rightColoredSampleVector.x - (-28),
-                                rightColoredSampleVector.y - (45)
-                        ) - Math.toRadians(5)
-                )
-                .endTrajectory();
-
-        TrajectoryActionBuilder turn90TAB_0 = goToRightSampleTAB
-                .fresh()
-                .turn(Math.toRadians(-90))
-                .endTrajectory();
-
-        TrajectoryActionBuilder goToMiddleSampleTAB = turn90TAB_0
-                .fresh()
-                // sample 1
-                .strafeToLinearHeading(
-                        new Vector2d(
-                                -40,
-                                45
-                        ),
-                        Math.atan2(
-                                middleColoredSampleVector.x - (-40),
-                                middleColoredSampleVector.y - (45)
-                        ) - Math.toRadians(0)
-                )
-                .endTrajectory();
-
-        TrajectoryActionBuilder turn90TAB_1 = goToMiddleSampleTAB
-                .fresh()
-                .turn(Math.toRadians(-90))
-                .endTrajectory();
-
-        TrajectoryActionBuilder goToLeftSampleTAB = turn90TAB_1
-                .fresh()
-                // sample 1
-                .strafeToLinearHeading(
-                        new Vector2d(
-                                -50,
-                                45
-                        ),
-                        Math.atan2(
-                                leftColoredSampleVector.x - (-50),
-                                leftColoredSampleVector.y - (45)
-                        ) - Math.toRadians(0)
-                )
-                .endTrajectory();
-
-        TrajectoryActionBuilder turn90TAB_2 = goToLeftSampleTAB
-                .fresh()
-                .turn(Math.toRadians(-90))
-                .endTrajectory();
-
-        TrajectoryActionBuilder parkPTS_TAB = turn90TAB_2
-                .fresh()
-                .strafeToLinearHeading(new Vector2d(-57, 60), Math.toRadians(90))
-                .endTrajectory();
 
         // push samples
         TrajectoryActionBuilder pushSamplesTAB = goToHangSpecimenTAB
@@ -164,31 +103,31 @@ public class MeepMeepTesting {
                 )
                 // down
                 .strafeToConstantHeading(
-                        new Vector2d(-36, 15)
+                        new Vector2d(-36, 17)
                 )
                 .splineToConstantHeading(
-                        new Vector2d(-47, 13),
+                        new Vector2d(-47, 19),
                         Math.toRadians(90)
 
                 )
                 // up
                 .strafeToConstantHeading(
-                        new Vector2d(-47, 55)
+                        new Vector2d(-47, 51)
                 )
 
                 // middle sample
                 // down
                 .strafeToConstantHeading(
-                        new Vector2d(-47, 14)
+                        new Vector2d(-47, 17)
                 )
                 .splineToConstantHeading(
-                        new Vector2d(-57, 14),
+                        new Vector2d(-57, 19),
                         Math.toRadians(90)
 
                 )
                 // up
                 .strafeToConstantHeading(
-                        new Vector2d(-57, 55)
+                        new Vector2d(-57, 51)
                 )
                 // left sample
                 // down
@@ -196,17 +135,14 @@ public class MeepMeepTesting {
                         new Vector2d(-57, 15)
                 )
                 .splineToConstantHeading(
-                        new Vector2d(-61, 13),
+                        new Vector2d(-61, 17),
                         Math.toRadians(90)
 
                 )
-                // left
-                .strafeToConstantHeading(
-                        new Vector2d(-61, 13)
-                )
+                .waitSeconds(0)
                 // up
                 .strafeToConstantHeading(
-                        new Vector2d(-61, 55)
+                        new Vector2d(-61, 51)
                 )
                 .endTrajectory();
 
@@ -347,18 +283,6 @@ public class MeepMeepTesting {
 //                parkPSHS_TAB.build()
         );
 
-        SequentialAction pickUpAndTransferSamplesSA = new SequentialAction(
-                goToHangSpecimenTAB.build(),
-                goToRightSampleTAB.build(),
-                turn90TAB_0.build(),
-                goToMiddleSampleTAB.build(),
-                turn90TAB_1.build(),
-                goToLeftSampleTAB.build(),
-                turn90TAB_2.build(),
-                parkPTS_TAB.build()
-        );
-
-//        currentSequentialAction = pickUpAndTransferSamplesSA;
         currentSequentialAction = pushSamplesAndHangSpecimensSA;
 
         drive.runAction(currentSequentialAction);

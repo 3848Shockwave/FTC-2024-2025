@@ -103,70 +103,74 @@ public class CommandAutonomous extends CommandOpMode {
 
         // to continue off a previous command, you do:
         // TAB tab = previousTAB.fresh(). [insert trajectories here] .endTrajectory();
-        TrajectoryActionBuilder goToRightSampleTAB = goToHangSpecimenTAB
-                .fresh()
-                // sample 1
+        TrajectoryActionBuilder dropSampleTAB = drive.actionBuilder(coloredSampleStartPose)
                 .strafeToLinearHeading(
-                        new Vector2d(
-                                -28,
-                                45
-                        ),
-                        Math.atan2(
-                                rightColoredSampleVector.x - (-28),
-                                rightColoredSampleVector.y - (45)
-                        ) - Math.toRadians(5)
+                        dropSamplePose.component1(),
+                        dropSamplePose.component2()
                 )
                 .endTrajectory();
 
-        TrajectoryActionBuilder turn90TAB_0 = goToRightSampleTAB
+        TrajectoryActionBuilder leftSampleTAB = dropSampleTAB
                 .fresh()
-                .turn(Math.toRadians(-90))
-                .endTrajectory();
+                .strafeToLinearHeading(
+                        new Vector2d(47, 60),
+                        Math.toRadians(-90)
 
-        TrajectoryActionBuilder goToMiddleSampleTAB = turn90TAB_0
+                )
+                .endTrajectory();
+        TrajectoryActionBuilder dropSample0TAB = leftSampleTAB
                 .fresh()
-                // sample 1
+                .strafeToLinearHeading(
+                        dropSamplePose.component1(),
+                        dropSamplePose.component2()
+                )
+                .endTrajectory();
+        TrajectoryActionBuilder middleSampleTAB = dropSample0TAB
+                .fresh()
+                .strafeToLinearHeading(
+                        new Vector2d(47, 60),
+                        Math.toRadians(-90)
+
+                )
+                .endTrajectory();
+        TrajectoryActionBuilder dropSample1TAB = middleSampleTAB
+                .fresh()
+                .strafeToLinearHeading(
+                        dropSamplePose.component1(),
+                        dropSamplePose.component2()
+                )
+                .endTrajectory();
+        TrajectoryActionBuilder rightSampleTAB = dropSample1TAB
+                .fresh()
+                .strafeToLinearHeading(
+                        new Vector2d(47, 60),
+                        Math.toRadians(-90)
+
+                )
+                .endTrajectory();
+        TrajectoryActionBuilder dropSample2TAB = rightSampleTAB
+                .fresh()
+                .strafeToLinearHeading(
+                        dropSamplePose.component1(),
+                        dropSamplePose.component2()
+                )
+                .endTrajectory();
+        TrajectoryActionBuilder parkTAB = dropSample2TAB
+                .fresh()
                 .strafeToLinearHeading(
                         new Vector2d(
-                                -40,
-                                45
+                                -58,
+                                55
                         ),
-                        Math.atan2(
-                                middleColoredSampleVector.x - (-40),
-                                middleColoredSampleVector.y - (45)
-                        ) - Math.toRadians(0)
+                        Math.toRadians(-90)
                 )
                 .endTrajectory();
 
-        TrajectoryActionBuilder turn90TAB_1 = goToMiddleSampleTAB
-                .fresh()
-                .turn(Math.toRadians(-90))
-                .endTrajectory();
+        // specimen
 
-        TrajectoryActionBuilder goToLeftSampleTAB = turn90TAB_1
-                .fresh()
-                // sample 1
-                .strafeToLinearHeading(
-                        new Vector2d(
-                                -50,
-                                45
-                        ),
-                        Math.atan2(
-                                leftColoredSampleVector.x - (-50),
-                                leftColoredSampleVector.y - (45)
-                        ) - Math.toRadians(0)
-                )
-                .endTrajectory();
 
-        TrajectoryActionBuilder turn90TAB_2 = goToLeftSampleTAB
-                .fresh()
-                .turn(Math.toRadians(-90))
-                .endTrajectory();
-
-        TrajectoryActionBuilder parkPTS_TAB = turn90TAB_2
-                .fresh()
-                .strafeToLinearHeading(new Vector2d(-57, 60), Math.toRadians(90))
-                .endTrajectory();
+        // to continue off a previous command, you do:
+        // TAB tab = previousTAB.fresh(). [insert trajectories here] .endTrajectory();
 
         // push samples
         TrajectoryActionBuilder pushSamplesTAB = goToHangSpecimenTAB
@@ -182,31 +186,31 @@ public class CommandAutonomous extends CommandOpMode {
                 )
                 // down
                 .strafeToConstantHeading(
-                        new Vector2d(-36, 15)
+                        new Vector2d(-36, 17)
                 )
                 .splineToConstantHeading(
-                        new Vector2d(-47, 13),
+                        new Vector2d(-47, 19),
                         Math.toRadians(90)
 
                 )
                 // up
                 .strafeToConstantHeading(
-                        new Vector2d(-47, 55)
+                        new Vector2d(-47, 51)
                 )
 
                 // middle sample
                 // down
                 .strafeToConstantHeading(
-                        new Vector2d(-47, 14)
+                        new Vector2d(-47, 17)
                 )
                 .splineToConstantHeading(
-                        new Vector2d(-57, 14),
+                        new Vector2d(-57, 19),
                         Math.toRadians(90)
 
                 )
                 // up
                 .strafeToConstantHeading(
-                        new Vector2d(-57, 55)
+                        new Vector2d(-57, 51)
                 )
                 // left sample
                 // down
@@ -214,17 +218,14 @@ public class CommandAutonomous extends CommandOpMode {
                         new Vector2d(-57, 15)
                 )
                 .splineToConstantHeading(
-                        new Vector2d(-61, 13),
+                        new Vector2d(-61, 17),
                         Math.toRadians(90)
 
                 )
-                // left
-                .strafeToConstantHeading(
-                        new Vector2d(-61, 13)
-                )
+                .waitSeconds(0)
                 // up
                 .strafeToConstantHeading(
-                        new Vector2d(-61, 55)
+                        new Vector2d(-61, 51)
                 )
                 .endTrajectory();
 
