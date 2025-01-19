@@ -47,7 +47,7 @@ public class MeepMeepTesting {
 
         Pose2d hangSpecimenPose = new Pose2d(
                 0,
-                39,
+                38.5,
                 Math.toRadians(90)
         );
 
@@ -58,7 +58,7 @@ public class MeepMeepTesting {
         Vector2d placedSpecimenVector = new Vector2d(-47, 58);
         Pose2d pickUpSpecimenPose = new Pose2d(
                 -46,
-                47,
+                46,
                 Math.atan2(
                         -(placedSpecimenVector.x - (-37)),
                         -(placedSpecimenVector.y - (41))
@@ -156,15 +156,20 @@ public class MeepMeepTesting {
                 // right sample
                 .setTangent(Math.toRadians(0))
                 .strafeToConstantHeading(
-                        new Vector2d(-35, 39)
+                        new Vector2d(-30, 39)
+                )
+                .splineToConstantHeading(
+                        new Vector2d(-36, 35),
+                        Math.toRadians(-90)
                 )
                 // down
                 .strafeToConstantHeading(
-                        new Vector2d(-35, 13)
+                        new Vector2d(-36, 15)
                 )
-                // left
-                .strafeToConstantHeading(
-                        new Vector2d(-47, 13)
+                .splineToConstantHeading(
+                        new Vector2d(-47, 13),
+                        Math.toRadians(90)
+
                 )
                 // up
                 .strafeToConstantHeading(
@@ -174,11 +179,12 @@ public class MeepMeepTesting {
                 // middle sample
                 // down
                 .strafeToConstantHeading(
-                        new Vector2d(-47, 13)
+                        new Vector2d(-47, 14)
                 )
-                // left
-                .strafeToConstantHeading(
-                        new Vector2d(-57, 13)
+                .splineToConstantHeading(
+                        new Vector2d(-57, 14),
+                        Math.toRadians(90)
+
                 )
                 // up
                 .strafeToConstantHeading(
@@ -187,7 +193,12 @@ public class MeepMeepTesting {
                 // left sample
                 // down
                 .strafeToConstantHeading(
-                        new Vector2d(-57, 13)
+                        new Vector2d(-57, 15)
+                )
+                .splineToConstantHeading(
+                        new Vector2d(-61, 13),
+                        Math.toRadians(90)
+
                 )
                 // left
                 .strafeToConstantHeading(
@@ -224,7 +235,7 @@ public class MeepMeepTesting {
                                 hangSpecimenPose.component1().x - 3,
                                 hangSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-30)
+                        Math.toRadians(-50)
                 )
                 .endTrajectory();
 
@@ -251,7 +262,7 @@ public class MeepMeepTesting {
                                 hangSpecimenPose.component1().x - 5,
                                 hangSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-30)
+                        Math.toRadians(-50)
                 )
                 .endTrajectory();
 
@@ -278,19 +289,30 @@ public class MeepMeepTesting {
                                 hangSpecimenPose.component1().x - 7,
                                 hangSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-30)
+                        Math.toRadians(-50)
                 )
                 .endTrajectory();
 
         TrajectoryActionBuilder parkPSHS_TAB = hangSpecimenTAB_2
                 .fresh()
-                .strafeToConstantHeading(
+                .strafeToLinearHeading(
                         new Vector2d(
                                 -58,
                                 55
-                        )
+                        ),
+                        Math.toRadians(-90)
                 )
-                .turnTo(Math.toRadians(90))
+                .endTrajectory();
+
+        TrajectoryActionBuilder parkPSHS_Backup_TAB = hangSpecimenTAB_0
+                .fresh()
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                -58,
+                                55
+                        ),
+                        Math.toRadians(-90)
+                )
                 .endTrajectory();
 
 
@@ -313,15 +335,16 @@ public class MeepMeepTesting {
                 // transfer specimen
                 hangSpecimenTAB_0.build(),
                 // hang specimen
-
-                // repeat x2
-                pickUpSpecimenTAB_1.build(),
-                hangSpecimenTAB_1.build(),
-                pickUpSpecimenTAB_2.build(),
-                hangSpecimenTAB_2.build(),
-
-                // park
-                parkPSHS_TAB.build()
+                parkPSHS_Backup_TAB.build()
+//
+//                // repeat x2
+//                pickUpSpecimenTAB_1.build(),
+//                hangSpecimenTAB_1.build(),
+//                pickUpSpecimenTAB_2.build(),
+//                hangSpecimenTAB_2.build(),
+//
+//                // park
+//                parkPSHS_TAB.build()
         );
 
         SequentialAction pickUpAndTransferSamplesSA = new SequentialAction(

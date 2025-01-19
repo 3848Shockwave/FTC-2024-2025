@@ -11,7 +11,7 @@ public final class Constants {
     public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 50;
     public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 130;
     // slide
-    public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 87;
+    public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 88;
     public static double HORIZONTAL_SLIDE_MAX_POSITION = 170;
     public static double HORIZONTAL_SLIDE_MIDDLE_POSITION = 135;
     public static double HORIZONTAL_SLIDE_MIN_POSITION = 75;
@@ -57,7 +57,7 @@ public final class Constants {
     public static int VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION = 180;
     public static int VERTICAL_CLAW_ROLL_SPECIMEN_DROPOFF_POSITION = 94;
     public static int VERTICAL_WRIST_PITCH_SPECIMEN_DROPOFF_POSITION = 180;
-    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_UP_POSITION = 525;
+    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_UP_POSITION = 510;
     public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_ON_BAR_POSITION = 100;
 
 }

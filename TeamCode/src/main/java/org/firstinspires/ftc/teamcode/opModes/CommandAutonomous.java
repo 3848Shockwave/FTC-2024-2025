@@ -66,7 +66,7 @@ public class CommandAutonomous extends CommandOpMode {
 
         Pose2d hangSpecimenPose = new Pose2d(
                 0,
-                39,
+                38.5,
                 Math.toRadians(90)
         );
 
@@ -77,7 +77,7 @@ public class CommandAutonomous extends CommandOpMode {
         Vector2d placedSpecimenVector = new Vector2d(-47, 58);
         Pose2d pickUpSpecimenPose = new Pose2d(
                 -46,
-                47,
+                46,
                 Math.atan2(
                         -(placedSpecimenVector.x - (-37)),
                         -(placedSpecimenVector.y - (41))
@@ -174,15 +174,20 @@ public class CommandAutonomous extends CommandOpMode {
                 // right sample
                 .setTangent(Math.toRadians(0))
                 .strafeToConstantHeading(
-                        new Vector2d(-35, 39)
+                        new Vector2d(-30, 39)
+                )
+                .splineToConstantHeading(
+                        new Vector2d(-36, 35),
+                        Math.toRadians(-90)
                 )
                 // down
                 .strafeToConstantHeading(
-                        new Vector2d(-35, 13)
+                        new Vector2d(-36, 15)
                 )
-                // left
-                .strafeToConstantHeading(
-                        new Vector2d(-47, 13)
+                .splineToConstantHeading(
+                        new Vector2d(-47, 13),
+                        Math.toRadians(90)
+
                 )
                 // up
                 .strafeToConstantHeading(
@@ -192,11 +197,12 @@ public class CommandAutonomous extends CommandOpMode {
                 // middle sample
                 // down
                 .strafeToConstantHeading(
-                        new Vector2d(-47, 13)
+                        new Vector2d(-47, 14)
                 )
-                // left
-                .strafeToConstantHeading(
-                        new Vector2d(-57, 13)
+                .splineToConstantHeading(
+                        new Vector2d(-57, 14),
+                        Math.toRadians(90)
+
                 )
                 // up
                 .strafeToConstantHeading(
@@ -205,7 +211,12 @@ public class CommandAutonomous extends CommandOpMode {
                 // left sample
                 // down
                 .strafeToConstantHeading(
-                        new Vector2d(-57, 13)
+                        new Vector2d(-57, 15)
+                )
+                .splineToConstantHeading(
+                        new Vector2d(-61, 13),
+                        Math.toRadians(90)
+
                 )
                 // left
                 .strafeToConstantHeading(
@@ -242,7 +253,7 @@ public class CommandAutonomous extends CommandOpMode {
                                 hangSpecimenPose.component1().x - 3,
                                 hangSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-30)
+                        Math.toRadians(-50)
                 )
                 .endTrajectory();
 
@@ -269,7 +280,7 @@ public class CommandAutonomous extends CommandOpMode {
                                 hangSpecimenPose.component1().x - 5,
                                 hangSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-30)
+                        Math.toRadians(-50)
                 )
                 .endTrajectory();
 
@@ -296,19 +307,30 @@ public class CommandAutonomous extends CommandOpMode {
                                 hangSpecimenPose.component1().x - 7,
                                 hangSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-30)
+                        Math.toRadians(-50)
                 )
                 .endTrajectory();
 
         TrajectoryActionBuilder parkPSHS_TAB = hangSpecimenTAB_2
                 .fresh()
-                .strafeToConstantHeading(
+                .strafeToLinearHeading(
                         new Vector2d(
                                 -58,
                                 55
-                        )
+                        ),
+                        Math.toRadians(-90)
                 )
-                .turn(Math.toRadians(180))
+                .endTrajectory();
+
+        TrajectoryActionBuilder parkPSHS_Backup_TAB = hangSpecimenTAB_0
+                .fresh()
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                -58,
+                                55
+                        ),
+                        Math.toRadians(-90)
+                )
                 .endTrajectory();
 
         // INIT ACTIONS
@@ -323,65 +345,59 @@ public class CommandAutonomous extends CommandOpMode {
                     intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_SPECIMEN_DROPOFF_POSITION);
 
                 })
-//                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL)
         );
 
         waitForStart();
 
         CommandScheduler.getInstance().schedule(
-                new ActionCommand(
-                        drive.actionBuilder(coloredSampleStartPose)
-                                .turnTo(Math.toRadians(180))
-                                .build(),
-                        new HashSet<>()
-                )
-        );
-//        CommandScheduler.getInstance().schedule(
-//                new SequentialCommandGroup(
-//                        new VerticalArmToSpecimenDropoffCommandSequence(intakeSubsystem, WAIT4),
-//                        // go to hang specimen position
-//                        new ActionCommand(goToHangSpecimenTAB.build(), new HashSet<>()),
+                new SequentialCommandGroup(
+                        new VerticalArmToSpecimenDropoffCommandSequence(intakeSubsystem, WAIT4),
+                        // go to hang specimen position
+                        new ActionCommand(goToHangSpecimenTAB.build(), new HashSet<>()),
+                        new WaitCommand(100),
+                        // hang the specimen
+                        new SpecimenHangCommandSequence(intakeSubsystem),
+                        new WaitCommand(250),
+                        // push all the samples
+                        new ActionCommand(pushSamplesTAB.build(), new HashSet<>()),
 //                        new WaitCommand(1000),
-//                        // hang the specimen
-//                        new SpecimenHangCommandSequence(intakeSubsystem),
+
+                        // put intake to hover
+                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
+                        // go to pick up position
+                        new ActionCommand(pickUpSpecimenTAB_0.build(), new HashSet<>()),
 //                        new WaitCommand(1000),
-//                        // push all the samples
-//                        new ActionCommand(pushSamplesTAB.build(), new HashSet<>()),
-//                        new WaitCommand(1000),
-//
-//                        // put intake to hover
-//                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
-//                        // go to pick up position
-//                        new ActionCommand(pickUpSpecimenTAB_0.build(), new HashSet<>()),
-//                        new WaitCommand(1000),
-//                        // pick up specimen
-//                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
-//                        new WaitCommand(1000),
-//                        // transfer specimen
-//                        new SpecimenTransferCommandSequence(intakeSubsystem),
-//                        // go to hang position
-//                        new ActionCommand(hangSpecimenTAB_0.build(), new HashSet<>()),
-//                        new WaitCommand(1000),
-//                        // hang specimen
-//                        new SpecimenHangCommandSequence(intakeSubsystem),
+                        // pick up specimen
+                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
+                        new WaitCommand(250),
+                        // transfer specimen
+                        new SpecimenTransferCommandSequence(intakeSubsystem),
+                        // go to hang position
+                        new ActionCommand(hangSpecimenTAB_0.build(), new HashSet<>()),
+                        new WaitCommand(100),
+                        // hang specimen
+                        new SpecimenHangCommandSequence(intakeSubsystem),
+
+                        // park
+                        new ActionCommand(parkPSHS_Backup_TAB.build(), new HashSet<>())
 //
 //                        // repeat #1
 //                        // put intake to hover
 //                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
 //                        // go to pick up position
 //                        new ActionCommand(pickUpSpecimenTAB_1.build(), new HashSet<>()),
-//                        new WaitCommand(1000),
+////                        new WaitCommand(1000),
 //                        // pick up specimen
 //                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
-//                        new WaitCommand(1000),
+//                        new WaitCommand(250),
 //                        // transfer specimen
 //                        new SpecimenTransferCommandSequence(intakeSubsystem),
 //                        // go to hang position
 //                        new ActionCommand(hangSpecimenTAB_1.build(), new HashSet<>()),
-//                        new WaitCommand(1000),
+//                        new WaitCommand(100),
 //                        // hang specimen
 //                        new SpecimenHangCommandSequence(intakeSubsystem),
-//
+
 //                        // repeat #2
 //                        // put intake to hover
 //                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
@@ -389,16 +405,26 @@ public class CommandAutonomous extends CommandOpMode {
 //                        new ActionCommand(pickUpSpecimenTAB_2.build(), new HashSet<>()),
 //                        // pick up specimen
 //                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
-//                        new WaitCommand(1000),
+//                        new WaitCommand(250),
 //                        // transfer specimen
 //                        new SpecimenTransferCommandSequence(intakeSubsystem),
 //                        // go to hang position
 //                        new ActionCommand(hangSpecimenTAB_2.build(), new HashSet<>()),
+//                        new WaitCommand(100),
 //                        // hang specimen
 //                        new SpecimenHangCommandSequence(intakeSubsystem),
 //
 //                        // park
 //                        new ActionCommand(parkPSHS_TAB.build(), new HashSet<>())
+                )
+        );
+
+//        CommandScheduler.getInstance().schedule(
+//                new ActionCommand(
+//                        drive.actionBuilder(coloredSampleStartPose)
+//                                .turnTo(Math.toRadians(270))
+//                                .build(),
+//                        new HashSet<>()
 //                )
 //        );
 

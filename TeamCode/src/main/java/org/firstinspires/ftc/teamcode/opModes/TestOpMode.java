@@ -9,10 +9,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.constants.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 @Config
 @TeleOp(name = "Test op mode")
-public class SlideTestOpMode extends LinearOpMode {
+public class TestOpMode extends LinearOpMode {
 
     // PID(F) declaration
     // kp = 0, ki = 0, kd = 0, kf = 0;
@@ -30,6 +32,8 @@ public class SlideTestOpMode extends LinearOpMode {
         int targetPosition = 0;
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
+        IntakeSubsystem intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
+
         DcMotorEx verticalSlideMotorBottom = hardwareMap.get(DcMotorEx.class, "spoolRight");
         verticalSlideMotorBottom.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        verticalSlideMotorBottom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -42,18 +46,20 @@ public class SlideTestOpMode extends LinearOpMode {
         resetRuntime();
 
         while (opModeIsActive()) {
-            if (gamepad1.a) targetPosition = topPosition;
-            if (gamepad1.b) targetPosition = bottomPosition;
 
-                        /*
-            Calculates PID based only on one encoder.
-            This can also be the average position of the two linear slides, but we haven't noticed much difference
-            */
-            double power = examplePIDF.calculate(verticalSlideMotorTop.getCurrentPosition(), targetPosition);
+            if (gamepad1.a) intakeSubsystem.horizontalClawPitchServo.turnToAngle(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION);
+            if (gamepad1.b) intakeSubsystem.horizontalClawPitchServo.turnToAngle(Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION);
 
-            // see how both motors are getting the same power
-            verticalSlideMotorBottom.setPower(-power);
-            verticalSlideMotorTop.setPower(power);
+
+//                        /*
+//            Calculates PID based only on one encoder.
+//            This can also be the average position of the two linear slides, but we haven't noticed much difference
+//            */
+//            double power = examplePIDF.calculate(verticalSlideMotorTop.getCurrentPosition(), targetPosition);
+//
+//            // see how both motors are getting the same power
+//            verticalSlideMotorBottom.setPower(-power);
+//            verticalSlideMotorTop.setPower(power);
 
             telemetry.addData("target position: ", targetPosition);
             telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
