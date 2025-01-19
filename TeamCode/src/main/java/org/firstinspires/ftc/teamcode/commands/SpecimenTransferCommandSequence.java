@@ -12,13 +12,12 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
 
 
     // waits are in milliseconds
-    public static double HORIZONTAL_SLIDE_SLIGHTLY_OUT_POSITION = 66 + 5;
+    public static double HORIZONTAL_SLIDE_SLIGHTLY_OUT_POSITION = 87 + 5;
     public static int CLOSE_CLAW_WAIT = 0;
     public static int WAIT0 = 300;
-    public static int WAIT1 = 500;
-    public static int WAIT2 = 500;
-    public static int WAIT3 = 200;
-    public static int WAIT3_5 = 100;
+    public static int WAIT1 = 400;
+    public static int WAIT2 = 150;
+    public static int WAIT3 = 100;
     public static int WAIT4 = 100;
 
     public SpecimenTransferCommandSequence(IntakeSubsystem intakeSubsystem) {
@@ -60,8 +59,6 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
 //                new InstantCommand(() ->
 //                        intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_SLIGHTLY_OUT_POSITION)
 //                ),
-
-                new WaitCommand(WAIT3_5),
 
                 // set vertical slide position to deposit position, after start of this command: wait, then set vertical arm to deposit position
                 new VerticalArmToSpecimenDropoffCommandSequence(intakeSubsystem, WAIT4)

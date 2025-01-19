@@ -97,6 +97,10 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
+        // always give motors power
+        verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+        verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+
         telemetry.addData("top motor position: ", verticalSlideMotorTop.getCurrentPosition());
         telemetry.addData("top motor at position:", verticalSlideMotorTop.atTargetPosition());
 

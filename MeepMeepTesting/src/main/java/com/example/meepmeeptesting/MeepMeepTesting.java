@@ -17,16 +17,54 @@ public class MeepMeepTesting {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
-//        endHeading = 0;
-        String endHeadingInput;
-
-
         meepMeep = new MeepMeep(600);
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f);
+
+        // copy from here
+        Pose2d bucketStartPose = new Pose2d(
+                11.5,
+                62,
+                Math.toRadians(-90)
+        );
+        Pose2d coloredSampleStartPose = new Pose2d(
+                -11.5,
+                62,
+                Math.toRadians(90)
+        );
+        Pose2d submersiblePickUpPose = new Pose2d(
+                27,
+                0,
+                Math.toRadians(180)
+        );
+        Pose2d dropSamplePose = new Pose2d(
+                50,
+                50,
+                Math.toRadians(180 + 45)
+        );
+
+        Pose2d hangSpecimenPose = new Pose2d(
+                0,
+                39,
+                Math.toRadians(90)
+        );
+
+
+        Vector2d rightColoredSampleVector = new Vector2d(-48, 27);
+        Vector2d middleColoredSampleVector = new Vector2d(-58, 27);
+        Vector2d leftColoredSampleVector = new Vector2d(-68, 27);
+        Vector2d placedSpecimenVector = new Vector2d(-47, 58);
+        Pose2d pickUpSpecimenPose = new Pose2d(
+                -46,
+                47,
+                Math.atan2(
+                        -(placedSpecimenVector.x - (-37)),
+                        -(placedSpecimenVector.y - (41))
+                ) - Math.toRadians(20)
+        );
+
 
         RoadRunnerBotEntity drive = new DefaultBotBuilder(meepMeep)
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 10.8)
@@ -116,86 +154,144 @@ public class MeepMeepTesting {
         TrajectoryActionBuilder pushSamplesTAB = goToHangSpecimenTAB
                 .fresh()
                 // right sample
-                .strafeTo(
-                        new Vector2d(-37, 37)
-                )
+                .setTangent(Math.toRadians(0))
                 .strafeToConstantHeading(
-                        new Vector2d(-37, 15)
+                        new Vector2d(-35, 39)
                 )
-                .splineToConstantHeading(
-                        new Vector2d(-40, 10),
-                        Math.toRadians(-180)
+                // down
+                .strafeToConstantHeading(
+                        new Vector2d(-35, 13)
                 )
-                .splineToConstantHeading(
-                        new Vector2d(-45, 15),
-                        Math.toRadians(90)
+                // left
+                .strafeToConstantHeading(
+                        new Vector2d(-47, 13)
                 )
-                .lineToYConstantHeading(55)
+                // up
+                .strafeToConstantHeading(
+                        new Vector2d(-47, 55)
+                )
 
                 // middle sample
+                // down
                 .strafeToConstantHeading(
-                        new Vector2d(-37 - 9, 15)
+                        new Vector2d(-47, 13)
                 )
-                .splineToConstantHeading(
-                        new Vector2d(-40 - 9, 10),
-                        Math.toRadians(-180)
+                // left
+                .strafeToConstantHeading(
+                        new Vector2d(-57, 13)
                 )
-                .splineToConstantHeading(
-                        new Vector2d(-45 - 9, 15),
-                        Math.toRadians(90)
+                // up
+                .strafeToConstantHeading(
+                        new Vector2d(-57, 55)
                 )
-                .lineToYConstantHeading(55)
                 // left sample
+                // down
                 .strafeToConstantHeading(
-                        new Vector2d(-37 - 18, 15)
+                        new Vector2d(-57, 13)
                 )
-                .splineToConstantHeading(
-                        new Vector2d(-40 - 18, 10),
-                        Math.toRadians(-180)
+                // left
+                .strafeToConstantHeading(
+                        new Vector2d(-61, 13)
                 )
-                .splineToConstantHeading(
-                        new Vector2d(-45 - 16, 15),
-                        Math.toRadians(90)
+                // up
+                .strafeToConstantHeading(
+                        new Vector2d(-61, 55)
                 )
-                .lineToYConstantHeading(55)
                 .endTrajectory();
 
         // hang specimens
         TrajectoryActionBuilder pickUpSpecimenTAB_0 = pushSamplesTAB
                 .fresh()
-                .strafeToLinearHeading(new Vector2d(-57, 44), Math.toRadians(90))
+                .setTangent(Math.toRadians(-90))
+                .splineToConstantHeading(
+                        new Vector2d(
+                                pickUpSpecimenPose.component1().x,
+                                pickUpSpecimenPose.component1().y - 6
+                        ),
+                        Math.toRadians(90)
+                )
+                .waitSeconds(1.5)
+                .strafeToConstantHeading(
+                        pickUpSpecimenPose.component1()
+                )
                 .endTrajectory();
 
         TrajectoryActionBuilder hangSpecimenTAB_0 = pickUpSpecimenTAB_0
                 .fresh()
-                .strafeToLinearHeading(hangSpecimenPose.component1(), hangSpecimenPose.component2())
+                .setTangent(Math.toRadians(0))
+                .splineToConstantHeading(
+                        new Vector2d(
+                                hangSpecimenPose.component1().x - 3,
+                                hangSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(-30)
+                )
                 .endTrajectory();
 
         TrajectoryActionBuilder pickUpSpecimenTAB_1 = hangSpecimenTAB_0
                 .fresh()
-                .strafeToLinearHeading(new Vector2d(-57, 44), Math.toRadians(90))
+                .setTangent(Math.toRadians(-90))
+                .strafeToConstantHeading(
+                        new Vector2d(
+                                pickUpSpecimenPose.component1().x,
+                                pickUpSpecimenPose.component1().y - 6
+                        )
+                )
+                .waitSeconds(1.5)
+                .strafeToConstantHeading(
+                        pickUpSpecimenPose.component1()
+                )
                 .endTrajectory();
 
         TrajectoryActionBuilder hangSpecimenTAB_1 = pickUpSpecimenTAB_1
                 .fresh()
-                .strafeToLinearHeading(hangSpecimenPose.component1(), hangSpecimenPose.component2())
+                .setTangent(Math.toRadians(0))
+                .splineToConstantHeading(
+                        new Vector2d(
+                                hangSpecimenPose.component1().x - 5,
+                                hangSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(-30)
+                )
                 .endTrajectory();
 
         TrajectoryActionBuilder pickUpSpecimenTAB_2 = hangSpecimenTAB_1
                 .fresh()
-                .strafeToLinearHeading(new Vector2d(-57, 44), Math.toRadians(90))
+                .setTangent(Math.toRadians(-90))
+                .strafeToConstantHeading(
+                        new Vector2d(
+                                pickUpSpecimenPose.component1().x,
+                                pickUpSpecimenPose.component1().y - 6
+                        )
+                )
+                .waitSeconds(1.5)
+                .strafeToConstantHeading(
+                        pickUpSpecimenPose.component1()
+                )
                 .endTrajectory();
 
         TrajectoryActionBuilder hangSpecimenTAB_2 = pickUpSpecimenTAB_2
                 .fresh()
-                .strafeToLinearHeading(hangSpecimenPose.component1(), hangSpecimenPose.component2())
+                .setTangent(Math.toRadians(0))
+                .splineToConstantHeading(
+                        new Vector2d(
+                                hangSpecimenPose.component1().x - 7,
+                                hangSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(-30)
+                )
                 .endTrajectory();
 
         TrajectoryActionBuilder parkPSHS_TAB = hangSpecimenTAB_2
                 .fresh()
-                .strafeToLinearHeading(new Vector2d(-57, 60), Math.toRadians(90))
+                .strafeToConstantHeading(
+                        new Vector2d(
+                                -58,
+                                55
+                        )
+                )
+                .turnTo(Math.toRadians(90))
                 .endTrajectory();
-
 
 
         // TODO: after these TABs should be the TABS to pick up specimens and hang them, but i'm not sure we're advanced enough to actually execute those
@@ -250,89 +346,5 @@ public class MeepMeepTesting {
 
 
     }
-
-    public static Pose2d bucketStartPose = new Pose2d(
-            11.5,
-            62,
-            Math.toRadians(-90)
-    );
-    public static Pose2d coloredSampleStartPose = new Pose2d(
-            -11.5,
-            62,
-            Math.toRadians(90)
-    );
-    public static Pose2d submersiblePickUpPose = new Pose2d(
-            27,
-            0,
-            Math.toRadians(180)
-    );
-    public static Pose2d dropSamplePose = new Pose2d(
-            50,
-            50,
-            Math.toRadians(180 + 45)
-    );
-
-    public static Pose2d hangSpecimenPose = new Pose2d(
-            0,
-            37,
-            Math.toRadians(90)
-    );
-
-
-    public static Vector2d rightColoredSampleVector = new Vector2d(-48, 27);
-    public static Vector2d middleColoredSampleVector = new Vector2d(-58, 27);
-    public static Vector2d leftColoredSampleVector = new Vector2d(-68, 27);
-    public static Vector2d placedSpecimenVector = new Vector2d(-47, 58);
-    public static Pose2d pickUpSpecimenPose = new Pose2d(
-            -37, 41,
-            Math.atan2(
-                    -(placedSpecimenVector.x - (-37)),
-                    -(placedSpecimenVector.y - (41))
-            ) - Math.toRadians(20)
-    );
-
-
-//    public static TrajectoryActionBuilder moveAndHangSpecimensTA(RoadRunnerBotEntity drive) {
-//        return drive.getDrive().actionBuilder(coloredSampleStartPose)
-////                // PICK UP SPECIMEN
-////                .lineToLinearHeading(pickUpSpecimenPose)
-////                .addDisplacementMarker(() -> {
-////                    // pick up specimen
-////                })
-////
-////                // hang specimen
-////                .lineToSplineHeading(hangSpecimenPose)
-////                .addDisplacementMarker(() -> {
-////                    // hang specimen
-////                })
-////
-////                // PICK UP SPECIMEN 2
-////                .lineToLinearHeading(pickUpSpecimenPose)
-////                .addDisplacementMarker(() -> {
-////                    // pick up specimen
-////                })
-////
-////                // hang specimen
-////                .lineToSplineHeading(hangSpecimenPose)
-////                .addDisplacementMarker(() -> {
-////                    // hang specimen
-////                })
-////
-////                // PICK UP SPECIMEN 3
-////                .lineToLinearHeading(pickUpSpecimenPose)
-////                .addDisplacementMarker(() -> {
-////                    // pick up specimen
-////                })
-////
-////                // hang specimen
-////                .lineToSplineHeading(hangSpecimenPose)
-////                .addDisplacementMarker(() -> {
-////                    // hang specimen
-////                })
-////
-////                // TODO: park
-////
-//    }
-
 
 }

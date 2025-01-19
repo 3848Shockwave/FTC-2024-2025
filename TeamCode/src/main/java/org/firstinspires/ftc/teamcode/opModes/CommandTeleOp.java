@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
-import org.firstinspires.ftc.teamcode.commands.verticalArm.RunVerticalSlideCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -127,8 +126,10 @@ public class CommandTeleOp extends CommandOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 new DropAndResetToIntakeCommandSequence(intakeSubsystem)
         );
+
+        // right stick to transfer specimen
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
-                new PickUpSampleCommandSequence(intakeSubsystem)
+                new SpecimenTransferCommandSequence(intakeSubsystem)
         );
 
         // back button resets imu
@@ -155,7 +156,6 @@ public class CommandTeleOp extends CommandOpMode {
                 );
             }
 
-            // TRIGGER RELEASED: drop claw and pick up sample/specimen
             if (rightTriggerReader.wasJustReleased()) {
                 schedule(
                         new TriggerSamplePickupAndTransferCommandSequence(intakeSubsystem)
@@ -163,7 +163,13 @@ public class CommandTeleOp extends CommandOpMode {
             }
             if (leftTriggerReader.wasJustPressed()) {
                 schedule(
-                        new SpecimenTransferCommandSequence(intakeSubsystem)
+                        new TriggerSampleIntakeCommandSequence(intakeSubsystem)
+                );
+            }
+            // TRIGGER RELEASED: close claw and pick up sample to put to observation zone
+            if (leftTriggerReader.wasJustReleased()) {
+                schedule(
+                        new TriggerPickUpSampleCommandSequence(intakeSubsystem)
                 );
             }
         }));
@@ -173,7 +179,7 @@ public class CommandTeleOp extends CommandOpMode {
                 // touchpad drops specimen
                 new RunCommand(() -> {
                     if (gamepad1.touchpad) {
-                        schedule(new SpecimenDropCommandSequence(intakeSubsystem));
+                        schedule(new SpecimenHangCommandSequence(intakeSubsystem));
                     }
                 }),
 
@@ -186,9 +192,6 @@ public class CommandTeleOp extends CommandOpMode {
                 // immediately set vertical slide position
 //        intakeSubsystem.setVerticalSlideMotorsTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);
                 new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION),
-
-                // run vertical slides
-                new RunVerticalSlideCommand(intakeSubsystem, currentTelemetry),
 
                 // update telemetry
                 new RunCommand(() -> currentTelemetry.update())

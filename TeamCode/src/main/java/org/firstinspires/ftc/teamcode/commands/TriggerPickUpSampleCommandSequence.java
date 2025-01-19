@@ -8,17 +8,22 @@ import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 import static org.firstinspires.ftc.teamcode.commands.SampleTransferCommandSequence.CLOSE_CLAW_WAIT;
+import static org.firstinspires.ftc.teamcode.commands.TriggerSamplePickupAndTransferCommandSequence.DROP_CLOSE_WAIT;
 
-public class PickUpSampleCommandSequence extends SequentialCommandGroup {
+public class TriggerPickUpSampleCommandSequence extends SequentialCommandGroup {
 
-    public PickUpSampleCommandSequence(IntakeSubsystem intakeSubsystem) {
+    public TriggerPickUpSampleCommandSequence(IntakeSubsystem intakeSubsystem) {
         addCommands(
+                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
+                new WaitCommand(DROP_CLOSE_WAIT),
                 // close horizontal arm claw to pick up the sample
                 new InstantCommand(intakeSubsystem::closeHorizontalClaw),
 //                // (wait until ^ done)
                 new WaitCommand(CLOSE_CLAW_WAIT),
                 // set horizontal arm to vertical position
-                new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL),
+                new InstantCommand(() -> {
+                    intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_PICKUP_POSITION);
+                }),
                 new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION))
 
         );

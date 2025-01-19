@@ -11,12 +11,12 @@ import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 @Config
-public class SpecimenDropCommandSequence extends SequentialCommandGroup {
+public class SpecimenHangCommandSequence extends SequentialCommandGroup {
 
-    public static long WAIT0 = 500;
-    public static long WAIT1 = 500;
+    public static long WAIT0 = 50;
+    public static long WAIT1 = 50;
 
-    public SpecimenDropCommandSequence(IntakeSubsystem intakeSubsystem) {
+    public SpecimenHangCommandSequence(IntakeSubsystem intakeSubsystem) {
         addCommands(
                 // put vertical slides back down
                 new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_SPECIMEN_ON_BAR_POSITION),

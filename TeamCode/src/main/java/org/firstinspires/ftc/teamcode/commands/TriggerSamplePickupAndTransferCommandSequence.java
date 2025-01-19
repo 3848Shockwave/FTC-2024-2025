@@ -13,11 +13,11 @@ public class TriggerSamplePickupAndTransferCommandSequence extends SequentialCom
         SAMPLE,
         SPECIMEN
     }
-    public static int PICKUP_TRANSFER_WAIT = 100;
+    public static int DROP_CLOSE_WAIT = 100;
     public TriggerSamplePickupAndTransferCommandSequence(IntakeSubsystem intakeSubsystem) {
         addCommands(
                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
-                new WaitCommand(PICKUP_TRANSFER_WAIT),
+                new WaitCommand(DROP_CLOSE_WAIT),
                 new SampleTransferCommandSequence(intakeSubsystem)
         );
         addRequirements(intakeSubsystem);
