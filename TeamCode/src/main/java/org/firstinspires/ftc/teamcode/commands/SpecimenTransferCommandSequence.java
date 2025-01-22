@@ -12,7 +12,7 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
 
 
     // waits are in milliseconds
-    public static double HORIZONTAL_SLIDE_SLIGHTLY_OUT_POSITION = 87 + 5;
+    public static double HORIZONTAL_SLIDE_SLIGHTLY_OUT_POSITION = 88;
     public static int CLOSE_CLAW_WAIT = 0;
     public static int WAIT0 = 300;
     public static int WAIT1 = 400;

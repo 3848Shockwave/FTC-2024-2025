@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -9,24 +10,21 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.roadrunner.PinpointDrive;
 
 @Config
 public class DriveSubsystem extends SubsystemBase {
     private final Motor frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
     private final MecanumDrive mecanumDrive;
     private IMU imu;
+    private GoBildaPinpointDriver pinpoint;
     private Telemetry telemetry;
 
     private double heading;
-//    private StandardTrackingWheelLocalizer localizer;
-
-//    private HolonomicOdometry odometry;
-
     public static double VELOCITY_CURVE_EXPONENT = 1;
-    public static double TRACK_WIDTH = 10.80;
-    public static double CENTER_WHEEL_OFFSET = 1;
-    //    public static boolean USE_IMU_OVER_DEAD_WHEELS = true;
-    public static double IMU_WEIGHT = 1;
+
+    // how much to use pinpoint over imu (1 is only pinpoint, 0 is only imu)
+    public static double PINPOINT_IMU_WEIGHT = 0.5;
 
     public DriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -44,6 +42,13 @@ public class DriveSubsystem extends SubsystemBase {
         frontLeftMotor.setInverted(true);
         frontRightMotor.setInverted(true);
 
+
+        this.pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        pinpoint.setOffsets(PinpointDrive.PARAMS.xOffset, PinpointDrive.PARAMS.yOffset);
+        pinpoint.setEncoderResolution(PinpointDrive.PARAMS.encoderResolution);
+        pinpoint.setEncoderDirections(PinpointDrive.PARAMS.xDirection, PinpointDrive.PARAMS.yDirection);
+        pinpoint.resetPosAndIMU();
+
         this.imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
@@ -54,25 +59,19 @@ public class DriveSubsystem extends SubsystemBase {
 
         mecanumDrive = new MecanumDrive(frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor);
 
-//        TODO: https://learnroadrunner.com/advanced.html#using-road-runner-in-teleop
-        //TODO: use localizer
-//        localizer = new StandardTrackingWheelLocalizer(hardwareMap, new ArrayList<>(), new ArrayList<>());
-//        localizer.setPoseEstimate(new Pose2d(0, 0, 0));
 
     }
 
     @Override
     public void periodic() {
-        //TODO: use localizer
-//        localizer.update();
 
-//        telemetry.addData("Current Heading:", AngleUnit.normalizeDegrees(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)));
-//        telemetry.addData("is field centric:", Constants.IS_FIELD_CENTRIC);
-//        telemetry.addData("roadrunner localizer (odo pods) heading: ", Math.toDegrees(localizer.getPoseEstimate().getHeading()));
-//        telemetry.addData("roadrunner localizer (odo pods) x: ", localizer.getPoseEstimate().getX());
-//        telemetry.addData("roadrunner localizer (odo pods) y: ", localizer.getPoseEstimate().getY());
+        pinpoint.update();
 
-//        odometry.updatePose();
+        telemetry.addData("pinpoint heading", Math.toDegrees(pinpoint.getHeading()));
+        telemetry.addData("pinpoint status", pinpoint.getDeviceStatus());
+
+        telemetry.addData("weighted heading", heading);
+
     }
 
     public void resetIMU() {
@@ -84,18 +83,14 @@ public class DriveSubsystem extends SubsystemBase {
         forwardSpeed = applyVelocityCurves(forwardSpeed);
         rotationSpeed = applyVelocityCurves(rotationSpeed);
 
-        rotationSpeed *= 1.1;
+//        rotationSpeed *= 1.1;
         double imuHeading = AngleUnit.normalizeDegrees(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-//        double odoHeading = Math.toDegrees(localizer.getPoseEstimate().getHeading());
-//        double weight = IMU_WEIGHT;
-//        if (imuHeading == 0.0) weight = 0;
-//        if (USE_IMU_OVER_DEAD_WHEELS) {
-//            heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-//        } else {
-//            heading = Math.toDegrees(localizer.getPoseEstimate().getHeading());
-//        }
-//        heading = weight * imuHeading + (1 - weight) * odoHeading;
-        heading = imuHeading;
+        double pinpointHeading = Math.toDegrees(pinpoint.getHeading());
+        double weight = PINPOINT_IMU_WEIGHT;
+        // failsafe for if imu is bad (0.0 is a bad value)
+        if (imuHeading == 0.0) weight = 0;
+
+        heading = weight * pinpointHeading + (1 - weight) * imuHeading;
 
         mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, rotationSpeed, heading);
     }
@@ -105,7 +100,7 @@ public class DriveSubsystem extends SubsystemBase {
         forwardSpeed = applyVelocityCurves(forwardSpeed);
         rotationSpeed = applyVelocityCurves(rotationSpeed);
 
-        rotationSpeed *= 1.1;
+//        rotationSpeed *= 1.1;
         mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, rotationSpeed);
     }
 

@@ -86,7 +86,7 @@ public class SampleAuto {
         TrajectoryActionBuilder leftSampleTAB = dropSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(47, 60),
+                        new Vector2d(48, 56),
                         Math.toRadians(-90)
 
                 )
@@ -101,7 +101,7 @@ public class SampleAuto {
         TrajectoryActionBuilder middleSampleTAB = dropSample0TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(50, 60),
+                        new Vector2d(58, 56),
                         Math.toRadians(-90)
 
                 )

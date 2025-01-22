@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opModes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.*;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
+import org.firstinspires.ftc.teamcode.roadrunner.PinpointDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
@@ -31,6 +33,9 @@ public class CommandTeleOp extends CommandOpMode {
 
     @Override
     public void initialize() {
+
+//        PinpointDrive drive = new PinpointDrive(hardwareMap, new Pose2d(0, 0, 0));
+//        drive.pinpoint.getHeading();
 
         currentTelemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -125,6 +130,9 @@ public class CommandTeleOp extends CommandOpMode {
         // drop the sample and reset both arms to intake position
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 new DropAndResetToIntakeCommandSequence(intakeSubsystem)
+        );
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                new TouchBarCommand(intakeSubsystem)
         );
 
         // right stick to transfer specimen

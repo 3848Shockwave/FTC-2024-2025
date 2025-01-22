@@ -28,7 +28,7 @@ public final class Constants {
     public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 60;
     public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 100;
     // hovers
-    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 155;
+    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 160;
     public static double HORIZONTAL_WRIST_PITCH_PICKUP_POSITION = 135;
     public static double HORIZONTAL_CLAW_PITCH_HOVER_POSITION = 0;
     // SPECIMEN
@@ -47,12 +47,12 @@ public final class Constants {
     public static double VERTICAL_SLIDE_MOTOR_POSITION_COEFFICIENT = 0.01;
     public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 94;
     public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 152;
-    public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 42;
+    public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 26;
     public static double VERTICAL_CLAW_PITCH_DEPOSIT_POSITION = 70;
     public static double VERTICAL_WRIST_PITCH_TRANSFER_POSITION = 8;
     public static double VERTICAL_WRIST_PITCH_DEPOSIT_POSITION = 180;
     // SPECIMEN
-    public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 44;
+    public static int VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 34;
     public static int VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 8;
     public static int VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION = 180;
     public static int VERTICAL_CLAW_ROLL_SPECIMEN_DROPOFF_POSITION = 94;
