@@ -52,6 +52,9 @@ public class JerryPaths {
                       .lineToYLinearHeading(47, Math.toRadians(45))
                       .strafeTo(new Vector2d(60, 60))
                       .lineToYLinearHeading(24, Math.toRadians(0))
+                      .strafeTo(new Vector2d(60, 24))
+                      .strafeTo(new Vector2d(28, 24))
+                      .splineToLinearHeading(new Pose2d(60, 60, Math.toRadians(45)), Math.PI / 4)
                       .endTrajectory()
 
                       .build()
