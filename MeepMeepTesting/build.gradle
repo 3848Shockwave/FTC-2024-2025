@@ -1,19 +1,23 @@
 plugins {
-    id 'java-library'
+    id 'java'
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
+group = 'org.example'
+version = 'unspecified'
 
 repositories {
-    maven { url = 'https://jitpack.io' }
+    mavenCentral()
     maven { url = 'https://maven.brott.dev/' }
+
 }
 
 dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation 'com.acmerobotics.roadrunner:MeepMeep:0.1.6'
 
 }
 
+test {
+    useJUnitPlatform()
+}
