@@ -20,7 +20,7 @@ public class TriggerPickUpSampleCommandSequence extends SequentialCommandGroup {
                 new InstantCommand(intakeSubsystem::closeHorizontalClaw),
 //                // (wait until ^ done)
                 new WaitCommand(CLOSE_CLAW_WAIT),
-                // set horizontal arm to vertical position
+                // set horizontal arm to pickup position
                 new InstantCommand(() -> {
                     intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_PICKUP_POSITION);
                 }),

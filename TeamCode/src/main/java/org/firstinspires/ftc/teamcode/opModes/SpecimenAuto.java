@@ -21,7 +21,7 @@ import static org.firstinspires.ftc.teamcode.commands.SpecimenTransferCommandSeq
 
 // TODO: change to LinearOpMode if we have to
 @Config
-@Autonomous(name = "SPECIMEN AUTONOMOUS")
+@Autonomous(name = "SPECIMEN AUTONOMOUS (broken rn, please don't run)")
 public class SpecimenAuto extends CommandOpMode {
 
 
@@ -229,38 +229,38 @@ public class SpecimenAuto extends CommandOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-//                        new VerticalArmToSpecimenDropoffCommandSequence(intakeSubsystem, WAIT4),
-//                        // wait 5 secs for team
-////                        new WaitCommand(5000),
-//                        // go to hang specimen position
-//                        new ActionCommand(goToHangSpecimenTAB.build(), new HashSet<>()),
-//                        new WaitCommand(100),
-//                        // hang the specimen
-//                        new SpecimenHangCommandSequence(intakeSubsystem),
-//                        new WaitCommand(250),
-//                        // move all the samples
-//                        new ActionCommand(goToAndFaceRightSample.build(), new HashSet<>()),
-////                        new WaitCommand(1000),
-//
-//                        // put intake to hover
-//                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
-//                        // go to pick up position
-//                        new ActionCommand(pickUpSpecimenTAB_0.build(), new HashSet<>()),
-////                        new WaitCommand(1000),
-//                        // pick up specimen
-//                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
-//                        new WaitCommand(250),
-//                        new ActionCommand(slightlyForwardTAB.build(), new HashSet<>()),
-//                        // transfer specimen
-//                        new SpecimenTransferCommandSequence(intakeSubsystem),
-//                        // go to hang position
-//                        new ActionCommand(hangSpecimenTAB_0.build(), new HashSet<>()),
-//                        new WaitCommand(500),
-//                        // hang specimen
-//                        new SpecimenHangCommandSequence(intakeSubsystem),
-//
-//                        // park
-//                        new ActionCommand(parkTAB.build(), new HashSet<>())
+                        new VerticalArmToSpecimenDropoffCommandSequence(intakeSubsystem, WAIT4),
+                        // wait 5 secs for team
+//                        new WaitCommand(5000),
+                        // go to hang specimen position
+                        new ActionCommand(goToHangSpecimenTAB.build(), new HashSet<>()),
+                        new WaitCommand(100),
+                        // hang the specimen
+                        new SpecimenHangCommandSequence(intakeSubsystem),
+                        new WaitCommand(250),
+                        // move all the samples
+                        new ActionCommand(goToAndFaceRightSample.build(), new HashSet<>()),
+                        new WaitCommand(1000),
+
+                        // put intake to hover
+                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
+                        // go to pick up position
+                        new ActionCommand(pickUpSpecimenTAB.build(), new HashSet<>()),
+//                        new WaitCommand(1000),
+                        // pick up specimen
+                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
+                        new WaitCommand(250),
+                        new ActionCommand(slightlyForwardTAB.build(), new HashSet<>()),
+                        // transfer specimen
+                        new SpecimenTransferCommandSequence(intakeSubsystem),
+                        // go to hang position
+                        new ActionCommand(hangSpecimenTAB.build(), new HashSet<>()),
+                        new WaitCommand(500),
+                        // hang specimen
+                        new SpecimenHangCommandSequence(intakeSubsystem),
+
+                        // park
+                        new ActionCommand(parkTAB.build(), new HashSet<>())
                 )
         );
 
