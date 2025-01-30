@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.*;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -21,12 +23,15 @@ import java.util.HashSet;
 
 import static org.firstinspires.ftc.teamcode.commands.SpecimenTransferCommandSequence.WAIT4;
 
+@Config
 @Autonomous(name = "SAMPLE AUTONOMOUS")
 public class SampleAuto extends CommandOpMode {
 
-
     IntakeSubsystem intakeSubsystem;
     Telemetry currentTelemetry;
+
+    public static double VEL_CONSTRAINT = 10;
+    public static double X = 47;
 
     @Override
     public void initialize() {
@@ -55,7 +60,7 @@ public class SampleAuto extends CommandOpMode {
                 Math.toRadians(180)
         );
         Pose2d dropSamplePose = new Pose2d(
-                50,
+                54,
                 50,
                 Math.toRadians(180 + 45)
         );
@@ -99,9 +104,9 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder leftSampleTAB = dropSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(48, 56),
-                        Math.toRadians(-90)
-
+                        new Vector2d(X, 54),
+                        Math.toRadians(-90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder dropSample0TAB = leftSampleTAB
@@ -114,7 +119,7 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder middleSampleTAB = dropSample0TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(58, 56),
+                        new Vector2d(58, 54),
                         Math.toRadians(-90)
 
                 )
@@ -129,7 +134,7 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder rightSampleTAB = dropSample1TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(47, 26),
+                        new Vector2d(40, 26),
                         Math.toRadians(0)
 
                 )
@@ -197,7 +202,7 @@ public class SampleAuto extends CommandOpMode {
                         new TriggerSamplePickupAndTransferCommandSequence(intakeSubsystem),
                         // go to drop sample
                         new ActionCommand(dropSample0TAB.build(), new HashSet<>()),
-                        new WaitCommand(500),
+                        new WaitCommand(200),
                         // drop sample
                         new DropAndResetToIntakeCommandSequence(intakeSubsystem),
                         new ActionCommand(middleSampleTAB.build(), new HashSet<>()),
@@ -208,17 +213,23 @@ public class SampleAuto extends CommandOpMode {
                         new TriggerSamplePickupAndTransferCommandSequence(intakeSubsystem),
                         // go to drop sample
                         new ActionCommand(dropSample1TAB.build(), new HashSet<>()),
-                        new WaitCommand(500),
+                        new WaitCommand(200),
                         // drop sample
                         new DropAndResetToIntakeCommandSequence(intakeSubsystem),
                         new ActionCommand(rightSampleTAB.build(), new HashSet<>()),
                         new WaitCommand(250),
+                        new InstantCommand(() -> {
+                            intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION);
+                        }),
                         // pick up sample
                         new TriggerSampleIntakeCommandSequence(intakeSubsystem),
                         new WaitCommand(250),
                         new TriggerSamplePickupAndTransferCommandSequence(intakeSubsystem),
                         // go to drop sample
                         new ActionCommand(dropSample2TAB.build(), new HashSet<>()),
+                        new WaitCommand(200),
+                        // drop sample
+                        new DropAndResetToIntakeCommandSequence(intakeSubsystem),
                         new ActionCommand(parkTAB.build(), new HashSet<>())
                 )
         );

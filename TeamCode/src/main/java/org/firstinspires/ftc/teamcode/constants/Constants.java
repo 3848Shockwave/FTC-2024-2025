@@ -23,7 +23,7 @@ public final class Constants {
     //
     public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 0;
     public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 94;
-//    public static double HORIZONTAL_CLAW_PITCH_VERTICAL_POSITION = 70;
+    //    public static double HORIZONTAL_CLAW_PITCH_VERTICAL_POSITION = 70;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
     public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 60;
     public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 100;
@@ -40,6 +40,7 @@ public final class Constants {
     public static double VERTICAL_CLAW_GRIP_OPEN_POSITION = 75;
     public static double VERTICAL_CLAW_GRIP_CLOSED_POSITION = 130;
     public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = 2;
+    public static int VERTICAL_SLIDE_MOTOR_BOTTOM_BASKET_POSITION = 600;
     public static int VERTICAL_SLIDE_MOTOR_TOUCH_BAR_POSITION = 100;
     public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 1520;
     public static double VERTICAL_SLIDE_MOTOR_SPEED_FAST = 1;

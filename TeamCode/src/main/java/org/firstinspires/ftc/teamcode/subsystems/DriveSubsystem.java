@@ -67,10 +67,12 @@ public class DriveSubsystem extends SubsystemBase {
 
         pinpoint.update();
 
-        telemetry.addData("pinpoint heading", Math.toDegrees(pinpoint.getHeading()));
         telemetry.addData("pinpoint status", pinpoint.getDeviceStatus());
 
-        telemetry.addData("weighted heading", heading);
+        telemetry.addData("pinpoint heading degrees normalized", AngleUnit.normalizeDegrees(Math.toDegrees(pinpoint.getHeading())));
+        telemetry.addData("imu heading degrees normalized", AngleUnit.normalizeDegrees(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)));
+
+        telemetry.addData("weighted heading degrees normalized", heading);
 
     }
 
@@ -84,15 +86,23 @@ public class DriveSubsystem extends SubsystemBase {
         rotationSpeed = applyVelocityCurves(rotationSpeed);
 
 //        rotationSpeed *= 1.1;
-        double imuHeading = AngleUnit.normalizeDegrees(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+        double imuHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         double pinpointHeading = Math.toDegrees(pinpoint.getHeading());
-        double weight = PINPOINT_IMU_WEIGHT;
-        // failsafe for if imu is bad (0.0 is a bad value)
-        if (imuHeading == 0.0) weight = 0;
-
-        heading = weight * pinpointHeading + (1 - weight) * imuHeading;
+        heading = calculateHeadingDegreesNormalized(pinpointHeading, imuHeading, PINPOINT_IMU_WEIGHT);
 
         mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, rotationSpeed, heading);
+    }
+
+    public double calculateHeadingDegreesNormalized(double pinpointHeading, double imuHeading, double weight) {
+
+        pinpointHeading = pinpointHeading % 360;
+
+        
+        return pinpointHeading;
+
+//        // failsafe
+//        if (imuHeading == 0.0) return pinpointHeading;
+//        return pinpointHeading * weight + imuHeading * (1 - weight);
     }
 
     public void driveRobotCentric(double strafeSpeed, double forwardSpeed, double rotationSpeed) {
@@ -100,7 +110,6 @@ public class DriveSubsystem extends SubsystemBase {
         forwardSpeed = applyVelocityCurves(forwardSpeed);
         rotationSpeed = applyVelocityCurves(rotationSpeed);
 
-//        rotationSpeed *= 1.1;
         mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, rotationSpeed);
     }
 

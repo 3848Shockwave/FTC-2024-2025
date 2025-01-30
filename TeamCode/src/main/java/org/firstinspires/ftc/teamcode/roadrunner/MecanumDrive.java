@@ -30,6 +30,8 @@ import com.acmerobotics.roadrunner.ftc.LynxFirmware;
 import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
 import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
+import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -41,6 +43,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.messages.DriveCommandMessage;
 import org.firstinspires.ftc.teamcode.roadrunner.messages.MecanumCommandMessage;
 import org.firstinspires.ftc.teamcode.roadrunner.messages.MecanumLocalizerInputsMessage;
@@ -72,7 +75,7 @@ public class MecanumDrive {
         // feedforward parameters (in tick units)
         public double kS = 0.6826070947347374;
         public double kV = 0.1912614325924896;
-        public double kA = 0.01;
+        public double kA = 0.035;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -86,7 +89,7 @@ public class MecanumDrive {
         // path controller gains
         public double axialGain = 7.0;
         public double lateralGain = 7.0;
-        public double headingGain = 3.0; // shared with turn
+        public double headingGain = 15.0; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
@@ -209,6 +212,17 @@ public class MecanumDrive {
     }
 
     public MecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
+        // CUSTOM CODE
+        ServoEx horizontalSlideServoL = new SimpleServo(hardwareMap, "horzExtL", 0, 180);
+        ServoEx horizontalSlideServoR = new SimpleServo(hardwareMap, "horzExtR", 0, 180);
+        horizontalSlideServoL.setInverted(true);
+        horizontalSlideServoR.setInverted(true);
+
+        horizontalSlideServoL.turnToAngle(180 - Constants.HORIZONTAL_SLIDE_MIN_POSITION);
+        horizontalSlideServoR.turnToAngle(Constants.HORIZONTAL_SLIDE_MIN_POSITION);
+        //
+
+
         this.pose = pose;
 
         LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
