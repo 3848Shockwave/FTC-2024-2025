@@ -30,8 +30,10 @@ public class SampleAuto extends CommandOpMode {
     IntakeSubsystem intakeSubsystem;
     Telemetry currentTelemetry;
 
+    public static double HORIZONTAL_CLAW_ROLL_RIGHT_SAMPLE_POSITION = 50;
     public static double VEL_CONSTRAINT = 10;
-    public static double X = 47;
+    public static double X_RIGHT = 50;
+    public static double Y_RIGHT = 48;
 
     @Override
     public void initialize() {
@@ -43,6 +45,7 @@ public class SampleAuto extends CommandOpMode {
 
         CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
 
+        // preferred distance (+x) to eventually shift this by: 5.3 in
         // copy from here
         Pose2d bucketStartPose = new Pose2d(
                 11.5,
@@ -60,8 +63,8 @@ public class SampleAuto extends CommandOpMode {
                 Math.toRadians(180)
         );
         Pose2d dropSamplePose = new Pose2d(
-                54,
-                50,
+                51,
+                52,
                 Math.toRadians(180 + 45)
         );
 
@@ -84,6 +87,11 @@ public class SampleAuto extends CommandOpMode {
                         -(placedSpecimenVector.y - (41))
                 ) - Math.toRadians(20)
         );
+        Pose2d parkPose = new Pose2d(
+                22,
+                10,
+                Math.toRadians(0)
+        );
 
         // CREATE DRIVE
         PinpointDrive drive = new PinpointDrive(hardwareMap, bucketStartPose);
@@ -104,9 +112,9 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder leftSampleTAB = dropSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(X, 54),
+                        new Vector2d(49, 53),
                         Math.toRadians(-90),
-                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                        new TranslationalVelConstraint(10)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder dropSample0TAB = leftSampleTAB
@@ -119,7 +127,7 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder middleSampleTAB = dropSample0TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(58, 54),
+                        new Vector2d(58, 53),
                         Math.toRadians(-90)
 
                 )
@@ -134,8 +142,8 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder rightSampleTAB = dropSample1TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(40, 26),
-                        Math.toRadians(0)
+                        new Vector2d(50, 48),
+                        Math.toRadians(-50)
 
                 )
                 .endTrajectory();
@@ -148,12 +156,10 @@ public class SampleAuto extends CommandOpMode {
                 .endTrajectory();
         TrajectoryActionBuilder parkTAB = dropSample2TAB
                 .fresh()
-                .strafeToLinearHeading(
-                        new Vector2d(
-                                -58,
-                                55
-                        ),
-                        Math.toRadians(-90)
+                .setTangent(Math.toRadians(-90))
+                .splineToLinearHeading(
+                        parkPose,
+                        Math.toRadians(180)
                 )
                 .endTrajectory();
 
@@ -168,6 +174,9 @@ public class SampleAuto extends CommandOpMode {
                     intakeSubsystem.setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
                     intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_SPECIMEN_DROPOFF_POSITION);
 
+                }),
+                new RunCommand(() -> {
+                    currentTelemetry.update();
                 })
         );
 
@@ -190,7 +199,7 @@ public class SampleAuto extends CommandOpMode {
                                         new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.VERTICAL)
                                 )
                         ),
-                        new WaitCommand(500),
+                        new WaitCommand(200),
                         // drop sample
                         new DropAndResetToIntakeCommandSequence(intakeSubsystem),
                         // go to left sample
@@ -217,10 +226,10 @@ public class SampleAuto extends CommandOpMode {
                         // drop sample
                         new DropAndResetToIntakeCommandSequence(intakeSubsystem),
                         new ActionCommand(rightSampleTAB.build(), new HashSet<>()),
-                        new WaitCommand(250),
                         new InstantCommand(() -> {
-                            intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION);
+                            intakeSubsystem.setHorizontalClawRollPosition(HORIZONTAL_CLAW_ROLL_RIGHT_SAMPLE_POSITION);
                         }),
+                        new WaitCommand(250),
                         // pick up sample
                         new TriggerSampleIntakeCommandSequence(intakeSubsystem),
                         new WaitCommand(250),
@@ -230,7 +239,8 @@ public class SampleAuto extends CommandOpMode {
                         new WaitCommand(200),
                         // drop sample
                         new DropAndResetToIntakeCommandSequence(intakeSubsystem),
-                        new ActionCommand(parkTAB.build(), new HashSet<>())
+                        new ActionCommand(parkTAB.build(), new HashSet<>()),
+                        new TouchBarCommand(intakeSubsystem)
                 )
         );
 

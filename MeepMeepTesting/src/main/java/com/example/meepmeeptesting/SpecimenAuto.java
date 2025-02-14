@@ -46,14 +46,10 @@ public class SpecimenAuto {
 
         Pose2d hangSpecimenPose = new Pose2d(
                 0,
-                38.5,
+                37.5,
                 Math.toRadians(90)
         );
 
-
-        Vector2d rightColoredSampleVector = new Vector2d(-48, 27);
-        Vector2d middleColoredSampleVector = new Vector2d(-58, 27);
-        Vector2d leftColoredSampleVector = new Vector2d(-68, 27);
         Vector2d placedSpecimenVector = new Vector2d(-47, 58);
         Pose2d pickUpSpecimenPose = new Pose2d(
                 -46,
@@ -90,74 +86,53 @@ public class SpecimenAuto {
         // to continue off a previous command, you do:
         // TAB tab = previousTAB.fresh(). [insert trajectories here] .endTrajectory();
 
-        // push samples
-        TrajectoryActionBuilder goToAndFaceRightSample = goToHangSpecimenTAB
+        TrajectoryActionBuilder rightSampleTAB = goToHangSpecimenTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(-30, 44),
-                        Math.atan2(
-                                rightColoredSampleVector.y - (44),
-                                rightColoredSampleVector.x - (-30)
-                        )
+                        new Vector2d(-29, 46),
+                        Math.toRadians(180 + 50)
                 )
-
                 .endTrajectory();
-
-        // push samples
-        TrajectoryActionBuilder dropRightSample = goToAndFaceRightSample
+        TrajectoryActionBuilder dropRightSampleTAB = rightSampleTAB
                 .fresh()
-                .turnTo(Math.toRadians(90 + 45))
-                .endTrajectory();
-        // push samples
-        TrajectoryActionBuilder goToAndFaceMiddleSample = dropRightSample
-                .fresh()
-                .strafeToLinearHeading(
-                        new Vector2d(-40, 44),
-                        Math.atan2(
-                                middleColoredSampleVector.y - (44),
-                                middleColoredSampleVector.x - (-40)
-                        )
+                .turnTo(
+                        Math.toRadians(135)
                 )
-
                 .endTrajectory();
-
-        // push samples
-        TrajectoryActionBuilder dropMiddleSample = goToAndFaceMiddleSample
-                .fresh()
-
-                .turnTo(Math.toRadians(90 + 45))
-                .endTrajectory();
-        // push samples
-        TrajectoryActionBuilder goToAndFaceLeftSample = dropMiddleSample
+        TrajectoryActionBuilder middleSampleTAB = dropRightSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(-50, 44),
-                        Math.atan2(
-                                leftColoredSampleVector.y - (44),
-                                leftColoredSampleVector.x - (-50)
-                        )
+                        new Vector2d(-39, 46),
+                        Math.toRadians(180 + 50)
                 )
-
                 .endTrajectory();
-
-        // push samples
-        TrajectoryActionBuilder dropLeftSample = goToAndFaceLeftSample
+        TrajectoryActionBuilder dropMiddleSampleTAB = middleSampleTAB
+                .fresh()
+                .turnTo(
+                        Math.toRadians(135)
+                )
+                .endTrajectory();
+        TrajectoryActionBuilder leftSampleTAB = dropMiddleSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(
-                                pickUpSpecimenPose.component1().x,
-                                pickUpSpecimenPose.component1().y - 6
-                        ),
-                        Math.toRadians(90)
+                        new Vector2d(-49, 46),
+                        Math.toRadians(180 + 50)
+                )
+                .endTrajectory();
+        TrajectoryActionBuilder dropLeftSampleTAB = leftSampleTAB
+                .fresh()
+                .turnTo(
+                        Math.toRadians(135)
                 )
                 .endTrajectory();
 
 
         // hang specimens
-        TrajectoryActionBuilder pickUpSpecimenTAB = dropLeftSample
+        TrajectoryActionBuilder pickUpSpecimenTAB = dropLeftSampleTAB
                 .fresh()
-                .strafeToConstantHeading(
-                        pickUpSpecimenPose.component1()
+                .strafeToLinearHeading(
+                        pickUpSpecimenPose.component1(),
+                        Math.toRadians(90)
                 )
                 .endTrajectory();
 
@@ -208,12 +183,13 @@ public class SpecimenAuto {
                 // transfer preloaded specimen
                 goToHangSpecimenTAB.build(),
                 // hang specimen
-                goToAndFaceRightSample.build(),
-                dropRightSample.build(),
-                goToAndFaceMiddleSample.build(),
-                dropMiddleSample.build(),
-                goToAndFaceLeftSample.build(),
-                dropLeftSample.build(),
+
+                rightSampleTAB.build(),
+                dropRightSampleTAB.build(),
+                middleSampleTAB.build(),
+                dropMiddleSampleTAB.build(),
+                leftSampleTAB.build(),
+                dropLeftSampleTAB.build(),
 
 
                 // intake to pickup position

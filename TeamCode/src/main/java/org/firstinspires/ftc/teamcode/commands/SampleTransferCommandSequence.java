@@ -22,8 +22,8 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
     public static int WAIT0 = 200;
     public static int WAIT1 = 175;
     public static int WAIT2 = 200;
-    public static int WAIT3 = 0;
-    public static int WAIT4 = 200;
+    public static int WAIT3 = 100;
+    public static int WAIT4 = 300;
 
     public SampleTransferCommandSequence(IntakeSubsystem intakeSubsystem) {
         addCommands(
@@ -38,12 +38,12 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
                 // set horizontal arm to transfer position
                 new InstantCommand(() -> {
                     intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION);
+                    intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION);
                 }
                 ),
 //                // (wait until ^ done)
                 new WaitCommand(WAIT0),
                 new InstantCommand(() -> {
-                    intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION);
                     intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION + HORIZONTAL_SLIDE_RETRACT_OFFSET);
                     intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);
                 }),

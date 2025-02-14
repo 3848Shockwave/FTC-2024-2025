@@ -10,9 +10,9 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import static org.firstinspires.ftc.teamcode.commands.SampleTransferCommandSequence.CLOSE_CLAW_WAIT;
 import static org.firstinspires.ftc.teamcode.commands.TriggerSamplePickupAndTransferCommandSequence.DROP_CLOSE_WAIT;
 
-public class TriggerPickUpSampleCommandSequence extends SequentialCommandGroup {
+public class PickUpSampleNoExtensionCommandSequence extends SequentialCommandGroup {
 
-    public TriggerPickUpSampleCommandSequence(IntakeSubsystem intakeSubsystem) {
+    public PickUpSampleNoExtensionCommandSequence(IntakeSubsystem intakeSubsystem) {
         addCommands(
                 new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
                 new WaitCommand(DROP_CLOSE_WAIT),
@@ -24,8 +24,6 @@ public class TriggerPickUpSampleCommandSequence extends SequentialCommandGroup {
                 new InstantCommand(() -> {
                     intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_PICKUP_POSITION);
                 })
-                // TODO: change this maybe?
-//                new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION))
 
         );
     }

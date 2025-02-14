@@ -39,8 +39,8 @@ public class SampleAuto {
                 Math.toRadians(180)
         );
         Pose2d dropSamplePose = new Pose2d(
-                50,
-                50,
+                51,
+                52,
                 Math.toRadians(180 + 45)
         );
 
@@ -55,13 +55,10 @@ public class SampleAuto {
         Vector2d middleColoredSampleVector = new Vector2d(-58, 27);
         Vector2d leftColoredSampleVector = new Vector2d(-68, 27);
         Vector2d placedSpecimenVector = new Vector2d(-47, 58);
-        Pose2d pickUpSpecimenPose = new Pose2d(
-                -46,
-                46,
-                Math.atan2(
-                        -(placedSpecimenVector.x - (-37)),
-                        -(placedSpecimenVector.y - (41))
-                ) - Math.toRadians(20)
+        Pose2d parkPose = new Pose2d(
+                28,
+                10,
+                Math.toRadians(0)
         );
 
 
@@ -86,10 +83,9 @@ public class SampleAuto {
         TrajectoryActionBuilder leftSampleTAB = dropSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(49, 54),
+                        new Vector2d(49, 53),
                         Math.toRadians(-90),
-                        new TranslationalVelConstraint(10.0)
-
+                        new TranslationalVelConstraint(10)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder dropSample0TAB = leftSampleTAB
@@ -102,7 +98,7 @@ public class SampleAuto {
         TrajectoryActionBuilder middleSampleTAB = dropSample0TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(58, 54),
+                        new Vector2d(58, 53),
                         Math.toRadians(-90)
 
                 )
@@ -117,8 +113,8 @@ public class SampleAuto {
         TrajectoryActionBuilder rightSampleTAB = dropSample1TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(38, 26),
-                        Math.toRadians(0)
+                        new Vector2d(50, 48),
+                        Math.toRadians(-50)
 
                 )
                 .endTrajectory();
@@ -131,12 +127,10 @@ public class SampleAuto {
                 .endTrajectory();
         TrajectoryActionBuilder parkTAB = dropSample2TAB
                 .fresh()
-                .strafeToLinearHeading(
-                        new Vector2d(
-                                -58,
-                                55
-                        ),
-                        Math.toRadians(-90)
+                .setTangent(Math.toRadians(-90))
+                .splineToLinearHeading(
+                        parkPose,
+                        Math.toRadians(180)
                 )
                 .endTrajectory();
 

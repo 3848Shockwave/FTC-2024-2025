@@ -73,10 +73,14 @@ public class DriveSubsystem extends SubsystemBase {
         telemetry.addData("imu heading degrees normalized", AngleUnit.normalizeDegrees(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)));
 
         telemetry.addData("weighted heading degrees normalized", heading);
+        telemetry.addData("pinpoint x", pinpoint.getPosX());
+
+        telemetry.addData("pinpoint y", pinpoint.getPosY());
 
     }
 
     public void resetIMU() {
+        pinpoint.resetPosAndIMU();
         imu.resetYaw();
     }
 

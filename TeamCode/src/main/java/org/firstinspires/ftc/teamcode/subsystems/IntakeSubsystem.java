@@ -95,6 +95,8 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
         verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 
+        telemetry.addData("vertical claw roll position: ", verticalClawRollServo.getPosition());
+
 //        telemetry.addData("top motor position ", verticalSlideMotorTop.getCurrentPosition());
 //        telemetry.addData("bottom motor position ", verticalSlideMotorBottom.getCurrentPosition());
 //
