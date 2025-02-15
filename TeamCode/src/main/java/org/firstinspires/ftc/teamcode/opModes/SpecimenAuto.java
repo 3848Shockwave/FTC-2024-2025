@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.*;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.*;
+import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalArmPositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.PinpointDrive;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -22,10 +23,15 @@ import static org.firstinspires.ftc.teamcode.commands.SpecimenTransferCommandSeq
 @Autonomous(name = "SPECIMEN AUTONOMOUS (currently in testing)")
 public class SpecimenAuto extends CommandOpMode {
 
-    public static double HEADING = 180 + 50;
-    public static double RIGHT_SAMPLE_X = -29;
-    public static double SAMPLE_Y = 46;
-    public static double X_OFFSET = 10;
+    public static double RIGHT_X = -37;
+    public static double RIGHT_Y = 33;
+    public static double RIGHT_HEADING = 200;
+    public static double MIDDLE_X = -29;
+    public static double MIDDLE_Y = 46;
+    public static double MIDDLE_HEADING = 200;
+    public static double LEFT_X = -29;
+    public static double LEFT_Y = 46;
+    public static double LEFT_HEADING = 200;
     public static double CLAW_ROLL = 20;
 
     IntakeSubsystem intakeSubsystem;
@@ -111,8 +117,8 @@ public class SpecimenAuto extends CommandOpMode {
         TrajectoryActionBuilder rightSampleTAB = goToHangSpecimenTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(RIGHT_SAMPLE_X, SAMPLE_Y),
-                        Math.toRadians(HEADING)
+                        new Vector2d(RIGHT_X, RIGHT_Y),
+                        Math.toRadians(RIGHT_HEADING)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder dropRightSampleTAB = rightSampleTAB
@@ -124,8 +130,8 @@ public class SpecimenAuto extends CommandOpMode {
         TrajectoryActionBuilder middleSampleTAB = dropRightSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(RIGHT_SAMPLE_X - 1 * X_OFFSET, SAMPLE_Y),
-                        Math.toRadians(HEADING)
+                        new Vector2d(MIDDLE_X, MIDDLE_Y),
+                        Math.toRadians(MIDDLE_HEADING)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder dropMiddleSampleTAB = middleSampleTAB
@@ -137,8 +143,8 @@ public class SpecimenAuto extends CommandOpMode {
         TrajectoryActionBuilder leftSampleTAB = dropMiddleSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(RIGHT_SAMPLE_X - 2 * X_OFFSET, SAMPLE_Y),
-                        Math.toRadians(HEADING)
+                        new Vector2d(LEFT_X, LEFT_Y),
+                        Math.toRadians(LEFT_HEADING)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder dropLeftSampleTAB = leftSampleTAB
@@ -222,18 +228,22 @@ public class SpecimenAuto extends CommandOpMode {
                         new WaitCommand(250),
 
                         // right sample
+                        // open claw
+                        new InstantCommand(() -> intakeSubsystem.openHorizontalClaw()),
                         // roll claw to position
                         new InstantCommand(() -> intakeSubsystem.setHorizontalClawRollPosition(CLAW_ROLL)),
                         // go to sample
                         new ActionCommand(rightSampleTAB.build(), new HashSet<>()),
                         new WaitCommand(250),
                         // pick up sample
-                        new TriggerSampleIntakeCommandSequence(intakeSubsystem),
+                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
                         new WaitCommand(100),
                         new TriggerPickUpSampleCommandSequence(intakeSubsystem),
                         new WaitCommand(250),
                         // go to drop sample
                         new ActionCommand(dropRightSampleTAB.build(), new HashSet<>()),
+                        // max slides
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_POSITION)),
                         new WaitCommand(250),
                         // drop sample
                         new InstantCommand(() -> intakeSubsystem.openHorizontalClaw()),
@@ -242,16 +252,21 @@ public class SpecimenAuto extends CommandOpMode {
                         // middle sample
                         // roll claw to position
                         new InstantCommand(() -> intakeSubsystem.setHorizontalClawRollPosition(CLAW_ROLL)),
+                        // slides to middle
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIDDLE_POSITION)),
+                        new WaitCommand(150),
                         // go to sample
                         new ActionCommand(middleSampleTAB.build(), new HashSet<>()),
                         new WaitCommand(250),
                         // pick up sample
-                        new TriggerSampleIntakeCommandSequence(intakeSubsystem),
+                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
                         new WaitCommand(100),
                         new TriggerPickUpSampleCommandSequence(intakeSubsystem),
                         new WaitCommand(250),
                         // go to drop sample
                         new ActionCommand(dropMiddleSampleTAB.build(), new HashSet<>()),
+                        // max slides
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_POSITION)),
                         new WaitCommand(250),
                         // drop sample
                         new InstantCommand(() -> intakeSubsystem.openHorizontalClaw()),
@@ -270,6 +285,8 @@ public class SpecimenAuto extends CommandOpMode {
                         new WaitCommand(250),
                         // go to drop sample
                         new ActionCommand(dropLeftSampleTAB.build(), new HashSet<>()),
+                        // max slides
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_POSITION)),
                         new WaitCommand(250),
                         // drop sample
                         new InstantCommand(() -> intakeSubsystem.openHorizontalClaw()),
