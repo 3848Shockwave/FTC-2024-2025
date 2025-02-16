@@ -49,7 +49,7 @@ public final class Constants {
     public static double VERTICAL_SLIDE_MOTOR_POSITION_COEFFICIENT = 0.01;
     public static double VERTICAL_CLAW_ROLL_TRANSFER_POSITION = 94;
     public static double VERTICAL_CLAW_ROLL_DEPOSIT_POSITION = 152;
-    public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 26;
+    public static double VERTICAL_CLAW_PITCH_TRANSFER_POSITION = 31;
     public static double VERTICAL_CLAW_PITCH_DEPOSIT_POSITION = 70;
     public static double VERTICAL_WRIST_PITCH_TRANSFER_POSITION = 8;
     public static double VERTICAL_WRIST_PITCH_DEPOSIT_POSITION = 180;

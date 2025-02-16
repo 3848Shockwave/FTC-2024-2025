@@ -36,10 +36,11 @@ public class SpecimenAuto extends CommandOpMode {
     public static double LEFT_X = -57;
     public static double LEFT_SAMPLE_HEADING = 200;
     public static double CLAW_ROLL = 20;
-    public static double VEL_CONSTRAINT = 30;
+    public static double VEL_CONSTRAINT = 55;
+
     public static long THROW_WAIT = 200;
     public static double HORIZONTAL_SLIDE_DROP_EXTENSION = 60;
-    public static double PICK_UP_SPECIMEN_Y = 47;
+    public static double PICK_UP_SPECIMEN_Y = 46.5;
 
     IntakeSubsystem intakeSubsystem;
     Telemetry currentTelemetry;
@@ -128,6 +129,7 @@ public class SpecimenAuto extends CommandOpMode {
                                 Y,
                                 Math.toRadians(RIGHT_SAMPLE_HEADING)
                         ),
+
                         Math.toRadians(180 + 40),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
@@ -144,6 +146,7 @@ public class SpecimenAuto extends CommandOpMode {
                         new Vector2d(MIDDLE_X, Y),
                         Math.toRadians(MIDDLE_SAMPLE_HEADING),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
+
                 )
                 .endTrajectory();
 //        TrajectoryActionBuilder dropMiddleSampleTAB = middleSampleTAB
@@ -171,6 +174,7 @@ public class SpecimenAuto extends CommandOpMode {
                         ),
                         Math.toRadians(90),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
+
                 )
                 .endTrajectory();
 
@@ -247,7 +251,7 @@ public class SpecimenAuto extends CommandOpMode {
                 .strafeToLinearHeading(
                         new Vector2d(
                                 -40,
-                                60
+                                52
                         ),
                         Math.toRadians(-90),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
@@ -317,19 +321,19 @@ public class SpecimenAuto extends CommandOpMode {
 //                        new WaitCommand(100),
                         new TriggerPickUpSampleCommandSequence(intakeSubsystem),
                         new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_PICKUP_POSITION)),
-                        new WaitCommand(250),
+                        new WaitCommand(200),
 
                         // go to wait for specimen pose
                         new ActionCommand(goToWaitForSpecimenPoseTAB0.build(), new HashSet<>()),
-                        new WaitCommand(100),
+                        new WaitCommand(25),
                         // then drop the sample:
                         // MIDDLE slides this time
-                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_DROP_EXTENSION)),
+                       // new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_DROP_EXTENSION)),
                         // wait time increased since it's only dropping it
-                        new WaitCommand(225),
+                        //new WaitCommand(50),
                         // drop sample normally
                         new InstantCommand(() -> intakeSubsystem.openHorizontalClaw()),
-                        new WaitCommand(100),
+                        new WaitCommand(200),
 
                         // slides to min, wrist to vertical, claw roll perpendicular
                         new InstantCommand(() -> {
@@ -341,7 +345,7 @@ public class SpecimenAuto extends CommandOpMode {
 
                         // cycle 1
                         // WAIT
-                        new WaitCommand(1500),
+                        new WaitCommand(1250),
                         // pick up specimen
                         new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)),
                         new WaitCommand(50),
@@ -365,7 +369,7 @@ public class SpecimenAuto extends CommandOpMode {
                         }),
                         new ActionCommand(goToWaitForSpecimenPoseTAB1.build(), new HashSet<>()),
                         // WAIT
-                        new WaitCommand(1500),
+                        new WaitCommand(600),
                         // pick up specimen
                         new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)),
                         new WaitCommand(50),
@@ -389,10 +393,10 @@ public class SpecimenAuto extends CommandOpMode {
                         }),
                         new ActionCommand(goToWaitForSpecimenPoseTAB2.build(), new HashSet<>()),
                         // WAIT
-                        new WaitCommand(1500),
+                        new WaitCommand(600),
                         // pick up specimen
                         new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)),
-                        new WaitCommand(50),
+                        new WaitCommand(75),
                         new InstantCommand(() -> intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION)),
                         new WaitCommand(150),
 
