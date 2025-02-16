@@ -35,7 +35,7 @@ public class SampleAuto extends CommandOpMode {
     public static double X_LEFT = 49.5;
     public static double X_MIDDLE = 58;
     public static double Y_LEFT_AND_MIDDLE = 52.5;
-    public static double X_RIGHT = 52;
+    public static double X_RIGHT = 52.5;
     public static double Y_RIGHT = 49;
 
     @Override
