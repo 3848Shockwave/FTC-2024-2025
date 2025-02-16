@@ -58,7 +58,7 @@ public class TestSampleAuto extends CommandOpMode {
         TrajectoryActionBuilder rightSampleTAB = drive.actionBuilder(bucketStartPose)
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(X_RIGHT, Y_RIGHT),
+                        new Vector2d(40, 50),
                         Math.toRadians(-50)
 
                 )

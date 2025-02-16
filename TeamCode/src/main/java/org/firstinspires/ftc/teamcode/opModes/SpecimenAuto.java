@@ -176,6 +176,15 @@ public class SpecimenAuto extends CommandOpMode {
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
 
                 )
+//                .strafeToLinearHeading(
+//                        new Vector2d(
+//                                pickUpSpecimenPose.component1().x,
+//                                pickUpSpecimenPose.component1().y
+//                        ),
+//                        Math.toRadians(90),
+//                        new TranslationalVelConstraint(10)
+//
+//                )
                 .endTrajectory();
 
 
@@ -240,7 +249,7 @@ public class SpecimenAuto extends CommandOpMode {
                                 hangSpecimenPose.component1().x - 9,
                                 hangSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-50),
+                        Math.toRadians(-90),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
@@ -328,7 +337,7 @@ public class SpecimenAuto extends CommandOpMode {
                         new WaitCommand(25),
                         // then drop the sample:
                         // MIDDLE slides this time
-                       // new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_DROP_EXTENSION)),
+                        // new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_DROP_EXTENSION)),
                         // wait time increased since it's only dropping it
                         //new WaitCommand(50),
                         // drop sample normally

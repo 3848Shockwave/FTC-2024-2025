@@ -32,8 +32,7 @@ public class SampleAuto extends CommandOpMode {
 
     public static double HORIZONTAL_CLAW_ROLL_RIGHT_SAMPLE_POSITION = 50;
     public static double VEL_CONSTRAINT = 10;
-    public static double X_RIGHT = 50;
-    public static double Y_RIGHT = 48;
+    public static double X_LEFT = 10;
 
     @Override
     public void initialize() {
@@ -112,7 +111,7 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder leftSampleTAB = dropSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(50, 53),
+                        new Vector2d(49.7, 51.5),
                         Math.toRadians(-90),
                         new TranslationalVelConstraint(10)
                 )
@@ -127,7 +126,7 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder middleSampleTAB = dropSample0TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(58, 53),
+                        new Vector2d(58, 51.5),
                         Math.toRadians(-90)
 
                 )
@@ -142,7 +141,7 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder rightSampleTAB = dropSample1TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(50, 48),
+                        new Vector2d(51, 48),
                         Math.toRadians(-50)
 
                 )
