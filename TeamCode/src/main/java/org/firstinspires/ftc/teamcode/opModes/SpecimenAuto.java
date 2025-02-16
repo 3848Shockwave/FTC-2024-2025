@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.PinpointDrive;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
+import java.io.File;
 import java.lang.Math;
 import java.util.HashSet;
 
@@ -23,16 +24,22 @@ import static org.firstinspires.ftc.teamcode.commands.SpecimenTransferCommandSeq
 @Autonomous(name = "SPECIMEN AUTONOMOUS (currently in testing)")
 public class SpecimenAuto extends CommandOpMode {
 
+    File headingFile = new File("./savedHeading");
+
     public static double RIGHT_X = -37;
-    public static double RIGHT_Y = 33;
-    public static double RIGHT_HEADING = 200;
-    public static double MIDDLE_X = -29;
-    public static double MIDDLE_Y = 46;
-    public static double MIDDLE_HEADING = 200;
-    public static double LEFT_X = -29;
-    public static double LEFT_Y = 46;
-    public static double LEFT_HEADING = 200;
+    public static double Y = 29;
+    public static double RIGHT_SAMPLE_HEADING = 200;
+    public static double RIGHT_TURN_HEADING = 100;
+    public static double MIDDLE_X = -47;
+    public static double MIDDLE_SAMPLE_HEADING = 200;
+    public static double MIDDLE_TURN_HEADING = 100;
+    public static double LEFT_X = -57;
+    public static double LEFT_SAMPLE_HEADING = 200;
     public static double CLAW_ROLL = 20;
+    public static double VEL_CONSTRAINT = 30;
+    public static long THROW_WAIT = 200;
+    public static double HORIZONTAL_SLIDE_DROP_EXTENSION = 60;
+    public static double PICK_UP_SPECIMEN_Y = 47;
 
     IntakeSubsystem intakeSubsystem;
     Telemetry currentTelemetry;
@@ -71,7 +78,7 @@ public class SpecimenAuto extends CommandOpMode {
 
         Pose2d hangSpecimenPose = new Pose2d(
                 0,
-                37.5,
+                37,
                 Math.toRadians(90)
         );
 
@@ -81,12 +88,9 @@ public class SpecimenAuto extends CommandOpMode {
         Vector2d leftColoredSampleVector = new Vector2d(-68, 27);
         Vector2d placedSpecimenVector = new Vector2d(-47, 58);
         Pose2d pickUpSpecimenPose = new Pose2d(
-                -46,
-                46,
-                Math.atan2(
-                        -(placedSpecimenVector.x - (-37)),
-                        -(placedSpecimenVector.y - (41))
-                ) - Math.toRadians(20)
+                -48,
+                PICK_UP_SPECIMEN_Y,
+                Math.toRadians(90)
         );
 
         // CREATE DRIVE
@@ -106,7 +110,8 @@ public class SpecimenAuto extends CommandOpMode {
                                 hangSpecimenPose.component1().x,
                                 hangSpecimenPose.component1().y
                         ),
-                        hangSpecimenPose.component2()
+                        hangSpecimenPose.component2(),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
 
@@ -116,86 +121,136 @@ public class SpecimenAuto extends CommandOpMode {
 
         TrajectoryActionBuilder rightSampleTAB = goToHangSpecimenTAB
                 .fresh()
-                .strafeToLinearHeading(
-                        new Vector2d(RIGHT_X, RIGHT_Y),
-                        Math.toRadians(RIGHT_HEADING)
+                .setTangent(Math.toRadians(180 - 20))
+                .splineToLinearHeading(
+                        new Pose2d(
+                                RIGHT_X,
+                                Y,
+                                Math.toRadians(RIGHT_SAMPLE_HEADING)
+                        ),
+                        Math.toRadians(180 + 40),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder dropRightSampleTAB = rightSampleTAB
                 .fresh()
                 .turnTo(
-                        Math.toRadians(135)
+                        Math.toRadians(RIGHT_TURN_HEADING)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder middleSampleTAB = dropRightSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(MIDDLE_X, MIDDLE_Y),
-                        Math.toRadians(MIDDLE_HEADING)
+                        new Vector2d(MIDDLE_X, Y),
+                        Math.toRadians(MIDDLE_SAMPLE_HEADING),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
-        TrajectoryActionBuilder dropMiddleSampleTAB = middleSampleTAB
-                .fresh()
-                .turnTo(
-                        Math.toRadians(135)
-                )
-                .endTrajectory();
-        TrajectoryActionBuilder leftSampleTAB = dropMiddleSampleTAB
-                .fresh()
-                .strafeToLinearHeading(
-                        new Vector2d(LEFT_X, LEFT_Y),
-                        Math.toRadians(LEFT_HEADING)
-                )
-                .endTrajectory();
-        TrajectoryActionBuilder dropLeftSampleTAB = leftSampleTAB
-                .fresh()
-                .turnTo(
-                        Math.toRadians(135)
-                )
-                .endTrajectory();
-
+//        TrajectoryActionBuilder dropMiddleSampleTAB = middleSampleTAB
+//                .fresh()
+//                .turnTo(
+//                        Math.toRadians(MIDDLE_TURN_HEADING)
+//                )
+//                .endTrajectory();
+//        TrajectoryActionBuilder leftSampleTAB = dropMiddleSampleTAB
+//                .fresh()
+//                .strafeToLinearHeading(
+//                        new Vector2d(LEFT_X, Y),
+//                        Math.toRadians(LEFT_SAMPLE_HEADING),
+//                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+//                )
+//                .endTrajectory();
 
         // hang specimens
-        TrajectoryActionBuilder pickUpSpecimenTAB = dropLeftSampleTAB
+        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB0 = middleSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        pickUpSpecimenPose.component1(),
-                        Math.toRadians(90)
-                )
-                .endTrajectory();
-
-        // move 2 in forward
-        TrajectoryActionBuilder slightlyForwardTAB = pickUpSpecimenTAB
-                .fresh()
-                .strafeToConstantHeading(
                         new Vector2d(
                                 pickUpSpecimenPose.component1().x,
-                                pickUpSpecimenPose.component1().y + 1
-                        )
+                                pickUpSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
 
-        TrajectoryActionBuilder hangSpecimenTAB = slightlyForwardTAB
+
+        TrajectoryActionBuilder hangSpecimenTAB0 = goToWaitForSpecimenPoseTAB0
                 .fresh()
                 .setTangent(Math.toRadians(0))
                 .splineToConstantHeading(
                         new Vector2d(
                                 hangSpecimenPose.component1().x - 3,
-                                hangSpecimenPose.component1().y - 2
+                                hangSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-50)
+                        Math.toRadians(-50),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+        // hang specimens
+        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB1 = hangSpecimenTAB0
+                .fresh()
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                pickUpSpecimenPose.component1().x,
+                                pickUpSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
 
 
-        TrajectoryActionBuilder parkTAB = hangSpecimenTAB
+        TrajectoryActionBuilder hangSpecimenTAB1 = goToWaitForSpecimenPoseTAB1
+                .fresh()
+                .setTangent(Math.toRadians(0))
+                .splineToConstantHeading(
+                        new Vector2d(
+                                hangSpecimenPose.component1().x - 6,
+                                hangSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(-50),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+        // hang specimens
+        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB2 = hangSpecimenTAB1
                 .fresh()
                 .strafeToLinearHeading(
                         new Vector2d(
-                                -58,
-                                55
+                                pickUpSpecimenPose.component1().x,
+                                pickUpSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-90)
+                        Math.toRadians(90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+
+        TrajectoryActionBuilder hangSpecimenTAB2 = goToWaitForSpecimenPoseTAB2
+                .fresh()
+                .setTangent(Math.toRadians(0))
+                .splineToConstantHeading(
+                        new Vector2d(
+                                hangSpecimenPose.component1().x - 9,
+                                hangSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(-50),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+
+        TrajectoryActionBuilder parkTAB = hangSpecimenTAB2
+                .fresh()
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                -40,
+                                60
+                        ),
+                        Math.toRadians(-90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
 
@@ -222,95 +277,134 @@ public class SpecimenAuto extends CommandOpMode {
 //                        new WaitCommand(5000),
                         // go to hang specimen position
                         new ActionCommand(goToHangSpecimenTAB.build(), new HashSet<>()),
-                        new WaitCommand(100),
                         // hang the specimen
                         new SpecimenHangCommandSequence(intakeSubsystem),
-                        new WaitCommand(250),
 
                         // right sample
-                        // open claw
-                        new InstantCommand(() -> intakeSubsystem.openHorizontalClaw()),
-                        // roll claw to position
-                        new InstantCommand(() -> intakeSubsystem.setHorizontalClawRollPosition(CLAW_ROLL)),
+                        // slides to min, claw open, roll to place
+                        new InstantCommand(() ->
+                        {
+                            intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION);
+                            intakeSubsystem.openHorizontalClaw();
+                            intakeSubsystem.setHorizontalClawRollPosition(CLAW_ROLL);
+                        }),
+                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
                         // go to sample
                         new ActionCommand(rightSampleTAB.build(), new HashSet<>()),
-                        new WaitCommand(250),
                         // pick up sample
-                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
-                        new WaitCommand(100),
                         new TriggerPickUpSampleCommandSequence(intakeSubsystem),
-                        new WaitCommand(250),
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_PICKUP_POSITION)),
                         // go to drop sample
                         new ActionCommand(dropRightSampleTAB.build(), new HashSet<>()),
                         // max slides
                         new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_POSITION)),
-                        new WaitCommand(250),
-                        // drop sample
+                        new WaitCommand(THROW_WAIT),
+                        // drop sample, projecting it forward
                         new InstantCommand(() -> intakeSubsystem.openHorizontalClaw()),
-                        new WaitCommand(250),
+                        new WaitCommand(150),
 
                         // middle sample
-                        // roll claw to position
-                        new InstantCommand(() -> intakeSubsystem.setHorizontalClawRollPosition(CLAW_ROLL)),
-                        // slides to middle
-                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIDDLE_POSITION)),
-                        new WaitCommand(150),
+                        // slides to min, claw open, roll to place
+                        new InstantCommand(() ->
+                        {
+                            intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION);
+                            intakeSubsystem.openHorizontalClaw();
+                            intakeSubsystem.setHorizontalClawRollPosition(CLAW_ROLL);
+                        }),
+                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
                         // go to sample
                         new ActionCommand(middleSampleTAB.build(), new HashSet<>()),
-                        new WaitCommand(250),
-                        // pick up sample
-                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
-                        new WaitCommand(100),
+//                        new WaitCommand(100),
                         new TriggerPickUpSampleCommandSequence(intakeSubsystem),
-                        new WaitCommand(250),
-                        // go to drop sample
-                        new ActionCommand(dropMiddleSampleTAB.build(), new HashSet<>()),
-                        // max slides
-                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_POSITION)),
-                        new WaitCommand(250),
-                        // drop sample
-                        new InstantCommand(() -> intakeSubsystem.openHorizontalClaw()),
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_PICKUP_POSITION)),
                         new WaitCommand(250),
 
-                        // left sample
-                        // roll claw to position
-                        new InstantCommand(() -> intakeSubsystem.setHorizontalClawRollPosition(CLAW_ROLL)),
-                        // go to sample
-                        new ActionCommand(leftSampleTAB.build(), new HashSet<>()),
-                        new WaitCommand(250),
-                        // pick up sample
-                        new TriggerSampleIntakeCommandSequence(intakeSubsystem),
+                        // go to wait for specimen pose
+                        new ActionCommand(goToWaitForSpecimenPoseTAB0.build(), new HashSet<>()),
                         new WaitCommand(100),
-                        new TriggerPickUpSampleCommandSequence(intakeSubsystem),
-                        new WaitCommand(250),
-                        // go to drop sample
-                        new ActionCommand(dropLeftSampleTAB.build(), new HashSet<>()),
-                        // max slides
-                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_POSITION)),
-                        new WaitCommand(250),
-                        // drop sample
+                        // then drop the sample:
+                        // MIDDLE slides this time
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_DROP_EXTENSION)),
+                        // wait time increased since it's only dropping it
+                        new WaitCommand(225),
+                        // drop sample normally
                         new InstantCommand(() -> intakeSubsystem.openHorizontalClaw()),
-                        new WaitCommand(250)
-//
-//                        // put intake to hover
-//                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.HOVER_OVER_SAMPLE),
-//                        // go to pick up position
-//                        new ActionCommand(pickUpSpecimenTAB.build(), new HashSet<>()),
-////                        new WaitCommand(1000),
-//                        // pick up specimen
-//                        new SetHorizontalArmPositionCommand(intakeSubsystem, IntakeSubsystem.IntakeState.INTAKE),
-//                        new WaitCommand(250),
-//                        new ActionCommand(slightlyForwardTAB.build(), new HashSet<>()),
-//                        // transfer specimen
-//                        new SpecimenTransferCommandSequence(intakeSubsystem),
-//                        // go to hang position
-//                        new ActionCommand(hangSpecimenTAB.build(), new HashSet<>()),
-//                        new WaitCommand(500),
-//                        // hang specimen
-//                        new SpecimenHangCommandSequence(intakeSubsystem),
-//
-//                        // park
-//                        new ActionCommand(parkTAB.build(), new HashSet<>())
+                        new WaitCommand(100),
+
+                        // slides to min, wrist to vertical, claw roll perpendicular
+                        new InstantCommand(() -> {
+                            intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION);
+                            intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION);
+                            intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION);
+                            intakeSubsystem.setHorizontalClawPitchPosition(100);
+                        }),
+
+                        // cycle 1
+                        // WAIT
+                        new WaitCommand(1500),
+                        // pick up specimen
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)),
+                        new WaitCommand(50),
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION)),
+                        new WaitCommand(150),
+                        // transfer specimen
+                        new SpecimenTransferCommandSequence(intakeSubsystem),
+                        // go to hang position
+                        new ActionCommand(hangSpecimenTAB0.build(), new HashSet<>()),
+//                        new WaitCommand(150),
+                        // hang specimen
+                        new SpecimenHangCommandSequence(intakeSubsystem),
+
+                        // cycle 2
+                        // slides to min, wrist to vertical, claw roll perpendicular
+                        new InstantCommand(() -> {
+                            intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION);
+                            intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION);
+                            intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION);
+                            intakeSubsystem.setHorizontalClawPitchPosition(100);
+                        }),
+                        new ActionCommand(goToWaitForSpecimenPoseTAB1.build(), new HashSet<>()),
+                        // WAIT
+                        new WaitCommand(1500),
+                        // pick up specimen
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)),
+                        new WaitCommand(50),
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION)),
+                        new WaitCommand(250),
+                        // transfer specimen
+                        new SpecimenTransferCommandSequence(intakeSubsystem),
+                        // go to hang position
+                        new ActionCommand(hangSpecimenTAB1.build(), new HashSet<>()),
+                        new WaitCommand(250),
+                        // hang specimen
+                        new SpecimenHangCommandSequence(intakeSubsystem),
+
+                        // cycle 3
+                        // slides to min, wrist to vertical, claw roll perpendicular
+                        new InstantCommand(() -> {
+                            intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION);
+                            intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION);
+                            intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION);
+                            intakeSubsystem.setHorizontalClawPitchPosition(100);
+                        }),
+                        new ActionCommand(goToWaitForSpecimenPoseTAB2.build(), new HashSet<>()),
+                        // WAIT
+                        new WaitCommand(1500),
+                        // pick up specimen
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)),
+                        new WaitCommand(50),
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION)),
+                        new WaitCommand(150),
+
+                        // transfer specimen
+                        new SpecimenTransferCommandSequence(intakeSubsystem),
+                        // go to hang position
+                        new ActionCommand(hangSpecimenTAB2.build(), new HashSet<>()),
+                        // hang specimen
+                        new SpecimenHangCommandSequence(intakeSubsystem),
+
+                        // park
+                        new ActionCommand(parkTAB.build(), new HashSet<>())
                 )
         );
 

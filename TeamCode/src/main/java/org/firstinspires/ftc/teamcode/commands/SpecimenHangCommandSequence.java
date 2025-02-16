@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 @Config
 public class SpecimenHangCommandSequence extends SequentialCommandGroup {
 
-    public static long WAIT0 = 50;
+    public static long WAIT0 = 150;
     public static long WAIT1 = 50;
 
     public SpecimenHangCommandSequence(IntakeSubsystem intakeSubsystem) {

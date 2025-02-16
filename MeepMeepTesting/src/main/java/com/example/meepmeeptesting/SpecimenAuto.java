@@ -13,6 +13,16 @@ public class SpecimenAuto {
 
     public static Action currentSequentialAction;
 
+    public static double RIGHT_X = -37;
+    public static double Y = 29;
+    public static double RIGHT_SAMPLE_HEADING = 200;
+    public static double RIGHT_TURN_HEADING = 100;
+    public static double MIDDLE_X = -47;
+    public static double MIDDLE_SAMPLE_HEADING = 200;
+    public static double MIDDLE_TURN_HEADING = 100;
+    public static double LEFT_X = -57;
+    public static double LEFT_SAMPLE_HEADING = 200;
+    public static double VEL_CONSTRAINT = 30;
 
     public static void main(String[] args) {
 
@@ -88,86 +98,135 @@ public class SpecimenAuto {
 
         TrajectoryActionBuilder rightSampleTAB = goToHangSpecimenTAB
                 .fresh()
-                .strafeToLinearHeading(
-                        new Vector2d(-29, 46),
-                        Math.toRadians(180 + 50)
+                .setTangent(Math.toRadians(180 - 20))
+                .splineToLinearHeading(
+                        new Pose2d(
+                                RIGHT_X,
+                                Y,
+                                Math.toRadians(RIGHT_SAMPLE_HEADING)),
+                        Math.toRadians(180 + 40),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder dropRightSampleTAB = rightSampleTAB
                 .fresh()
                 .turnTo(
-                        Math.toRadians(135)
+                        Math.toRadians(RIGHT_TURN_HEADING)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder middleSampleTAB = dropRightSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(-39, 46),
-                        Math.toRadians(180 + 50)
+                        new Vector2d(MIDDLE_X, Y),
+                        Math.toRadians(MIDDLE_SAMPLE_HEADING),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
-        TrajectoryActionBuilder dropMiddleSampleTAB = middleSampleTAB
-                .fresh()
-                .turnTo(
-                        Math.toRadians(135)
-                )
-                .endTrajectory();
-        TrajectoryActionBuilder leftSampleTAB = dropMiddleSampleTAB
-                .fresh()
-                .strafeToLinearHeading(
-                        new Vector2d(-49, 46),
-                        Math.toRadians(180 + 50)
-                )
-                .endTrajectory();
-        TrajectoryActionBuilder dropLeftSampleTAB = leftSampleTAB
-                .fresh()
-                .turnTo(
-                        Math.toRadians(135)
-                )
-                .endTrajectory();
-
+//        TrajectoryActionBuilder dropMiddleSampleTAB = middleSampleTAB
+//                .fresh()
+//                .turnTo(
+//                        Math.toRadians(MIDDLE_TURN_HEADING)
+//                )
+//                .endTrajectory();
+//        TrajectoryActionBuilder leftSampleTAB = dropMiddleSampleTAB
+//                .fresh()
+//                .strafeToLinearHeading(
+//                        new Vector2d(LEFT_X, Y),
+//                        Math.toRadians(LEFT_SAMPLE_HEADING),
+//                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+//                )
+//                .endTrajectory();
 
         // hang specimens
-        TrajectoryActionBuilder pickUpSpecimenTAB = dropLeftSampleTAB
+        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB0 = middleSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        pickUpSpecimenPose.component1(),
-                        Math.toRadians(90)
-                )
-                .endTrajectory();
-
-        // move 2 in forward
-        TrajectoryActionBuilder slightlyForwardTAB = pickUpSpecimenTAB
-                .fresh()
-                .strafeToConstantHeading(
                         new Vector2d(
                                 pickUpSpecimenPose.component1().x,
-                                pickUpSpecimenPose.component1().y + 1
-                        )
+                                pickUpSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
 
-        TrajectoryActionBuilder hangSpecimenTAB = slightlyForwardTAB
+
+        TrajectoryActionBuilder hangSpecimenTAB0 = goToWaitForSpecimenPoseTAB0
                 .fresh()
                 .setTangent(Math.toRadians(0))
                 .splineToConstantHeading(
                         new Vector2d(
                                 hangSpecimenPose.component1().x - 3,
-                                hangSpecimenPose.component1().y - 2
+                                hangSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-50)
+                        Math.toRadians(-50),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+        // hang specimens
+        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB1 = hangSpecimenTAB0
+                .fresh()
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                pickUpSpecimenPose.component1().x,
+                                pickUpSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
 
 
-        TrajectoryActionBuilder parkTAB = hangSpecimenTAB
+        TrajectoryActionBuilder hangSpecimenTAB1 = goToWaitForSpecimenPoseTAB1
+                .fresh()
+                .setTangent(Math.toRadians(0))
+                .splineToConstantHeading(
+                        new Vector2d(
+                                hangSpecimenPose.component1().x - 6,
+                                hangSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(-50),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+        // hang specimens
+        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB2 = hangSpecimenTAB1
                 .fresh()
                 .strafeToLinearHeading(
                         new Vector2d(
-                                -58,
-                                55
+                                pickUpSpecimenPose.component1().x,
+                                pickUpSpecimenPose.component1().y
                         ),
-                        Math.toRadians(-90)
+                        Math.toRadians(90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+
+        TrajectoryActionBuilder hangSpecimenTAB2 = goToWaitForSpecimenPoseTAB2
+                .fresh()
+                .setTangent(Math.toRadians(0))
+                .splineToConstantHeading(
+                        new Vector2d(
+                                hangSpecimenPose.component1().x - 9,
+                                hangSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(-50),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+
+        TrajectoryActionBuilder parkTAB = hangSpecimenTAB2
+                .fresh()
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                -40,
+                                60
+                        ),
+                        Math.toRadians(-90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
 
@@ -187,17 +246,22 @@ public class SpecimenAuto {
                 rightSampleTAB.build(),
                 dropRightSampleTAB.build(),
                 middleSampleTAB.build(),
-                dropMiddleSampleTAB.build(),
-                leftSampleTAB.build(),
-                dropLeftSampleTAB.build(),
+//                dropMiddleSampleTAB.build(),
+//                leftSampleTAB.build(),
 
 
                 // intake to pickup position
-                pickUpSpecimenTAB.build(),
-                slightlyForwardTAB.build(),
+                goToWaitForSpecimenPoseTAB0.build(),
                 // pick up specimen
                 // transfer specimen
-                hangSpecimenTAB.build(),
+                hangSpecimenTAB0.build(),
+
+                goToWaitForSpecimenPoseTAB1.build(),
+                hangSpecimenTAB1.build(),
+
+                goToWaitForSpecimenPoseTAB2.build(),
+                hangSpecimenTAB2.build(),
+
                 // hang specimen
                 parkTAB.build()
 //

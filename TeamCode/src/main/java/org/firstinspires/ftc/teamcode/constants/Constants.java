@@ -26,11 +26,12 @@ public final class Constants {
     //    public static double HORIZONTAL_CLAW_PITCH_VERTICAL_POSITION = 70;
     public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
     public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 60;
-    public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 100;
+    public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 90;
     // hovers
     public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 160;
     public static double HORIZONTAL_WRIST_PITCH_PICKUP_POSITION = 135;
     public static double HORIZONTAL_CLAW_PITCH_HOVER_POSITION = 0;
+    public static double HORIZONTAL_CLAW_PITCH_PICKUP_POSITION = 40;
     // SPECIMEN
     public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 89;
     public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 92;
@@ -58,7 +59,7 @@ public final class Constants {
     public static int VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION = 180;
     public static int VERTICAL_CLAW_ROLL_SPECIMEN_DROPOFF_POSITION = 94;
     public static int VERTICAL_WRIST_PITCH_SPECIMEN_DROPOFF_POSITION = 180;
-    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_UP_POSITION = 510;
+    public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_UP_POSITION = 460;
     public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_ON_BAR_POSITION = 100;
 
 }
