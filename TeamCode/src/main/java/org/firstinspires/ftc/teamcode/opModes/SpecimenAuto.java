@@ -218,35 +218,35 @@ public class SpecimenAuto extends CommandOpMode {
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
-//        // hang specimens
-//        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB2 = hangSpecimenTAB1
-//                .fresh()
-//                .strafeToLinearHeading(
-//                        new Vector2d(
-//                                pickUpSpecimenPose.component1().x,
-//                                pickUpSpecimenPose.component1().y
-//                        ),
-//                        Math.toRadians(90),
-//                        new TranslationalVelConstraint(VEL_CONSTRAINT)
-//                )
-//                .endTrajectory();
-//
-//
-//        TrajectoryActionBuilder hangSpecimenTAB2 = goToWaitForSpecimenPoseTAB2
-//                .fresh()
-//                .setTangent(Math.toRadians(0))
-//                .splineToConstantHeading(
-//                        new Vector2d(
-//                                hangSpecimenPose.component1().x - 9,
-//                                hangSpecimenPose.component1().y
-//                        ),
-//                        Math.toRadians(-50),
-//                        new TranslationalVelConstraint(VEL_CONSTRAINT)
-//                )
-//                .endTrajectory();
+        // hang specimens
+        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB2 = hangSpecimenTAB1
+                .fresh()
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                pickUpSpecimenPose.component1().x,
+                                pickUpSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
 
 
-        TrajectoryActionBuilder parkTAB = hangSpecimenTAB1
+        TrajectoryActionBuilder hangSpecimenTAB2 = goToWaitForSpecimenPoseTAB2
+                .fresh()
+                .setTangent(Math.toRadians(0))
+                .splineToConstantHeading(
+                        new Vector2d(
+                                hangSpecimenPose.component1().x - 9,
+                                hangSpecimenPose.component1().y
+                        ),
+                        Math.toRadians(-50),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+
+        TrajectoryActionBuilder parkTAB = hangSpecimenTAB2
                 .fresh()
                 .strafeToLinearHeading(
                         new Vector2d(
@@ -383,29 +383,29 @@ public class SpecimenAuto extends CommandOpMode {
                         // hang specimen
                         new SpecimenHangCommandSequence(intakeSubsystem),
 
-//                        // cycle 3
-//                        // slides to min, wrist to vertical, claw roll perpendicular
-//                        new InstantCommand(() -> {
-//                            intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION);
-//                            intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION);
-//                            intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION);
-//                            intakeSubsystem.setHorizontalClawPitchPosition(100);
-//                        }),
-//                        new ActionCommand(goToWaitForSpecimenPoseTAB2.build(), new HashSet<>()),
-//                        // WAIT
-//                        new WaitCommand(600),
-//                        // pick up specimen
-//                        new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)),
-//                        new WaitCommand(75),
-//                        new InstantCommand(() -> intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION)),
-//                        new WaitCommand(150),
-//
-//                        // transfer specimen
-//                        new SpecimenTransferCommandSequence(intakeSubsystem),
-//                        // go to hang position
-//                        new ActionCommand(hangSpecimenTAB2.build(), new HashSet<>()),
-//                        // hang specimen
-//                        new SpecimenHangCommandSequence(intakeSubsystem),
+                        // cycle 3
+                        // slides to min, wrist to vertical, claw roll perpendicular
+                        new InstantCommand(() -> {
+                            intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION);
+                            intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION);
+                            intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION);
+                            intakeSubsystem.setHorizontalClawPitchPosition(100);
+                        }),
+                        new ActionCommand(goToWaitForSpecimenPoseTAB2.build(), new HashSet<>()),
+                        // WAIT
+                        new WaitCommand(600),
+                        // pick up specimen
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)),
+                        new WaitCommand(75),
+                        new InstantCommand(() -> intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION)),
+                        new WaitCommand(150),
+
+                        // transfer specimen
+                        new SpecimenTransferCommandSequence(intakeSubsystem),
+                        // go to hang position
+                        new ActionCommand(hangSpecimenTAB2.build(), new HashSet<>()),
+                        // hang specimen
+                        new SpecimenHangCommandSequence(intakeSubsystem),
 
                         // park
                         new ActionCommand(parkTAB.build(), new HashSet<>())

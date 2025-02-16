@@ -112,7 +112,7 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder leftSampleTAB = dropSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(49, 53),
+                        new Vector2d(50, 53),
                         Math.toRadians(-90),
                         new TranslationalVelConstraint(10)
                 )
