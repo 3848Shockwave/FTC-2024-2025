@@ -32,7 +32,11 @@ public class SampleAuto extends CommandOpMode {
 
     public static double HORIZONTAL_CLAW_ROLL_RIGHT_SAMPLE_POSITION = 50;
     public static double VEL_CONSTRAINT = 10;
-    public static double X_LEFT = 10;
+    public static double X_LEFT = 49.5;
+    public static double X_MIDDLE = 58;
+    public static double Y_LEFT_AND_MIDDLE = 52.5;
+    public static double X_RIGHT = 52;
+    public static double Y_RIGHT = 49;
 
     @Override
     public void initialize() {
@@ -64,7 +68,7 @@ public class SampleAuto extends CommandOpMode {
         Pose2d dropSamplePose = new Pose2d(
                 51,
                 52,
-                Math.toRadians(180 + 45)
+                Math.toRadians(180 + 40)
         );
 
         Pose2d hangSpecimenPose = new Pose2d(
@@ -111,7 +115,7 @@ public class SampleAuto extends CommandOpMode {
         TrajectoryActionBuilder leftSampleTAB = dropSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(49.7, 51.5),
+                        new Vector2d(X_LEFT, Y_LEFT_AND_MIDDLE),
                         Math.toRadians(-90),
                         new TranslationalVelConstraint(10)
                 )
@@ -120,13 +124,14 @@ public class SampleAuto extends CommandOpMode {
                 .fresh()
                 .strafeToLinearHeading(
                         dropSamplePose.component1(),
-                        dropSamplePose.component2()
+                        dropSamplePose.component2(),
+                        new TranslationalVelConstraint(10)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder middleSampleTAB = dropSample0TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(58, 51.5),
+                        new Vector2d(X_MIDDLE, Y_LEFT_AND_MIDDLE),
                         Math.toRadians(-90)
 
                 )
@@ -135,13 +140,14 @@ public class SampleAuto extends CommandOpMode {
                 .fresh()
                 .strafeToLinearHeading(
                         dropSamplePose.component1(),
-                        dropSamplePose.component2()
+                        dropSamplePose.component2(),
+                        new TranslationalVelConstraint(10)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder rightSampleTAB = dropSample1TAB
                 .fresh()
                 .strafeToLinearHeading(
-                        new Vector2d(51, 48),
+                        new Vector2d(X_RIGHT, Y_RIGHT),
                         Math.toRadians(-50)
 
                 )
@@ -203,7 +209,7 @@ public class SampleAuto extends CommandOpMode {
                         new DropAndResetToIntakeCommandSequence(intakeSubsystem),
                         // go to left sample
                         new ActionCommand(leftSampleTAB.build(), new HashSet<>()),
-                        new WaitCommand(250),
+                        new WaitCommand(300),
                         // pick up sample
                         new TriggerSampleIntakeCommandSequence(intakeSubsystem),
                         new WaitCommand(250),
