@@ -17,7 +17,7 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
 
     // waits are in milliseconds
     public static int CLOSE_CLAW_WAIT = 100;
-    public static int HORIZONTAL_SLIDE_RETRACT_WAIT = 350;
+    public static int HORIZONTAL_SLIDE_RETRACT_WAIT = 300;
     public static int HORIZONTAL_SLIDE_RETRACT_OFFSET = 20;
     public static int WAIT0 = 200;
     public static int WAIT1 = 150;
