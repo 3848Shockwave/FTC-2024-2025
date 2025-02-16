@@ -20,7 +20,7 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
     public static int HORIZONTAL_SLIDE_RETRACT_WAIT = 350;
     public static int HORIZONTAL_SLIDE_RETRACT_OFFSET = 20;
     public static int WAIT0 = 200;
-    public static int WAIT1 = 175;
+    public static int WAIT1 = 150;
     public static int WAIT2 = 200;
     public static int WAIT3 = 100;
     public static int WAIT4 = 300;

@@ -97,19 +97,19 @@ public class IntakeSubsystem extends SubsystemBase {
 
         telemetry.addData("vertical claw roll position: ", verticalClawRollServo.getPosition());
 
-//        telemetry.addData("top motor position ", verticalSlideMotorTop.getCurrentPosition());
-//        telemetry.addData("bottom motor position ", verticalSlideMotorBottom.getCurrentPosition());
+        telemetry.addData("top motor position ", verticalSlideMotorTop.getCurrentPosition());
+        telemetry.addData("bottom motor position ", verticalSlideMotorBottom.getCurrentPosition());
 //
 //        telemetry.addData("top motor at position", verticalSlideMotorTop.atTargetPosition());
 //        telemetry.addData("bottom motor at position", verticalSlideMotorBottom.atTargetPosition());
 //
 //        telemetry.addData("target position ", getVerticalSlideMotorsTargetPosition());
 //
-//        telemetry.addData("top motor current", verticalSlideMotorTop.motorEx.getCurrent(CurrentUnit.AMPS));
-//        telemetry.addData("bottom motor current", verticalSlideMotorBottom.motorEx.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("top motor current", verticalSlideMotorTop.motorEx.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("bottom motor current", verticalSlideMotorBottom.motorEx.getCurrent(CurrentUnit.AMPS));
 //
-//        telemetry.addData("Top motor power", verticalSlideMotorTop.get());
-//        telemetry.addData("Bottom motor negative power", -verticalSlideMotorBottom.get());
+        telemetry.addData("Top motor power", verticalSlideMotorTop.get());
+        telemetry.addData("Bottom motor negative power", -verticalSlideMotorBottom.get());
 
     }
 
