@@ -52,7 +52,6 @@ public class TestOpMode extends LinearOpMode {
                 intakeSubsystem.verticalSlideMotorBottom.setTargetPosition(-POSITION_1);
             }
 
-            telemetry.addData("intakeSubsystem.vertical claw roll position: ", intakeSubsystem.verticalClawRollServo.getPosition());
 
             telemetry.addData("top motor position ", intakeSubsystem.verticalSlideMotorTop.getCurrentPosition());
             telemetry.addData("bottom motor position ", intakeSubsystem.verticalSlideMotorBottom.getCurrentPosition());

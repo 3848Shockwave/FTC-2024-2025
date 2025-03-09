@@ -4,7 +4,13 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import org.firstinspires.ftc.teamcode.commands.arm.SetClawGripCommand;
+import org.firstinspires.ftc.teamcode.commands.arm.SetClawPitchCommand;
+import org.firstinspires.ftc.teamcode.commands.arm.SetClawRollCommand;
+import org.firstinspires.ftc.teamcode.commands.arm.SetWristPitchCommand;
+import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalSlidePosition;
 import org.firstinspires.ftc.teamcode.constants.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 @Config
@@ -20,39 +26,37 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     public static int WAIT3 = 100;
     public static int WAIT4 = 100;
 
-    public SpecimenTransferCommandSequence(IntakeSubsystem intakeSubsystem) {
+    public SpecimenTransferCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, IntakeSubsystem intakeSubsystem) {
         addCommands(
-                // close horizontal arm claw to pick up the sample
-                new InstantCommand(intakeSubsystem::closeHorizontalClaw),
-                // open vertical arm claw to pick up the sample
-                new InstantCommand(intakeSubsystem::openVerticalClaw),
+                // close horizontal arm claw to pick up the specimen
+                new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_CLOSED_POSITION),
+                // open vertical arm claw to pick up the specimen
+                new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION),
 //                // (wait until ^ done)
                 new WaitCommand(CLOSE_CLAW_WAIT),
                 // set vertical arm to transfer position
-                new InstantCommand(() -> {
-                    intakeSubsystem.openVerticalClaw();
-                    intakeSubsystem.setVerticalWristPitchPosition(Constants.VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION);
-                    intakeSubsystem.setVerticalClawPitchPosition(Constants.VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
-                    intakeSubsystem.setVerticalClawRollPosition(Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION);
-                }),
+                new SetClawPitchCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION),
+                new SetWristPitchCommand(verticalArmSubsystem, Constants.VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION),
+                new SetClawRollCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION),
+
 //                // (wait until ^ done)
                 new WaitCommand(WAIT0),
+
+                // bring back slides
+                new SetHorizontalSlidePosition(intakeSubsystem, Constants.HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION),
                 // set horizontal arm to transfer position
-                new InstantCommand(() -> {
-                    intakeSubsystem.setHorizontalWristPitchPosition(Constants.HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION);
-                    // bring back slides (SPECIMEN)
-                    intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION);
-                    intakeSubsystem.setHorizontalClawPitchPosition(Constants.HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION);
-                    intakeSubsystem.setHorizontalClawRollPosition(Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION);
-                }),
+                new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION),
+                new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION),
+                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION),
+
                 // (wait until ^ done)
                 new WaitCommand(WAIT1),
                 // close vertical arm claw
-                new InstantCommand(intakeSubsystem::closeVerticalClaw),
+                new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_CLOSED_POSITION),
                 // (wait until ^ done)
                 new WaitCommand(WAIT2),
                 // open horizontal arm claw
-                new InstantCommand(intakeSubsystem::openHorizontalClaw),
+                new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION),
                 // (wait until ^ done)
                 new WaitCommand(WAIT3),
 //                // set horizontal slide out a little
@@ -61,10 +65,13 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
 //                ),
 
                 // set vertical slide position to deposit position, after start of this command: wait, then set vertical arm to deposit position
-                new VerticalArmToSpecimenDropoffCommandSequence(intakeSubsystem, WAIT4)
+                new VerticalArmToSpecimenDropoffCommandSequence(horizontalArmSubsystem, intakeSubsystem, WAIT4),
+                // set horizontal arm to be straight up
+                new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION),
+                new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION)
                 // DONE!
         );
-        addRequirements(intakeSubsystem);
+        addRequirements(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem);
     }
 
 //    @Override

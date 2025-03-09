@@ -18,18 +18,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // horizontal components
     public ServoEx horizontalSlideServoL, horizontalSlideServoR;
-    public ServoEx horizontalClawGripServo;
-    public ServoEx horizontalClawRollServo;
-    public ServoEx horizontalClawPitchServo;
-    public ServoEx horizontalWristPitchServoL, horizontalWristPitchServoR;
 
     // vertical components
     public MotorEx verticalSlideMotorTop, verticalSlideMotorBottom;
     private static int verticalSlideMotorsTargetPosition = 0;
-    public ServoEx verticalClawGripServo;
-    public ServoEx verticalClawRollServo;
-    public ServoEx verticalClawPitchServo;
-    public ServoImplEx verticalWristPitchServoL, verticalWristPitchServoR;
 
 
     public enum IntakeState {
@@ -46,12 +38,6 @@ public class IntakeSubsystem extends SubsystemBase {
 //        horizontalClawGripServo = robot.horizontalClawGripServo;
         this.telemetry = telemetry;
         // horizontal
-        // arm
-        horizontalClawGripServo = new SimpleServo(hardwareMap, "horzClawGrip", 0, 180);
-        horizontalClawRollServo = new SimpleServo(hardwareMap, "horzClawPiv", 0, 180);
-        horizontalClawPitchServo = new SimpleServo(hardwareMap, "horzClawRot", 0, 180);
-        horizontalWristPitchServoL = new SimpleServo(hardwareMap, "horzArmRotL", 0, 180);
-        horizontalWristPitchServoR = new SimpleServo(hardwareMap, "horzArmRotR", 0, 180);
 
         // slides
         horizontalSlideServoL = new SimpleServo(hardwareMap, "horzExtL", 0, 180);
@@ -60,17 +46,6 @@ public class IntakeSubsystem extends SubsystemBase {
         horizontalSlideServoR.setInverted(true);
 
         // vertical
-        // arm
-        verticalClawGripServo = new SimpleServo(hardwareMap, "vertClawGrip", 0, 180);
-        verticalClawRollServo = new SimpleServo(hardwareMap, "vertClawPiv", 0, 180);
-        verticalClawPitchServo = new SimpleServo(hardwareMap, "vertClawRot", 0, 180);
-
-        verticalWristPitchServoL = hardwareMap.get(ServoImplEx.class, "vertArmRotL");
-        verticalWristPitchServoR = hardwareMap.get(ServoImplEx.class, "vertArmRotR");
-        verticalWristPitchServoL.setPwmEnable();
-        verticalWristPitchServoL.setPwmRange(new PwmControl.PwmRange(500, 3000));
-        verticalWristPitchServoR.setPwmEnable();
-        verticalWristPitchServoR.setPwmRange(new PwmControl.PwmRange(500, 3000));
 
         // vertical slide motors
         verticalSlideMotorBottom = new MotorEx(hardwareMap, "spoolRight", Motor.GoBILDA.RPM_1150);
@@ -95,7 +70,6 @@ public class IntakeSubsystem extends SubsystemBase {
         verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
         verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 
-        telemetry.addData("vertical claw roll position: ", verticalClawRollServo.getPosition());
 
         telemetry.addData("top motor position ", verticalSlideMotorTop.getCurrentPosition());
         telemetry.addData("bottom motor position ", verticalSlideMotorBottom.getCurrentPosition());
@@ -124,58 +98,12 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
-    public void openVerticalClaw() {
-        verticalClawGripServo.turnToAngle(Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION, AngleUnit.DEGREES);
-    }
-
-    public void closeVerticalClaw() {
-        verticalClawGripServo.turnToAngle(Constants.VERTICAL_CLAW_GRIP_CLOSED_POSITION, AngleUnit.DEGREES);
-    }
-
-    public void openHorizontalClaw() {
-        horizontalClawGripServo.turnToAngle(Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION, AngleUnit.DEGREES);
-    }
-
-    public void closeHorizontalClaw() {
-        horizontalClawGripServo.turnToAngle(Constants.HORIZONTAL_CLAW_GRIP_CLOSED_POSITION, AngleUnit.DEGREES);
-    }
-
-
-    public void setHorizontalWristPitchPosition(double degrees) {
-        horizontalWristPitchServoL.turnToAngle(180 - degrees);
-        horizontalWristPitchServoR.turnToAngle(degrees);
-    }
-
     public void setHorizontalSlidePosition(double degrees) {
         horizontalSlideServoL.turnToAngle(180 - degrees);
         horizontalSlideServoR.turnToAngle(degrees);
     }
 
 
-    public void setHorizontalClawRollPosition(double degrees) {
-        horizontalClawRollServo.turnToAngle(degrees);
-    }
-
-    public void setHorizontalClawPitchPosition(double degrees) {
-        horizontalClawPitchServo.turnToAngle(degrees);
-    }
-
-    public void setVerticalWristPitchPosition(double degrees) {
-        double position = degrees / 180;
-//        verticalWristPitchServoL.turnToAngle(180 - degrees);
-//        verticalWristPitchServoR.turnToAngle(degrees);
-        verticalWristPitchServoL.setPosition(1 - position);
-        verticalWristPitchServoR.setPosition(position);
-    }
-
-
-    public void setVerticalClawRollPosition(double degrees) {
-        verticalClawRollServo.turnToAngle(degrees);
-    }
-
-    public void setVerticalClawPitchPosition(double degrees) {
-        verticalClawPitchServo.turnToAngle(degrees);
-    }
 }
 
 
