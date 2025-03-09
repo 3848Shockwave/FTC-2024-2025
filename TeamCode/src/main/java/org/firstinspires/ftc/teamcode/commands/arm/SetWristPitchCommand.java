@@ -15,6 +15,7 @@ public class SetWristPitchCommand extends CommandBase {
 
     @Override
     public void initialize() {
+        armSubsystem.setWristPitch(angle);
     }
 
     @Override

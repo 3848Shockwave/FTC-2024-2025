@@ -16,7 +16,7 @@ public class SetClawRollCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        armSubsystem.turnClawRollToAngle(angle);
+        armSubsystem.setClawRoll(angle);
 
     }
 

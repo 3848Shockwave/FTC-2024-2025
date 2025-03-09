@@ -15,7 +15,7 @@ public class SetClawGripCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        armSubsystem.setClawGripPosition(angle);
+        armSubsystem.setClawGrip(angle);
     }
 
     @Override

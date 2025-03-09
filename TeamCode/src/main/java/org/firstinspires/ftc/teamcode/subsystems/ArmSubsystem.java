@@ -17,8 +17,10 @@ public class ArmSubsystem extends SubsystemBase {
     private ServoEx clawGripServo;
 
     // offset from the two servos from being centered
-    private double currentClawCenterOffset;
-    private double currentWristAngle;
+    // TODO: initialize?
+    private double clawPitch;
+    private double clawRoll;
+
     public static double DIFFY_SERVO_MAX_DEGREE = 315;
 
     public enum Type {
@@ -41,6 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
 
         diffyServoL = new SimpleServo(hardwareMap, type.getName() + "DiffyL", 0, DIFFY_SERVO_MAX_DEGREE);
+        wristPitchServoL.setInverted(true);
         diffyServoR = new SimpleServo(hardwareMap, type.getName() + "DiffyR", 0, DIFFY_SERVO_MAX_DEGREE);
 
         wristPitchServoL = new SimpleServo(hardwareMap, type.getName() + "ArmRotL", 0, 180);
@@ -58,45 +61,46 @@ public class ArmSubsystem extends SubsystemBase {
     private void initServoPositions() {
         // center servos
         // effectively zeroes claw rotation and wrist angle
-        diffyServoR.turnToAngle(0);
-        diffyServoL.turnToAngle(DIFFY_SERVO_MAX_DEGREE);
-        currentClawCenterOffset = 0;
-        currentWristAngle = 0;
+//        diffyServoR.turnToAngle(0);
+//        diffyServoL.turnToAngle(0);
+//        clawPitch = 0;
+//        clawRoll = 0;
     }
 
-    public void turnClawPitchToAngle(double angle) {
-        this.currentWristAngle = angle;
-        // both servos rotate opposite directions (ex. CW and CCW)
-        // TODO: switch if necessary
-        // TODO: add check for out of bounds
-
-//        // the offset between the two servos, or in simple terms, how much the claw is rotated
-//        double servosCenterOffset = (leftServo.getAngle() - (MAX_DEGREE - rightServo.getAngle())) / 2;
-
-        diffyServoL.turnToAngle(currentClawCenterOffset + angle);
-        diffyServoR.turnToAngle((DIFFY_SERVO_MAX_DEGREE - currentClawCenterOffset) - angle);
-
+    public void setClawPitchRoll(double pitch, double roll) {
+        this.clawPitch = pitch;
+        this.clawRoll = roll;
+        diffyServoL.turnToAngle((pitch + roll) / 2);
+        diffyServoR.turnToAngle((pitch - roll) / 2);
     }
 
-    public void turnClawRollToAngle(double angle) {
-        this.currentClawCenterOffset = angle;
-        // both servos rotate same direction (ex. CCW, CCW)
-        // TODO: switch if necessary
-        // TODO: add check for out of bounds
-        diffyServoL.turnToAngle(currentWristAngle + angle);
-        diffyServoR.turnToAngle((DIFFY_SERVO_MAX_DEGREE - currentWristAngle) + angle);
-
+    public void setClawPitch(double pitch) {
+        setClawPitchRoll(pitch, this.clawRoll);
     }
 
-    public void setClawGripPosition(double clawGripPosition) {
+    public void setClawRoll(double roll) {
+        setClawPitchRoll(this.clawPitch, roll);
+    }
+
+    public void setClawGrip(double clawGripPosition) {
         clawGripServo.turnToAngle(clawGripPosition, AngleUnit.DEGREES);
     }
 
-    public void setWristPitchPosition(double degrees) {
+    public void setWristPitch(double degrees) {
         wristPitchServoL.turnToAngle(180 - degrees);
         wristPitchServoR.turnToAngle(degrees);
     }
 
+    public double getClawPitch() {
+        return clawPitch;
+    }
 
+    public double getClawRoll() {
+        return clawRoll;
+    }
+
+    public double getWristPitch() {
+        return wristPitchServoR.getAngle();
+    }
 
 }
