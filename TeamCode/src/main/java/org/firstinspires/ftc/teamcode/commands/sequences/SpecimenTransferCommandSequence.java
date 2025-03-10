@@ -1,17 +1,17 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.sequences;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawGripCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawPitchCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawRollCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetWristPitchCommand;
-import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalSlidePosition;
+import org.firstinspires.ftc.teamcode.commands.slides.SetHorizontalSlidePosition;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 
 @Config
 public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
@@ -26,7 +26,7 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
     public static int WAIT3 = 100;
     public static int WAIT4 = 100;
 
-    public SpecimenTransferCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, IntakeSubsystem intakeSubsystem) {
+    public SpecimenTransferCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, HorizontalSlideSubsystem horizontalSlideSubsystem, VerticalSlideSubsystem verticalSlideSubsystem) {
         addCommands(
                 // close horizontal arm claw to pick up the specimen
                 new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_CLOSED_POSITION),
@@ -43,7 +43,7 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
                 new WaitCommand(WAIT0),
 
                 // bring back slides
-                new SetHorizontalSlidePosition(intakeSubsystem, Constants.HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION),
+                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION),
                 // set horizontal arm to transfer position
                 new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION),
                 new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION),
@@ -65,13 +65,13 @@ public class SpecimenTransferCommandSequence extends SequentialCommandGroup {
 //                ),
 
                 // set vertical slide position to deposit position, after start of this command: wait, then set vertical arm to deposit position
-                new VerticalArmToSpecimenDropoffCommandSequence(horizontalArmSubsystem, intakeSubsystem, WAIT4),
+                new VerticalArmToSpecimenDropoffCommandSequence(horizontalArmSubsystem, verticalSlideSubsystem, WAIT4),
                 // set horizontal arm to be straight up
                 new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION),
                 new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION)
                 // DONE!
         );
-        addRequirements(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem);
+        addRequirements(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem);
     }
 
 //    @Override

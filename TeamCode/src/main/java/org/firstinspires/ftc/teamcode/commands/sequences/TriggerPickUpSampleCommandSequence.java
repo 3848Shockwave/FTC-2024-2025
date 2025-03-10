@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.sequences;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -7,14 +7,14 @@ import org.firstinspires.ftc.teamcode.commands.arm.SetClawPitchCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetWristPitchCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
 
-import static org.firstinspires.ftc.teamcode.commands.SampleTransferCommandSequence.CLOSE_CLAW_WAIT;
-import static org.firstinspires.ftc.teamcode.commands.TriggerSamplePickupAndTransferCommandSequence.DROP_CLOSE_WAIT;
+import static org.firstinspires.ftc.teamcode.commands.sequences.SampleTransferCommandSequence.CLOSE_CLAW_WAIT;
+import static org.firstinspires.ftc.teamcode.commands.sequences.TriggerSamplePickupAndTransferCommandSequence.DROP_CLOSE_WAIT;
 
 public class TriggerPickUpSampleCommandSequence extends SequentialCommandGroup {
 
-    public TriggerPickUpSampleCommandSequence(ArmSubsystem horizontalArmSubsystem, IntakeSubsystem intakeSubsystem) {
+    public TriggerPickUpSampleCommandSequence(ArmSubsystem horizontalArmSubsystem) {
         addCommands(
                 // horizontal arm to intake position
                 new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION),
@@ -31,5 +31,6 @@ public class TriggerPickUpSampleCommandSequence extends SequentialCommandGroup {
 //                new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MIN_POSITION))
 
         );
+        addRequirements(horizontalArmSubsystem);
     }
 }

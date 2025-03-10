@@ -8,17 +8,19 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.TriggerReader;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawGripCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawPitchCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawRollCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetWristPitchCommand;
-import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalSlidePosition;
-import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.DriveCommand;
+import org.firstinspires.ftc.teamcode.commands.slides.SetHorizontalSlidePosition;
+import org.firstinspires.ftc.teamcode.commands.sequences.*;
+import org.firstinspires.ftc.teamcode.commands.slides.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 
 // BREAKS EVERYTHING
 //@Photon
@@ -26,7 +28,8 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 public class CommandTeleOp extends CommandOpMode {
 
     private DriveSubsystem driveSubsystem;
-    private IntakeSubsystem intakeSubsystem;
+    private HorizontalSlideSubsystem horizontalSlideSubsystem;
+    private VerticalSlideSubsystem verticalSlideSubsystem;
     private ArmSubsystem verticalArmSubsystem, horizontalArmSubsystem;
     private DriveCommand driveCommand;
     private GamepadEx driverGamepad;
@@ -48,14 +51,17 @@ public class CommandTeleOp extends CommandOpMode {
 
 
         driveSubsystem = new DriveSubsystem(hardwareMap, currentTelemetry);
-        intakeSubsystem = new IntakeSubsystem(hardwareMap, currentTelemetry);
+
+        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, currentTelemetry);
+        verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap, currentTelemetry);
+
         verticalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.VERTICAL);
         horizontalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.HORIZONTAL);
 
         driveCommand = new DriveCommand(driveSubsystem, driverGamepad::getLeftX, driverGamepad::getLeftY, driverGamepad::getRightX, () -> Constants.IS_FIELD_CENTRIC);
 
         // good practice to register the subsystem before setting default command
-        register(driveSubsystem, intakeSubsystem, verticalArmSubsystem, horizontalArmSubsystem);
+        register(driveSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem, verticalArmSubsystem, horizontalArmSubsystem);
 
         // "always be runnin this thing"
         driveSubsystem.setDefaultCommand(driveCommand);
@@ -72,20 +78,20 @@ public class CommandTeleOp extends CommandOpMode {
 
         // horizontal slide min extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
-                new SetHorizontalSlidePosition(intakeSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION)
+                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION)
         );
         // horizontal slide middle extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
-                new SetHorizontalSlidePosition(intakeSubsystem, Constants.HORIZONTAL_SLIDE_MIDDLE_POSITION)
+                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIDDLE_POSITION)
         );
         // horizontal slide max extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
-                new SetHorizontalSlidePosition(intakeSubsystem, Constants.HORIZONTAL_SLIDE_MAX_POSITION)
+                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MAX_POSITION)
         );
 
         // vertical slide bottom box extension
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_BOTTOM_BASKET_POSITION)
+                new SetVerticalSlidePositionCommand(verticalSlideSubsystem, Constants.VERTICAL_SLIDE_MOTOR_BOTTOM_BASKET_POSITION)
         );
 
 
@@ -106,23 +112,22 @@ public class CommandTeleOp extends CommandOpMode {
         );
         // drop the sample and reset both arms to intake position
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new DropAndResetToIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem)
+                new DropAndResetToIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem)
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                new TouchBarCommand(verticalArmSubsystem, intakeSubsystem)
+                new TouchBarCommandSequence(verticalArmSubsystem, verticalSlideSubsystem)
         );
 
         // right stick to transfer specimen
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
-                new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem)
+                new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem)
         );
 
         // back button resets imu
         driverGamepad.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(
                 new ParallelCommandGroup(
                         new InstantCommand(driveSubsystem::resetIMU),
-                        new InstantCommand(() -> gamepad1.rumble(200)
-                        )
+                        new InstantCommand(() -> gamepad1.rumble(200))
                 )
         );
 
@@ -137,34 +142,36 @@ public class CommandTeleOp extends CommandOpMode {
             // TRIGGER PRESSED: set horizontal slide to middle extension and hover over sample/specimen
             if (rightTriggerReader.wasJustPressed()) {
                 schedule(
-                        new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem)
+                        new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem)
                 );
             }
 
             if (rightTriggerReader.wasJustReleased()) {
                 schedule(
-                        new TriggerSamplePickupAndTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem)
+                        new TriggerSamplePickupAndTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem)
                 );
             }
             if (leftTriggerReader.wasJustPressed()) {
                 schedule(
-                        new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem)
+                        new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem)
                 );
             }
             // TRIGGER RELEASED: close claw and pick up sample to put to observation zone
             if (leftTriggerReader.wasJustReleased()) {
                 schedule(
-                        new TriggerPickUpSampleCommandSequence(horizontalArmSubsystem, intakeSubsystem)
+                        new TriggerPickUpSampleCommandSequence(horizontalArmSubsystem)
                 );
             }
         }));
 
 
+
         schedule(
                 // touchpad drops specimen
                 new RunCommand(() -> {
+                    // TODO: fix maybe by adding rising edge detector or switching to a different button, as of now this repeats if touchpad is pressed
                     if (gamepad1.touchpad) {
-                        schedule(new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem));
+                        schedule(new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem));
                     }
                 }),
 
@@ -175,7 +182,7 @@ public class CommandTeleOp extends CommandOpMode {
 
                 // immediately set vertical slide position
 //        intakeSubsystem.setVerticalSlideMotorsTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);
-                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION),
+                new SetVerticalSlidePositionCommand(verticalSlideSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION),
 
                 // update telemetry
                 new RunCommand(() -> currentTelemetry.update())

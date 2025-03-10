@@ -15,22 +15,28 @@ import org.firstinspires.ftc.teamcode.commands.arm.SetClawGripCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawPitchCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawRollCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetWristPitchCommand;
-import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalSlidePosition;
-import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
+import org.firstinspires.ftc.teamcode.commands.sequences.TouchBarCommandSequence;
+import org.firstinspires.ftc.teamcode.commands.slides.SetHorizontalSlidePosition;
+import org.firstinspires.ftc.teamcode.commands.sequences.DropAndResetToIntakeCommandSequence;
+import org.firstinspires.ftc.teamcode.commands.sequences.TriggerSampleIntakeCommandSequence;
+import org.firstinspires.ftc.teamcode.commands.sequences.TriggerSamplePickupAndTransferCommandSequence;
+import org.firstinspires.ftc.teamcode.commands.slides.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.PinpointDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 
 import java.util.HashSet;
 
-import static org.firstinspires.ftc.teamcode.commands.SpecimenTransferCommandSequence.WAIT4;
+import static org.firstinspires.ftc.teamcode.commands.sequences.SpecimenTransferCommandSequence.WAIT4;
 
 @Config
 @Autonomous(name = "SAMPLE AUTONOMOUS")
 public class SampleAuto extends CommandOpMode {
 
-    IntakeSubsystem intakeSubsystem;
+    HorizontalSlideSubsystem horizontalSlideSubsystem;
+    VerticalSlideSubsystem verticalSlideSubsystem;
     ArmSubsystem horizontalArmSubsystem, verticalArmSubsystem;
     Telemetry currentTelemetry;
 
@@ -47,12 +53,13 @@ public class SampleAuto extends CommandOpMode {
 
         currentTelemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        intakeSubsystem = new IntakeSubsystem(hardwareMap, currentTelemetry);
+        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, currentTelemetry);
+        verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap, currentTelemetry);
         verticalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.VERTICAL);
         horizontalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.HORIZONTAL);
 
 
-        register(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem);
+        register(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem);
 
         // preferred distance (+x) to eventually shift this by: 5.3 in
         // copy from here
@@ -176,7 +183,7 @@ public class SampleAuto extends CommandOpMode {
 
         // INIT ACTIONS
         CommandScheduler.getInstance().schedule(
-                new SetHorizontalSlidePosition(intakeSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION),
+                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION),
                 new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_CLOSED_POSITION),
                 new SetWristPitchCommand(verticalArmSubsystem, Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION),
                 new SetClawPitchCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION),
@@ -197,7 +204,7 @@ public class SampleAuto extends CommandOpMode {
                                 // go to drop sample
                                 new ActionCommand(dropSampleTAB.build(), new HashSet<>()),
                                 // set vertical slide position to transfer position
-                                new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION),
+                                new SetVerticalSlidePositionCommand(verticalSlideSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION),
                                 new SequentialCommandGroup(
                                         new WaitCommand(WAIT4),
                                         // set vertical arm to deposit position
@@ -212,44 +219,44 @@ public class SampleAuto extends CommandOpMode {
                         ),
                         new WaitCommand(200),
                         // drop sample
-                        new DropAndResetToIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new DropAndResetToIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         // go to left sample
                         new ActionCommand(leftSampleTAB.build(), new HashSet<>()),
                         new WaitCommand(300),
                         // pick up sample
-                        new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         new WaitCommand(250),
-                        new TriggerSamplePickupAndTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new TriggerSamplePickupAndTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         // go to drop sample
                         new ActionCommand(dropSample0TAB.build(), new HashSet<>()),
                         new WaitCommand(200),
                         // drop sample
-                        new DropAndResetToIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new DropAndResetToIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         new ActionCommand(middleSampleTAB.build(), new HashSet<>()),
                         new WaitCommand(250),
                         // pick up sample
-                        new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         new WaitCommand(250),
-                        new TriggerSamplePickupAndTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new TriggerSamplePickupAndTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         // go to drop sample
                         new ActionCommand(dropSample1TAB.build(), new HashSet<>()),
                         new WaitCommand(200),
                         // drop sample
-                        new DropAndResetToIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new DropAndResetToIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         new ActionCommand(rightSampleTAB.build(), new HashSet<>()),
                         new SetClawRollCommand(horizontalArmSubsystem, HORIZONTAL_CLAW_ROLL_RIGHT_SAMPLE_POSITION),
                         new WaitCommand(250),
                         // pick up sample
-                        new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         new WaitCommand(250),
-                        new TriggerSamplePickupAndTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new TriggerSamplePickupAndTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         // go to drop sample
                         new ActionCommand(dropSample2TAB.build(), new HashSet<>()),
                         new WaitCommand(200),
                         // drop sample
-                        new DropAndResetToIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new DropAndResetToIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         new ActionCommand(parkTAB.build(), new HashSet<>()),
-                        new TouchBarCommand(verticalArmSubsystem, intakeSubsystem)
+                        new TouchBarCommandSequence(verticalArmSubsystem, verticalSlideSubsystem)
                 )
         );
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.sequences;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -9,11 +9,12 @@ import org.firstinspires.ftc.teamcode.commands.arm.SetClawGripCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawPitchCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawRollCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetWristPitchCommand;
-import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalSlidePosition;
+import org.firstinspires.ftc.teamcode.commands.slides.SetHorizontalSlidePosition;
 import org.firstinspires.ftc.teamcode.constants.Constants;
-import org.firstinspires.ftc.teamcode.commands.verticalArm.SetVerticalSlidePositionCommand;
+import org.firstinspires.ftc.teamcode.commands.slides.SetVerticalSlidePositionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 
 @Config
 public class SampleTransferCommandSequence extends SequentialCommandGroup {
@@ -29,7 +30,7 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
     public static int WAIT3 = 100;
     public static int WAIT4 = 300;
 
-    public SampleTransferCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, IntakeSubsystem intakeSubsystem) {
+    public SampleTransferCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, HorizontalSlideSubsystem horizontalSlideSubsystem, VerticalSlideSubsystem verticalSlideSubsystem) {
         addCommands(
                 // close horizontal arm claw to pick up the sample
                 new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_CLOSED_POSITION),
@@ -50,15 +51,13 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
                 new WaitCommand(WAIT0),
 
                 // do the little slide thingy
-                new InstantCommand(() -> {
-                    intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION + HORIZONTAL_SLIDE_RETRACT_OFFSET);
-                }),
+                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION + HORIZONTAL_SLIDE_RETRACT_OFFSET),
                 new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION),
 
                 new WaitCommand(HORIZONTAL_SLIDE_RETRACT_WAIT),
 
                 // actually put the slides in this time
-                new SetHorizontalSlidePosition(intakeSubsystem, Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION),
+                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION),
 //                // (wait until ^ done)
                 new WaitCommand(WAIT1),
 //                // close vertical arm claw
@@ -74,7 +73,7 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
                 // set vertical slide position to deposit position, after start of this command: wait 500 ms, then set vertical arm to deposit position
                 new ParallelCommandGroup(
                         // set vertical slide position to transfer position
-                        new SetVerticalSlidePositionCommand(intakeSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION),
+                        new SetVerticalSlidePositionCommand(verticalSlideSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION),
                         new SequentialCommandGroup(
                                 new WaitCommand(WAIT4),
                                 // set vertical arm to deposit position
@@ -89,7 +88,7 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
                 )
                 // DONE!
         );
-        addRequirements(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem);
+        addRequirements(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem);
     }
 
 }

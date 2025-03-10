@@ -5,47 +5,21 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 
-public class IntakeSubsystem extends SubsystemBase {
-    // first let's do horizontal
+public class VerticalSlideSubsystem extends SubsystemBase {
     private Telemetry telemetry;
 
-
-    // horizontal components
-    public ServoEx horizontalSlideServoL, horizontalSlideServoR;
 
     // vertical components
     public MotorEx verticalSlideMotorTop, verticalSlideMotorBottom;
     private static int verticalSlideMotorsTargetPosition = 0;
 
-
-    public enum IntakeState {
-        INTAKE,
-        TRANSFER,
-        DEPOSIT,
-        HOVER_OVER_SAMPLE,
-        VERTICAL
-
-
-    }
-
-    public IntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
-//        horizontalClawGripServo = robot.horizontalClawGripServo;
+    public VerticalSlideSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
-        // horizontal
-
-        // slides
-        horizontalSlideServoL = new SimpleServo(hardwareMap, "horzExtL", 0, 180);
-        horizontalSlideServoR = new SimpleServo(hardwareMap, "horzExtR", 0, 180);
-        horizontalSlideServoL.setInverted(true);
-        horizontalSlideServoR.setInverted(true);
-
-        // vertical
 
         // vertical slide motors
         verticalSlideMotorBottom = new MotorEx(hardwareMap, "spoolRight", Motor.GoBILDA.RPM_1150);
@@ -65,7 +39,6 @@ public class IntakeSubsystem extends SubsystemBase {
     // constantly updating
     @Override
     public void periodic() {
-
         // always give motors power
         verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
         verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
@@ -96,13 +69,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public int getVerticalSlideMotorsTargetPosition() {
         return verticalSlideMotorsTargetPosition;
     }
-
-
-    public void setHorizontalSlidePosition(double degrees) {
-        horizontalSlideServoL.turnToAngle(180 - degrees);
-        horizontalSlideServoR.turnToAngle(degrees);
-    }
-
 
 }
 

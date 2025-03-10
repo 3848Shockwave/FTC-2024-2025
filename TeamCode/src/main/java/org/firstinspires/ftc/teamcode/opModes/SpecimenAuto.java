@@ -12,17 +12,21 @@ import org.firstinspires.ftc.teamcode.commands.arm.SetClawGripCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawPitchCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawRollCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetWristPitchCommand;
-import org.firstinspires.ftc.teamcode.commands.horizontalArm.SetHorizontalSlidePosition;
+import org.firstinspires.ftc.teamcode.commands.slides.SetHorizontalSlidePosition;
+import org.firstinspires.ftc.teamcode.commands.sequences.SpecimenHangCommandSequence;
+import org.firstinspires.ftc.teamcode.commands.sequences.SpecimenTransferCommandSequence;
+import org.firstinspires.ftc.teamcode.commands.sequences.TriggerPickUpSampleCommandSequence;
+import org.firstinspires.ftc.teamcode.commands.sequences.VerticalArmToSpecimenDropoffCommandSequence;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.PinpointDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 
-import java.io.File;
 import java.lang.Math;
 import java.util.HashSet;
 
-import static org.firstinspires.ftc.teamcode.commands.SpecimenTransferCommandSequence.WAIT4;
+import static org.firstinspires.ftc.teamcode.commands.sequences.SpecimenTransferCommandSequence.WAIT4;
 
 // TODO: change to LinearOpMode if we have to
 @Config
@@ -47,7 +51,8 @@ public class SpecimenAuto extends CommandOpMode {
     public static double HORIZONTAL_SLIDE_DROP_EXTENSION = 60;
     public static double PICK_UP_SPECIMEN_Y = 46.5;
 
-    IntakeSubsystem intakeSubsystem;
+    HorizontalSlideSubsystem horizontalSlideSubsystem;
+    VerticalSlideSubsystem verticalSlideSubsystem;
     ArmSubsystem horizontalArmSubsystem, verticalArmSubsystem;
     Telemetry currentTelemetry;
 
@@ -56,12 +61,13 @@ public class SpecimenAuto extends CommandOpMode {
 
         currentTelemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        intakeSubsystem = new IntakeSubsystem(hardwareMap, currentTelemetry);
+        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, currentTelemetry);
+        verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap, currentTelemetry);
         verticalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.VERTICAL);
         horizontalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.HORIZONTAL);
 
 
-        register(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem);
+        register(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem);
 
         // TABS go here
         Pose2d bucketStartPose = new Pose2d(
@@ -277,7 +283,7 @@ public class SpecimenAuto extends CommandOpMode {
 
         // INIT ACTIONS
         CommandScheduler.getInstance().schedule(
-                new SetHorizontalSlidePosition(intakeSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION),
+                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION),
                 new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_CLOSED_POSITION),
                 new SetWristPitchCommand(verticalArmSubsystem, Constants.VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION),
                 new SetClawPitchCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION),
@@ -288,7 +294,7 @@ public class SpecimenAuto extends CommandOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new VerticalArmToSpecimenDropoffCommandSequence(verticalArmSubsystem, intakeSubsystem, WAIT4),
+                        new VerticalArmToSpecimenDropoffCommandSequence(verticalArmSubsystem, verticalSlideSubsystem, WAIT4),
                         // set horizontal arm to be straight up
                         new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION),
                         new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION),
@@ -297,11 +303,11 @@ public class SpecimenAuto extends CommandOpMode {
                         // go to hang specimen position
                         new ActionCommand(goToHangSpecimenTAB.build(), new HashSet<>()),
                         // hang the specimen
-                        new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
 
                         // right sample
                         // slides to min, claw open, roll to place
-                        new SetHorizontalSlidePosition(intakeSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION),
+                        new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION),
                         new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION),
                         new SetClawRollCommand(horizontalArmSubsystem, CLAW_ROLL),
 
@@ -312,12 +318,12 @@ public class SpecimenAuto extends CommandOpMode {
                         // go to sample
                         new ActionCommand(rightSampleTAB.build(), new HashSet<>()),
                         // pick up sample
-                        new TriggerPickUpSampleCommandSequence(horizontalArmSubsystem, intakeSubsystem),
+                        new TriggerPickUpSampleCommandSequence(horizontalArmSubsystem),
                         new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_PICKUP_POSITION),
                         // go to drop sample
                         new ActionCommand(dropRightSampleTAB.build(), new HashSet<>()),
                         // max slides
-                        new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_POSITION)),
+                        new InstantCommand(() -> horizontalSlideSubsystem.setHorizontalSlidePosition(Constants.HORIZONTAL_SLIDE_MAX_POSITION)),
                         new WaitCommand(THROW_WAIT),
                         // drop sample, projecting it forward
                         new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION),
@@ -325,7 +331,7 @@ public class SpecimenAuto extends CommandOpMode {
 
                         // middle sample
                         // slides to min, claw open, roll to place
-                        new SetHorizontalSlidePosition(intakeSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION),
+                        new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION),
                         new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION),
                         new SetClawRollCommand(horizontalArmSubsystem, CLAW_ROLL),
 
@@ -336,7 +342,7 @@ public class SpecimenAuto extends CommandOpMode {
                         // go to sample
                         new ActionCommand(middleSampleTAB.build(), new HashSet<>()),
 //                        new WaitCommand(100),
-                        new TriggerPickUpSampleCommandSequence(horizontalArmSubsystem, intakeSubsystem),
+                        new TriggerPickUpSampleCommandSequence(horizontalArmSubsystem),
                         new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_PICKUP_POSITION),
                         new WaitCommand(200),
 
@@ -355,31 +361,31 @@ public class SpecimenAuto extends CommandOpMode {
                         // TODO: this is when we pick up the specimen from the wall
 
                         // transfer specimen
-                        new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         // go to hang position
                         new ActionCommand(hangSpecimenTAB0.build(), new HashSet<>()),
 //                        new WaitCommand(150),
                         // hang specimen
-                        new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
 
                         // cycle 2
                         // TODO: this is when we pick up the specimen from the wall
                         // transfer specimen
-                        new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         // go to hang position
                         new ActionCommand(hangSpecimenTAB1.build(), new HashSet<>()),
                         new WaitCommand(250),
                         // hang specimen
-                        new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
 
                         // cycle 3
                         // TODO: this is when we pick up the specimen from the wall
                         // transfer specimen
-                        new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
                         // go to hang position
                         new ActionCommand(hangSpecimenTAB2.build(), new HashSet<>()),
                         // hang specimen
-                        new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem),
+                        new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
 
                         // park
                         new ActionCommand(parkTAB.build(), new HashSet<>())

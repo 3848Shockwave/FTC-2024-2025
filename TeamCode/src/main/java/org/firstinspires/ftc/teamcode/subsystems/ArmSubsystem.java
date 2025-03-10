@@ -20,6 +20,9 @@ public class ArmSubsystem extends SubsystemBase {
     // TODO: initialize?
     private double clawPitch;
     private double clawRoll;
+    // debug
+    private boolean pitchBoundsExceeded;
+
 
     public static double DIFFY_SERVO_MAX_DEGREE = 315;
 
@@ -51,11 +54,14 @@ public class ArmSubsystem extends SubsystemBase {
 
         clawGripServo = new SimpleServo(hardwareMap, type.getName() + "ClawGrip", 0, 180);
 
+        pitchBoundsExceeded = false;
     }
 
     @Override
     public void periodic() {
-
+        if (pitchBoundsExceeded) {
+            telemetry.addLine("ERROR: claw roll exceeded bounds, reset claw roll to 0 to prioritize pitch");
+        }
     }
 
     private void initServoPositions() {
@@ -70,6 +76,14 @@ public class ArmSubsystem extends SubsystemBase {
     public void setClawPitchRoll(double pitch, double roll) {
         this.clawPitch = pitch;
         this.clawRoll = roll;
+
+        // wrap to prioritize pitch over roll
+        if (pitch - roll < 0 || pitch + roll > DIFFY_SERVO_MAX_DEGREE) {
+            roll = 0;
+            // print debug error
+            pitchBoundsExceeded = true;
+        }
+
         diffyServoL.turnToAngle((pitch + roll) / 2);
         diffyServoR.turnToAngle((pitch - roll) / 2);
     }

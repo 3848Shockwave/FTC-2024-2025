@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.sequences;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -7,7 +7,8 @@ import org.firstinspires.ftc.teamcode.commands.arm.SetClawPitchCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetWristPitchCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 
 
 @Config
@@ -17,7 +18,7 @@ public class TriggerSamplePickupAndTransferCommandSequence extends SequentialCom
         SPECIMEN
     }
     public static int DROP_CLOSE_WAIT = 100;
-    public TriggerSamplePickupAndTransferCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, IntakeSubsystem intakeSubsystem) {
+    public TriggerSamplePickupAndTransferCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, HorizontalSlideSubsystem horizontalSlideSubsystem, VerticalSlideSubsystem verticalSlideSubsystem) {
         addCommands(
                 // set horizontal arm to intake position
                 new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION),
@@ -25,10 +26,10 @@ public class TriggerSamplePickupAndTransferCommandSequence extends SequentialCom
 
                 new WaitCommand(DROP_CLOSE_WAIT),
 
-                new SampleTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem)
+                new SampleTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem)
         );
 
         // TODO: might cause conflict
-        addRequirements(horizontalArmSubsystem, verticalArmSubsystem, intakeSubsystem);
+        addRequirements(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem);
     }
 }
