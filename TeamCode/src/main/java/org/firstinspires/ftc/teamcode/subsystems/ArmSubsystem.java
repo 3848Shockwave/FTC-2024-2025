@@ -16,9 +16,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     //    public static double DIFFY_SERVO_MAX_DEGREE = 315;
     // TODO: find out what this is
-    public static double SERVO_CPR = 3.217;
+    public static double SERVO_CPR = 3.272;
     public static double kP = 0, kI = 0, kD = 0, kF = 0;
-    public static double WRAP_TOLERANCE = 10; // might not be necessary
+    public static double WRAP_TOLERANCE = 0.05; // might not be necessary
     public static double POSITION_TOLERANCE = 0.05;
 
     private Telemetry telemetry;
@@ -27,7 +27,7 @@ public class ArmSubsystem extends SubsystemBase {
     private PIDFController pidL, pidR;
     private double previousVoltageL, previousVoltageR;
     private double currentVoltageL, currentVoltageR;
-    // position in counts
+    // WRAPPED voltage reading from the feedback wire in counts
     private double currentPositionL, currentPositionR;
     private ServoEx clawRollServo;
     private ServoEx clawGripServo;
@@ -76,10 +76,17 @@ public class ArmSubsystem extends SubsystemBase {
         clawGripServo = new SimpleServo(hardwareMap, type.getName() + "ClawGrip", 0, 180);
 
         // initialize voltages
+        // get current voltages
         currentVoltageL = diffyServoLFeedback.getVoltage();
         currentVoltageR = diffyServoRFeedback.getVoltage();
+
+        // initialize previous voltages
         previousVoltageL = currentVoltageL;
         previousVoltageR = currentVoltageR;
+
+        // initialize wrapped voltages
+        currentPositionL = currentVoltageL;
+        currentPositionR = currentVoltageR;
 
     }
 
@@ -90,6 +97,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
+    /**
+     * sets the servos to the output of the PID controllers
+     * basically speeds up the servos to reach the desired position
+     */
     private void setServos() {
         // left
         if (!pidL.atSetPoint()) {
@@ -110,7 +121,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     /**
      * the voltage from .getVoltage() is automatically wrapped between 0 and CPR
-     * this method attempts to unwrap the voltage to get the actual angle
+     * this method attempts to unwrap the voltage to get the actual, real-life servo positions
      */
     private void unwrapVoltage() {
 
@@ -172,6 +183,7 @@ public class ArmSubsystem extends SubsystemBase {
         wristPitch *= (SERVO_CPR / 360);
         clawPitch *= (SERVO_CPR / 360);
 
+        // set the pid's setpoint to the desired servo positions, effectively telling the servos to move to position
         pidL.setSetPoint((wristPitch + clawPitch) / 2);
         pidR.setSetPoint((wristPitch - clawPitch) / 2);
     }
@@ -179,6 +191,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setWristPitch(double wristPitch) {
         setWristClawPitch(wristPitch, this.clawPitch);
     }
+
     public void setClawPitch(double clawPitch) {
         setWristClawPitch(this.wristPitch, clawPitch);
     }
