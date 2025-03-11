@@ -17,7 +17,6 @@ public class SetClawPitchCommand extends CommandBase {
     @Override
     public void initialize() {
         armSubsystem.setClawPitch(angle);
-
     }
 
 //    @Override
