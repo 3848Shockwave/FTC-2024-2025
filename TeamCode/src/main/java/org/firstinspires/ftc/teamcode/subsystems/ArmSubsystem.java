@@ -61,6 +61,7 @@ public class ArmSubsystem extends SubsystemBase {
 //        diffyServoL = new SimpleServo(hardwareMap, type.getName() + "ArmRotL", 0, DIFFY_SERVO_MAX_DEGREE);
         diffyServoL = new CRServo(hardwareMap, type.getName() + "ArmRotL");
         diffyServoR = new CRServo(hardwareMap, type.getName() + "ArmRotR");
+        // TODO: since the servo is reversed, the PID controller or encoder wire feedback or whatever might also have to be reversed, we'll see
         diffyServoR.setInverted(true);
 
         AnalogInput diffyServoLFeedback = hardwareMap.get(AnalogInput.class, type.getName() + "FeedbackL");
@@ -129,12 +130,12 @@ public class ArmSubsystem extends SubsystemBase {
         currentVoltageL = diffyServoLFeedback.getVoltage();
         double deltaL = currentVoltageL - previousVoltageL;
 
-        // if wraps under from 0 to CPR
+        // if wraps under from 0 to CPR, or if there's a large spike in deltaL
         if (deltaL >= SERVO_CPR - WRAP_TOLERANCE) {
             // instead goes below 0 (deltaL is slightly more negative than +CPR)
             currentPositionL -= SERVO_CPR - deltaL;
 
-            // if wraps over from CPR to 0
+            // if wraps over from CPR to 0, or if there's a large negative spike in deltaL
         } else if (deltaL <= SERVO_CPR - WRAP_TOLERANCE) {
             // instead goes past CPR (deltaL is slightly more positive than -CPR)
             currentPositionL += SERVO_CPR + deltaL;
@@ -185,7 +186,8 @@ public class ArmSubsystem extends SubsystemBase {
 
         // set the pid's setpoint to the desired servo positions, effectively telling the servos to move to position
         pidL.setSetPoint((wristPitch + clawPitch) / 2);
-        pidR.setSetPoint((wristPitch - clawPitch) / 2);
+        // TODO: figure out if this should really be negative or not (since the right servo is reversed)
+        pidR.setSetPoint(-((wristPitch - clawPitch) / 2));
     }
 
     public void setWristPitch(double wristPitch) {
