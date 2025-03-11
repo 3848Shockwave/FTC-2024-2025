@@ -156,7 +156,7 @@ public class ArmSubsystem extends SubsystemBase {
             currentPositionR -= SERVO_CPR - deltaR;
 
             // if wraps over from CPR to 0
-        } else if (deltaR <= SERVO_CPR - WRAP_TOLERANCE) {
+        } else if (deltaR <= -(SERVO_CPR - WRAP_TOLERANCE)) {
             // instead goes past CPR (deltaR is slightly more positive than -CPR)
             currentPositionR += SERVO_CPR + deltaR;
 
