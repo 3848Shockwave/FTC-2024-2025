@@ -4,6 +4,7 @@ import android.icu.text.Transliterator;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
@@ -24,6 +25,9 @@ public class ServoTestOpMode extends LinearOpMode {
     public static double MAX_DEGREE = 315;
     public static double POSITION_1 = 180;
 
+    public static double kP = 0, kI = 0, kD = 0, kF = 0;
+    PIDFController pid = new PIDFController(kP, kI, kD, kF);
+
     @Override
     public void runOpMode() throws InterruptedException {
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
@@ -39,9 +43,11 @@ public class ServoTestOpMode extends LinearOpMode {
 
         while (opModeIsActive()) {
             servo.set(POSITION_0);
-            telemetry.addData("servo thing", input.getVoltage());
+//            servo.turnToAngle(POSITION_0);
+            telemetry.addData("voltage", input.getVoltage());
             telemetry.update();
         }
 
     }
+
 }

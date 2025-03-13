@@ -4,39 +4,35 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.ServoEx;
-import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.servoEncoder.ServoEncoder;
 
 @Config
 public class ArmSubsystem extends SubsystemBase {
 
     //    public static double DIFFY_SERVO_MAX_DEGREE = 315;
     // TODO: find out what this is
-    public static double SERVO_CPR = 3.272;
-    public static double kP = 0, kI = 0, kD = 0, kF = 0;
-    public static double WRAP_TOLERANCE = 0.05; // might not be necessary
-    public static double POSITION_TOLERANCE = 0.05;
+    public static double SERVO_CPR = 3.274;
+    public static double kP = 0.8, kI = 0, kD = 0, kF = 0;
+    public static double WRAP_TOLERANCE = 0.3; // IS VERY NECESSARY
+    public static double POSITION_TOLERANCE = 0.03;
 
     private Telemetry telemetry;
     private CRServo diffyServoL, diffyServoR;
     private AnalogInput diffyServoLFeedback, diffyServoRFeedback;
+    private ServoEncoder diffyServoLEncoder, diffyServoREncoder;
     private PIDFController pidL, pidR;
-    private double previousVoltageL, previousVoltageR;
-    private double currentVoltageL, currentVoltageR;
-    // WRAPPED voltage reading from the feedback wire in counts
-    private double currentPositionL, currentPositionR;
+    private boolean diffyServosInitialized = false;
     private ServoEx clawRollServo;
     private ServoEx clawGripServo;
     // offset from the two servos from being centered
     // TODO: initialize?
     private double wristPitch;
     private double clawPitch;
-    // debug
-    private boolean pitchBoundsExceeded;
 
 
     public enum Type {
@@ -62,39 +58,50 @@ public class ArmSubsystem extends SubsystemBase {
         diffyServoL = new CRServo(hardwareMap, type.getName() + "ArmRotL");
         diffyServoR = new CRServo(hardwareMap, type.getName() + "ArmRotR");
         // TODO: since the servo is reversed, the PID controller or encoder wire feedback or whatever might also have to be reversed, we'll see
-        diffyServoR.setInverted(true);
 
-        AnalogInput diffyServoLFeedback = hardwareMap.get(AnalogInput.class, type.getName() + "FeedbackL");
-        AnalogInput diffyServoRFeedback = hardwareMap.get(AnalogInput.class, type.getName() + "FeedbackR");
+        diffyServoLFeedback = hardwareMap.get(AnalogInput.class, type.getName() + "FeedbackL");
+        diffyServoRFeedback = hardwareMap.get(AnalogInput.class, type.getName() + "FeedbackR");
+
+        diffyServoLEncoder = new ServoEncoder(diffyServoLFeedback, SERVO_CPR);
+        diffyServoREncoder = new ServoEncoder(diffyServoRFeedback, SERVO_CPR);
 
         pidL = new PIDFController(kP, kI, kD, kF);
         pidR = new PIDFController(kP, kI, kD, kF);
         pidL.setTolerance(POSITION_TOLERANCE);
         pidR.setTolerance(POSITION_TOLERANCE);
 
-        clawRollServo = new SimpleServo(hardwareMap, type.getName() + "ClawPiv", 0, 180);
-
-        clawGripServo = new SimpleServo(hardwareMap, type.getName() + "ClawGrip", 0, 180);
-
-        // initialize voltages
-        // get current voltages
-        currentVoltageL = diffyServoLFeedback.getVoltage();
-        currentVoltageR = diffyServoRFeedback.getVoltage();
-
-        // initialize previous voltages
-        previousVoltageL = currentVoltageL;
-        previousVoltageR = currentVoltageR;
-
-        // initialize wrapped voltages
-        currentPositionL = currentVoltageL;
-        currentPositionR = currentVoltageR;
+//        clawRollServo = new SimpleServo(hardwareMap, type.getName() + "ClawPiv", 0, 180);
+//
+//        clawGripServo = new SimpleServo(hardwareMap, type.getName() + "ClawGrip", 0, 180);
 
     }
 
     @Override
     public void periodic() {
-        unwrapVoltage();
-        setServos();
+        if (!diffyServosInitialized && diffyServoLEncoder.isVoltageInitialized() && diffyServoREncoder.isVoltageInitialized()) {
+            diffyServosInitialized = true;
+        }
+
+        if (diffyServosInitialized) {
+            diffyServoLEncoder.calculatePosition();
+            diffyServoREncoder.calculatePosition();
+            double servoPositionL = diffyServoLEncoder.getPosition();
+            double servoPositionR = diffyServoREncoder.getPosition();
+            setServos(servoPositionL, servoPositionR);
+        }
+
+        telemetry.addData("current delta L", diffyServoLEncoder.getDelta());
+        telemetry.addData("current delta R", diffyServoREncoder.getDelta());
+//        telemetry.addData("debug delta L", debugDeltaL);
+//        telemetry.addData("debug delta R", debugDeltaR);
+//        telemetry.addData("pid L error", pidL.getPositionError());
+//        telemetry.addData("pid R error", pidL.getPositionError());
+        telemetry.addData("voltage L", diffyServoLEncoder.getVoltage());
+        telemetry.addData("voltage R", diffyServoREncoder.getVoltage());
+        telemetry.addData("position L", diffyServoLEncoder.getPosition());
+        telemetry.addData("position R", diffyServoREncoder.getPosition());
+
+        telemetry.update();
 
     }
 
@@ -102,74 +109,17 @@ public class ArmSubsystem extends SubsystemBase {
      * sets the servos to the output of the PID controllers
      * basically speeds up the servos to reach the desired position
      */
-    private void setServos() {
+    private void setServos(double leftPosition, double rightPosition) {
         // left
-        if (!pidL.atSetPoint()) {
-            double output = pidL.calculate(currentPositionL);
-            diffyServoL.set(output);
-        } else {
-            diffyServoL.stop();
-        }
+        double leftOutput = pidL.calculate(leftPosition);
+        diffyServoL.set(leftOutput);
 
         // right
-        if (!pidR.atSetPoint()) {
-            double output = pidR.calculate(currentPositionR);
-            diffyServoR.set(output);
-        } else {
-            diffyServoR.stop();
-        }
-    }
-
-    /**
-     * the voltage from .getVoltage() is automatically wrapped between 0 and CPR
-     * this method attempts to unwrap the voltage to get the actual, real-life servo positions
-     */
-    private void unwrapVoltage() {
-
-        // LEFT
-        currentVoltageL = diffyServoLFeedback.getVoltage();
-        double deltaL = currentVoltageL - previousVoltageL;
-
-        // if wraps under from 0 to CPR, or if there's a large spike in deltaL
-        if (deltaL >= SERVO_CPR - WRAP_TOLERANCE) {
-            // instead goes below 0 (deltaL is slightly more negative than +CPR)
-            currentPositionL -= SERVO_CPR - deltaL;
-
-            // if wraps over from CPR to 0, or if there's a large negative spike in deltaL
-        } else if (deltaL <= -(SERVO_CPR - WRAP_TOLERANCE)) {
-            // instead goes past CPR (deltaL is slightly more positive than -CPR)
-            currentPositionL += SERVO_CPR + deltaL;
-
-        } else {
-            currentPositionL += deltaL;
-        }
-
-        previousVoltageL = currentVoltageL;
-
-        // RIGHT
-        currentVoltageR = diffyServoRFeedback.getVoltage();
-        double deltaR = currentVoltageR - previousVoltageR;
-
-        // if wraps under from 0 to CPR
-        if (deltaR >= SERVO_CPR - WRAP_TOLERANCE) {
-            // instead goes below 0 (deltaR is slightly more negative than +CPR)
-            currentPositionR -= SERVO_CPR - deltaR;
-
-            // if wraps over from CPR to 0
-        } else if (deltaR <= -(SERVO_CPR - WRAP_TOLERANCE)) {
-            // instead goes past CPR (deltaR is slightly more positive than -CPR)
-            currentPositionR += SERVO_CPR + deltaR;
-
-        } else {
-            currentPositionR += deltaR;
-        }
-
-        previousVoltageR = currentVoltageR;
+        double rightOutput = pidR.calculate(rightPosition);
+        diffyServoR.set(rightOutput);
 
     }
 
-    private void initServoPositions() {
-    }
 
     /**
      * takes in pitches and sets the setpoints for the PID controllers
