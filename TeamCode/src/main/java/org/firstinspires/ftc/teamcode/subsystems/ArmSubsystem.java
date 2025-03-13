@@ -25,6 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
     private CRServo diffyServoL, diffyServoR;
     private AnalogInput diffyServoLFeedback, diffyServoRFeedback;
     private ServoEncoder diffyServoLEncoder, diffyServoREncoder;
+    private Thread testThread;
     private PIDFController pidL, pidR;
     private boolean diffyServosInitialized = false;
     private ServoEx clawRollServo;
@@ -83,10 +84,16 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!diffyServosInitialized && diffyServoLEncoder.isVoltageInitialized() && diffyServoREncoder.isVoltageInitialized()) {
+        if (!diffyServosInitialized && diffyServoLEncoder.isVoltageInitialized()/* && diffyServoREncoder.isVoltageInitialized()*/) {
             diffyServoLEncoder.initializePosition();
             diffyServoREncoder.initializePosition();
             diffyServosInitialized = true;
+            testThread = new Thread(() -> {
+                diffyServoLEncoder.calculatePositionDiscrete();
+                diffyServoREncoder.calculatePositionDiscrete();
+                telemetry.addLine("thread running");
+            });
+            testThread.start();
         }
 
         if (diffyServosInitialized) {
@@ -100,23 +107,25 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         telemetry.addData("loop number L", diffyServoLEncoder.loopNumber);
-        telemetry.addData("loop number R", diffyServoREncoder.loopNumber);
-        telemetry.addData("debug previous voltage L", diffyServoLEncoder.debugPreviousVoltage);
-        telemetry.addData("debug previous voltage R", diffyServoREncoder.debugPreviousVoltage);
-        telemetry.addData("debug current voltage L", diffyServoLEncoder.debugCurrentVoltage);
-        telemetry.addData("debug current voltage R", diffyServoREncoder.debugCurrentVoltage);
+        telemetry.addData("delta voltage during wrap L", diffyServoLEncoder.deltaVoltageDuringWrap);
+        telemetry.addData("timer", diffyServoLEncoder.timer.time());
+//        telemetry.addData("loop number R", diffyServoREncoder.loopNumber);
+        telemetry.addData("debug previous voltage L", diffyServoLEncoder.previousVoltageDuringWrap);
+//        telemetry.addData("debug previous voltage R", diffyServoREncoder.previousVoltageDuringWrap);
+        telemetry.addData("debug current voltage L", diffyServoLEncoder.currentVoltageDuringWrap);
+//        telemetry.addData("debug current voltage R", diffyServoREncoder.currentVoltageDuringWrap);
         telemetry.addData("voltage delta L", diffyServoLEncoder.getDelta());
-        telemetry.addData("voltage delta R", diffyServoREncoder.getDelta());
+//        telemetry.addData("voltage delta R", diffyServoREncoder.getDelta());
 //        telemetry.addData("debug delta L", diffyServoLEncoder.debugDelta);
 //        telemetry.addData("debug delta R", diffyServoREncoder.debugDelta);
 //        telemetry.addData("error L", diffyServoLEncoder.error);
 //        telemetry.addData("error R", diffyServoREncoder.error);
         telemetry.addData("voltage L", diffyServoLEncoder.getVoltage());
-        telemetry.addData("voltage R", diffyServoREncoder.getVoltage());
-        telemetry.addData("initial voltage L", diffyServoLEncoder.initialVoltage);
-        telemetry.addData("initial voltage R", diffyServoREncoder.initialVoltage);
+//        telemetry.addData("voltage R", diffyServoREncoder.getVoltage());
+//        telemetry.addData("initial voltage L", diffyServoLEncoder.initialVoltage);
+//        telemetry.addData("initial voltage R", diffyServoREncoder.initialVoltage);
         telemetry.addData("position L", diffyServoLEncoder.getPosition());
-        telemetry.addData("position R", diffyServoREncoder.getPosition());
+//        telemetry.addData("position R", diffyServoREncoder.getPosition());
 
         telemetry.update();
 
