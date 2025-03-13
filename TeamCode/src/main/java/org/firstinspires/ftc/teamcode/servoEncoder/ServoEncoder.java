@@ -42,7 +42,7 @@ public class ServoEncoder {
      *
      * essentially ignores spikes in voltage, which is when the servo's position crosses 0
      */
-    public double calculatePosition() {
+    public void calculatePosition() {
 
         // LEFT
         currentVoltage = diffyServoFeedback.getVoltage();
@@ -70,7 +70,6 @@ public class ServoEncoder {
         // save previous voltage
         previousVoltage = currentVoltage;
 
-        return currentPosition;
     }
 
     public double getPosition() {
