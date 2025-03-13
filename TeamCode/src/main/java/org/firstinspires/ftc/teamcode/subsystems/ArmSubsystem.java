@@ -17,9 +17,9 @@ public class ArmSubsystem extends SubsystemBase {
     //    public static double DIFFY_SERVO_MAX_DEGREE = 315;
     // TODO: find out what this is
     public static double SERVO_CPR = 3.274;
-    public static double kP = 0.8, kI = 0, kD = 0, kF = 0;
-    public static double WRAP_TOLERANCE = 0.3; // IS VERY NECESSARY
+    public static double kP = 1, kI = 0, kD = 0.01, kF = 0;
     public static double POSITION_TOLERANCE = 0.03;
+    public static boolean setServos = false;
 
     private Telemetry telemetry;
     private CRServo diffyServoL, diffyServoR;
@@ -54,10 +54,15 @@ public class ArmSubsystem extends SubsystemBase {
     public ArmSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Type type) {
         this.telemetry = telemetry;
 
-//        diffyServoL = new SimpleServo(hardwareMap, type.getName() + "ArmRotL", 0, DIFFY_SERVO_MAX_DEGREE);
         diffyServoL = new CRServo(hardwareMap, type.getName() + "ArmRotL");
         diffyServoR = new CRServo(hardwareMap, type.getName() + "ArmRotR");
+        diffyServoL.setInverted(true);
+        diffyServoR.setInverted(true);
         // TODO: since the servo is reversed, the PID controller or encoder wire feedback or whatever might also have to be reversed, we'll see
+
+        // send power to both servos
+        diffyServoL.stop();
+        diffyServoR.stop();
 
         diffyServoLFeedback = hardwareMap.get(AnalogInput.class, type.getName() + "FeedbackL");
         diffyServoRFeedback = hardwareMap.get(AnalogInput.class, type.getName() + "FeedbackR");
@@ -79,6 +84,8 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (!diffyServosInitialized && diffyServoLEncoder.isVoltageInitialized() && diffyServoREncoder.isVoltageInitialized()) {
+            diffyServoLEncoder.initializePosition();
+            diffyServoREncoder.initializePosition();
             diffyServosInitialized = true;
         }
 
@@ -87,17 +94,19 @@ public class ArmSubsystem extends SubsystemBase {
             diffyServoREncoder.calculatePosition();
             double servoPositionL = diffyServoLEncoder.getPosition();
             double servoPositionR = diffyServoREncoder.getPosition();
-            setServos(servoPositionL, servoPositionR);
+            if (setServos) setServos(servoPositionL, servoPositionR);
         }
 
-        telemetry.addData("current delta L", diffyServoLEncoder.getDelta());
-        telemetry.addData("current delta R", diffyServoREncoder.getDelta());
-//        telemetry.addData("debug delta L", debugDeltaL);
-//        telemetry.addData("debug delta R", debugDeltaR);
-//        telemetry.addData("pid L error", pidL.getPositionError());
-//        telemetry.addData("pid R error", pidL.getPositionError());
+        telemetry.addData("voltage delta L", diffyServoLEncoder.getDelta());
+        telemetry.addData("voltage delta R", diffyServoREncoder.getDelta());
+        telemetry.addData("debug delta L", diffyServoLEncoder.debugDelta);
+        telemetry.addData("debug delta R", diffyServoREncoder.debugDelta);
+//        telemetry.addData("error L", diffyServoLEncoder.error);
+//        telemetry.addData("error R", diffyServoREncoder.error);
         telemetry.addData("voltage L", diffyServoLEncoder.getVoltage());
         telemetry.addData("voltage R", diffyServoREncoder.getVoltage());
+        telemetry.addData("initial voltage L", diffyServoLEncoder.initialVoltage);
+        telemetry.addData("initial voltage R", diffyServoREncoder.initialVoltage);
         telemetry.addData("position L", diffyServoLEncoder.getPosition());
         telemetry.addData("position R", diffyServoREncoder.getPosition());
 

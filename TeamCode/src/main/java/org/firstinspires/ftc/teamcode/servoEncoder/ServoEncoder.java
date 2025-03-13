@@ -7,12 +7,18 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 public class ServoEncoder {
     private AnalogInput diffyServoFeedback;
     private final double SERVO_CPR;
-    public static double WRAP_TOLERANCE = 0.3; // IS VERY NECESSARY
+    public static double DELTA_THRESHOLD = 0.03; // IS VERY NECESSARY
+    public static double INITIAL_VOLTAGE_THRESHOLD = 0.01;
+    public static double ERROR_CORRECTION = 0.1;
     private double previousVoltage;
     private double currentVoltage;
-    private double currentDelta;
-    private double previousDelta;
-    private double debugDelta;
+    private double deltaVoltage;
+    private double previousDeltaVoltage;
+
+    // debug
+    public double debugDelta;
+    public double initialVoltage;
+    public double error;
 
 
     private double currentPosition;
@@ -28,12 +34,27 @@ public class ServoEncoder {
         previousVoltage = currentVoltage;
 
         // initialize wrapped voltages
-        currentPosition = currentVoltage;
 
     }
 
+    /**
+     *
+     * @return if the voltages of the encoders aren't 0, in other words, if they exist
+     */
     public boolean isVoltageInitialized() {
-         return voltageInitialized = diffyServoFeedback.getVoltage() != 0;
+        double initialVoltage = diffyServoFeedback.getVoltage();
+        return voltageInitialized = initialVoltage < -INITIAL_VOLTAGE_THRESHOLD
+                || initialVoltage > INITIAL_VOLTAGE_THRESHOLD;
+    }
+
+    /**
+     * should only be called after voltages are initialized
+     */
+    public void initializePosition() {
+        currentPosition = diffyServoFeedback.getVoltage();
+        initialVoltage = currentPosition;
+        // initially, set to negative if position is close to CPR (between CPR/2 and CPR)
+        if (currentPosition > SERVO_CPR / 2) currentPosition -= SERVO_CPR;
     }
 
     /**
@@ -46,29 +67,38 @@ public class ServoEncoder {
 
         // LEFT
         currentVoltage = diffyServoFeedback.getVoltage();
-        currentDelta = currentVoltage - previousVoltage;
+        deltaVoltage = currentVoltage - previousVoltage;
 
         // if wraps under from 0 to CPR, or if there's a large spike in delta
-        if (currentDelta >= WRAP_TOLERANCE) {
-            // DO NOTHING
-            debugDelta = currentDelta;
+        if (deltaVoltage >= DELTA_THRESHOLD) {
+            // interpolate delta
+            if (previousDeltaVoltage <= DELTA_THRESHOLD) {
+                currentPosition += previousDeltaVoltage;
+            }
+            debugDelta = deltaVoltage;
 
             // if wraps over from CPR to 0, or if there's a large negative spike in delta
-        } else if (currentDelta <= -WRAP_TOLERANCE) {
-            // DO NOTHING
-            debugDelta = currentDelta;
+        } else if (deltaVoltage <= -DELTA_THRESHOLD) {
+            // interpolate delta
+            if (previousDeltaVoltage >= -DELTA_THRESHOLD) {
+                currentPosition += previousDeltaVoltage;
+            }
+            debugDelta = deltaVoltage;
 
             // run only if there are no spikes
         } else {
             // update currentPosition based on speed
-            currentPosition -= currentDelta;
-
-            previousDelta = currentDelta;
+            currentPosition += deltaVoltage;
+            // correct for error (doesn't work)
+            // currentVoltage - mod(currentPosition, SERVO_CPR)
+//            error = currentVoltage - (currentPosition - SERVO_CPR * Math.floor(currentPosition / SERVO_CPR));
+//            currentPosition += error * ERROR_CORRECTION;
 
         }
 
         // save previous voltage
         previousVoltage = currentVoltage;
+        previousDeltaVoltage = deltaVoltage;
 
     }
 
@@ -77,7 +107,7 @@ public class ServoEncoder {
     }
 
     public double getDelta() {
-        return currentDelta;
+        return deltaVoltage;
     }
 
     public double getVoltage() {
