@@ -14,6 +14,7 @@ public class ServoEncoder {
     private double currentVoltage;
     private double deltaVoltage;
     private double previousDeltaVoltage;
+    public int loopNumber = 0;
 
     // debug
     public double debugDelta;
@@ -54,7 +55,12 @@ public class ServoEncoder {
         currentPosition = diffyServoFeedback.getVoltage();
         initialVoltage = currentPosition;
         // initially, set to negative if position is close to CPR (between CPR/2 and CPR)
-        if (currentPosition > SERVO_CPR / 2) currentPosition -= SERVO_CPR;
+        if (currentPosition > SERVO_CPR / 2) {
+//            currentPosition -= SERVO_CPR;
+
+            loopNumber = -1;
+            currentPosition = loopNumber * SERVO_CPR + initialVoltage;
+        }
     }
 
     /**
@@ -112,5 +118,45 @@ public class ServoEncoder {
 
     public double getVoltage() {
         return currentVoltage;
+    }
+
+    public static double WRAP_TOLERANCE = 0.8;
+    public double debugCurrentVoltage;
+    public double debugPreviousVoltage;
+
+    public void calculatePositionDiscrete() {
+
+        // LEFT
+        currentVoltage = diffyServoFeedback.getVoltage();
+        deltaVoltage = currentVoltage - previousVoltage;
+
+        // if wraps over from CPR to 0, or if there's a large negative spike in delta
+        // the problem is during initialization, there is a high spike in delta from 0 to 2.9
+        if (currentVoltage < SERVO_CPR / 2 - WRAP_TOLERANCE && previousVoltage > SERVO_CPR / 2 + WRAP_TOLERANCE) {
+
+            loopNumber++;
+
+            debugCurrentVoltage = currentVoltage;
+            debugPreviousVoltage = previousVoltage;
+
+            // if wraps under from 0 to CPR, or if there's a large spike in delta
+        } else if (currentVoltage > SERVO_CPR / 2 + WRAP_TOLERANCE && previousVoltage < SERVO_CPR / 2 - WRAP_TOLERANCE) {
+            loopNumber--;
+
+            debugCurrentVoltage = currentVoltage;
+            debugPreviousVoltage = previousVoltage;
+
+
+            // run only if there are no spikes
+        } else {
+
+        }
+
+        // update currentPosition based on current voltage and loop number
+        currentPosition = loopNumber * SERVO_CPR + currentVoltage;
+
+        // save previous voltage
+        previousVoltage = currentVoltage;
+
     }
 }

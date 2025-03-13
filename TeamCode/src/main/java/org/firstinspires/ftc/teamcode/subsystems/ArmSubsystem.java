@@ -90,17 +90,25 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         if (diffyServosInitialized) {
-            diffyServoLEncoder.calculatePosition();
-            diffyServoREncoder.calculatePosition();
+//            diffyServoLEncoder.calculatePosition();
+//            diffyServoREncoder.calculatePosition();
+            diffyServoLEncoder.calculatePositionDiscrete();
+            diffyServoREncoder.calculatePositionDiscrete();
             double servoPositionL = diffyServoLEncoder.getPosition();
             double servoPositionR = diffyServoREncoder.getPosition();
             if (setServos) setServos(servoPositionL, servoPositionR);
         }
 
+        telemetry.addData("loop number L", diffyServoLEncoder.loopNumber);
+        telemetry.addData("loop number R", diffyServoREncoder.loopNumber);
+        telemetry.addData("debug previous voltage L", diffyServoLEncoder.debugPreviousVoltage);
+        telemetry.addData("debug previous voltage R", diffyServoREncoder.debugPreviousVoltage);
+        telemetry.addData("debug current voltage L", diffyServoLEncoder.debugCurrentVoltage);
+        telemetry.addData("debug current voltage R", diffyServoREncoder.debugCurrentVoltage);
         telemetry.addData("voltage delta L", diffyServoLEncoder.getDelta());
         telemetry.addData("voltage delta R", diffyServoREncoder.getDelta());
-        telemetry.addData("debug delta L", diffyServoLEncoder.debugDelta);
-        telemetry.addData("debug delta R", diffyServoREncoder.debugDelta);
+//        telemetry.addData("debug delta L", diffyServoLEncoder.debugDelta);
+//        telemetry.addData("debug delta R", diffyServoREncoder.debugDelta);
 //        telemetry.addData("error L", diffyServoLEncoder.error);
 //        telemetry.addData("error R", diffyServoREncoder.error);
         telemetry.addData("voltage L", diffyServoLEncoder.getVoltage());
