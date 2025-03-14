@@ -17,7 +17,7 @@ public class ArmSubsystem extends SubsystemBase {
     //    public static double DIFFY_SERVO_MAX_DEGREE = 315;
     // TODO: find out what this is
     public static double SERVO_CPR = 3.274;
-    public static double kP = 1, kI = 0, kD = 0.01, kF = 0;
+    public static double kP = 0.3, kI = 0.02, kD = 0.01, kF = 0;
     public static double POSITION_TOLERANCE = 0.03;
     public static boolean setServos = false;
 
@@ -82,6 +82,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
+
     @Override
     public void periodic() {
         if (!diffyServosInitialized && diffyServoLEncoder.isVoltageInitialized()/* && diffyServoREncoder.isVoltageInitialized()*/) {
@@ -89,9 +90,10 @@ public class ArmSubsystem extends SubsystemBase {
             diffyServoREncoder.initializePosition();
             diffyServosInitialized = true;
             testThread = new Thread(() -> {
-                diffyServoLEncoder.calculatePositionDiscrete();
-                diffyServoREncoder.calculatePositionDiscrete();
-                telemetry.addLine("thread running");
+                while (true) {
+                    diffyServoLEncoder.calculatePositionDiscrete();
+                    diffyServoREncoder.calculatePositionDiscrete();
+                }
             });
             testThread.start();
         }
@@ -99,8 +101,8 @@ public class ArmSubsystem extends SubsystemBase {
         if (diffyServosInitialized) {
 //            diffyServoLEncoder.calculatePosition();
 //            diffyServoREncoder.calculatePosition();
-            diffyServoLEncoder.calculatePositionDiscrete();
-            diffyServoREncoder.calculatePositionDiscrete();
+//            diffyServoLEncoder.calculatePositionDiscrete();
+//            diffyServoREncoder.calculatePositionDiscrete();
             double servoPositionL = diffyServoLEncoder.getPosition();
             double servoPositionR = diffyServoREncoder.getPosition();
             if (setServos) setServos(servoPositionL, servoPositionR);
@@ -125,6 +127,8 @@ public class ArmSubsystem extends SubsystemBase {
 //        telemetry.addData("initial voltage L", diffyServoLEncoder.initialVoltage);
 //        telemetry.addData("initial voltage R", diffyServoREncoder.initialVoltage);
         telemetry.addData("position L", diffyServoLEncoder.getPosition());
+        telemetry.addData("set point L", pidL.getSetPoint());
+        telemetry.addData("error", pidL.getPositionError());
 //        telemetry.addData("position R", diffyServoREncoder.getPosition());
 
         telemetry.update();
