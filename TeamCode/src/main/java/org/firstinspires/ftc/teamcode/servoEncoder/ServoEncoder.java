@@ -12,10 +12,9 @@ public class ServoEncoder {
     private AnalogInput diffyServoFeedback;
     private Deque<Double> voltages;
     private final double SERVO_CPR;
-    public static double DELTA_THRESHOLD = 0.03; // IS VERY NECESSARY
+    public static double DELTA_THRESHOLD = 0.13; // IS VERY NECESSARY
     public static double INIT_DELTA_THRESHOLD = 0.03;
     public static double INITIAL_VOLTAGE_THRESHOLD = 0.01;
-    public static double ALTERNATE_DELTA_THRESHOLD = 0.2;
     private double previousVoltage;
     private double currentVoltage;
     private double deltaVoltage;
@@ -143,7 +142,7 @@ public class ServoEncoder {
     }
 
     public static double WRAP_TOLERANCE = 0.8;
-    public static double ALTERNATE_WRAP_TOLERANCE = 0.2;
+    public static double ALTERNATE_WRAP_TOLERANCE = 0.1;
     public double currentVoltageDuringWrap;
     public double previousVoltageDuringWrap;
     public double deltaVoltageDuringWrap;
@@ -153,21 +152,25 @@ public class ServoEncoder {
 
         // LEFT
         currentVoltage = diffyServoFeedback.getVoltage();
-        voltages.addFirst(currentVoltage);
+//        voltages.addFirst(currentVoltage);
         // DELAY HERE?
-        timer.reset();
-        while (timer.time() <= delay) {
-            // no op
-        }
+//        timer.reset();
+//        while (timer.time() <= delay) {
+//            // no op
+//        }
 
         deltaVoltage = currentVoltage - previousVoltage;
 
+        // if voltage spike detected
+        // if wraps over from CPR to 0, or if there's a large negative spike in delta
+        // the problem is during initialization, there is a high spike in delta from 0 to 2.9
         // if big negative spike and previous voltage was near CPR
         if (deltaVoltage < -DELTA_THRESHOLD && previousVoltage > SERVO_CPR - ALTERNATE_WRAP_TOLERANCE) {
 
             loopNumber++;
 
         }
+        // if wraps under from 0 to CPR, or if there's a large spike in delta
         // if big positive spike and previous voltage was near 0
         else if (deltaVoltage > DELTA_THRESHOLD && previousVoltage < 0 + ALTERNATE_WRAP_TOLERANCE) {
             loopNumber--;
@@ -187,17 +190,5 @@ public class ServoEncoder {
         // save previous voltage
         previousVoltage = currentVoltage;
 
-        // if voltage spike detected
-        // if wraps over from CPR to 0, or if there's a large negative spike in delta
-        // the problem is during initialization, there is a high spike in delta from 0 to 2.9
-//        if (currentVoltage < SERVO_CPR / 2 - WRAP_TOLERANCE && previousVoltage > SERVO_CPR / 2 + WRAP_TOLERANCE && deltaVoltage < -DELTA_THRESHOLD) {
-//
-//            loopNumber++;
-//
-//            // if wraps under from 0 to CPR, or if there's a large spike in delta
-//        } else if (currentVoltage > SERVO_CPR / 2 + WRAP_TOLERANCE && previousVoltage < SERVO_CPR / 2 - WRAP_TOLERANCE && deltaVoltage > DELTA_THRESHOLD) {
-//            loopNumber--;
-//
-//        }
     }
 }

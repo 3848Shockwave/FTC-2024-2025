@@ -17,8 +17,8 @@ public class ArmSubsystem extends SubsystemBase {
     //    public static double DIFFY_SERVO_MAX_DEGREE = 315;
     // TODO: find out what this is
     public static double SERVO_CPR = 3.274;
-    public static double kP = 0.3, kI = 0.02, kD = 0.01, kF = 0;
-    public static double POSITION_TOLERANCE = 0.03;
+    public static double kP = 1, kI = 0.00, kD = 0.00, kF = 0;
+    public static double POSITION_TOLERANCE = 0.01;
     public static boolean setServos = false;
 
     private Telemetry telemetry;
@@ -85,7 +85,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!diffyServosInitialized && diffyServoLEncoder.isVoltageInitialized()/* && diffyServoREncoder.isVoltageInitialized()*/) {
+        if (!diffyServosInitialized && diffyServoLEncoder.isVoltageInitialized() && diffyServoREncoder.isVoltageInitialized()) {
             diffyServoLEncoder.initializePosition();
             diffyServoREncoder.initializePosition();
             diffyServosInitialized = true;
@@ -99,37 +99,26 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         if (diffyServosInitialized) {
-//            diffyServoLEncoder.calculatePosition();
-//            diffyServoREncoder.calculatePosition();
-//            diffyServoLEncoder.calculatePositionDiscrete();
-//            diffyServoREncoder.calculatePositionDiscrete();
             double servoPositionL = diffyServoLEncoder.getPosition();
             double servoPositionR = diffyServoREncoder.getPosition();
             if (setServos) setServos(servoPositionL, servoPositionR);
         }
 
         telemetry.addData("loop number L", diffyServoLEncoder.loopNumber);
-        telemetry.addData("delta voltage during wrap L", diffyServoLEncoder.deltaVoltageDuringWrap);
-        telemetry.addData("timer", diffyServoLEncoder.timer.time());
 //        telemetry.addData("loop number R", diffyServoREncoder.loopNumber);
-        telemetry.addData("debug previous voltage L", diffyServoLEncoder.previousVoltageDuringWrap);
-//        telemetry.addData("debug previous voltage R", diffyServoREncoder.previousVoltageDuringWrap);
-        telemetry.addData("debug current voltage L", diffyServoLEncoder.currentVoltageDuringWrap);
-//        telemetry.addData("debug current voltage R", diffyServoREncoder.currentVoltageDuringWrap);
+        telemetry.addData("delta voltage during wrap L", diffyServoLEncoder.deltaVoltageDuringWrap);
+//        telemetry.addData("timer", diffyServoLEncoder.timer.time());
+//        telemetry.addData("loop number R", diffyServoREncoder.loopNumber);
         telemetry.addData("voltage delta L", diffyServoLEncoder.getDelta());
 //        telemetry.addData("voltage delta R", diffyServoREncoder.getDelta());
-//        telemetry.addData("debug delta L", diffyServoLEncoder.debugDelta);
-//        telemetry.addData("debug delta R", diffyServoREncoder.debugDelta);
 //        telemetry.addData("error L", diffyServoLEncoder.error);
 //        telemetry.addData("error R", diffyServoREncoder.error);
         telemetry.addData("voltage L", diffyServoLEncoder.getVoltage());
 //        telemetry.addData("voltage R", diffyServoREncoder.getVoltage());
-//        telemetry.addData("initial voltage L", diffyServoLEncoder.initialVoltage);
-//        telemetry.addData("initial voltage R", diffyServoREncoder.initialVoltage);
         telemetry.addData("position L", diffyServoLEncoder.getPosition());
-        telemetry.addData("set point L", pidL.getSetPoint());
-        telemetry.addData("error", pidL.getPositionError());
 //        telemetry.addData("position R", diffyServoREncoder.getPosition());
+        telemetry.addData("set point L", pidL.getSetPoint());
+//        telemetry.addData("error", pidL.getPositionError());
 
         telemetry.update();
 
@@ -142,6 +131,7 @@ public class ArmSubsystem extends SubsystemBase {
     private void setServos(double leftPosition, double rightPosition) {
         // left
         double leftOutput = pidL.calculate(leftPosition);
+        telemetry.addData("output L", leftOutput);
         diffyServoL.set(leftOutput);
 
         // right
