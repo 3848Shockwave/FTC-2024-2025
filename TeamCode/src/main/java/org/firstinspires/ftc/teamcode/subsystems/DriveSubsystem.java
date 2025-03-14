@@ -40,6 +40,7 @@ public class DriveSubsystem extends SubsystemBase {
         backRightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         backLeftMotor.setInverted(true);
+        backRightMotor.setInverted(true);
         frontLeftMotor.setInverted(true);
         frontRightMotor.setInverted(true);
 

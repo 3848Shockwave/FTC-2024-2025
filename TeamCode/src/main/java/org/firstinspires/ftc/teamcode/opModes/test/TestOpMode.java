@@ -7,7 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.constants.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 
 @Config
 @TeleOp(name = "Test op mode")
@@ -22,51 +23,50 @@ public class TestOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         MultipleTelemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), this.telemetry);
 
-        IntakeSubsystem intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
+        VerticalSlideSubsystem verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap, telemetry);
 
 
         waitForStart();
 
         while (opModeIsActive()) {
-            intakeSubsystem.verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
-            intakeSubsystem.verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+            verticalSlideSubsystem.verticalSlideMotorTop.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
+            verticalSlideSubsystem.verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 
             if (gamepad1.a) {
-                intakeSubsystem.verticalSlideMotorBottom.setTargetPosition(-POSITION_0);
+                verticalSlideSubsystem.verticalSlideMotorBottom.setTargetPosition(-POSITION_0);
             }
             if (gamepad1.b) {
-                intakeSubsystem.verticalSlideMotorTop.setTargetPosition(POSITION_0);
+                verticalSlideSubsystem.verticalSlideMotorTop.setTargetPosition(POSITION_0);
             }
             if (gamepad1.x) {
-                intakeSubsystem.verticalSlideMotorTop.setTargetPosition(POSITION_0);
-                intakeSubsystem.verticalSlideMotorBottom.setTargetPosition(-POSITION_0);
+                verticalSlideSubsystem.verticalSlideMotorTop.setTargetPosition(POSITION_0);
+                verticalSlideSubsystem.verticalSlideMotorBottom.setTargetPosition(-POSITION_0);
             }
             if (gamepad1.y) {
-                intakeSubsystem.verticalSlideMotorTop.setTargetPosition(POSITION_1);
-                intakeSubsystem.verticalSlideMotorBottom.setTargetPosition(-POSITION_1);
+                verticalSlideSubsystem.verticalSlideMotorTop.setTargetPosition(POSITION_1);
+                verticalSlideSubsystem.verticalSlideMotorBottom.setTargetPosition(-POSITION_1);
             }
             if (gamepad1.dpad_left) {
-                intakeSubsystem.verticalSlideMotorTop.setTargetPosition(POSITION_1);
+                verticalSlideSubsystem.verticalSlideMotorTop.setTargetPosition(POSITION_1);
             }
             if (gamepad1.dpad_right) {
-                intakeSubsystem.verticalSlideMotorBottom.setTargetPosition(-POSITION_1);
+                verticalSlideSubsystem.verticalSlideMotorBottom.setTargetPosition(-POSITION_1);
             }
 
-            telemetry.addData("intakeSubsystem.vertical claw roll position: ", intakeSubsystem.verticalClawRollServo.getPosition());
 
-            telemetry.addData("top motor position ", intakeSubsystem.verticalSlideMotorTop.getCurrentPosition());
-            telemetry.addData("bottom motor position ", intakeSubsystem.verticalSlideMotorBottom.getCurrentPosition());
+            telemetry.addData("top motor position ", verticalSlideSubsystem.verticalSlideMotorTop.getCurrentPosition());
+            telemetry.addData("bottom motor position ", verticalSlideSubsystem.verticalSlideMotorBottom.getCurrentPosition());
 //
 //        telemetry.addData("top motor at position", intakeSubsystem.verticalSlideMotorTop.atTargetPosition());
 //        telemetry.addData("bottom motor at position", intakeSubsystem.verticalSlideMotorBottom.atTargetPosition());
 //
 //        telemetry.addData("target position ", getVerticalSlideMotorsTargetPosition());
 //
-            telemetry.addData("top motor current", intakeSubsystem.verticalSlideMotorTop.motorEx.getCurrent(CurrentUnit.AMPS));
-            telemetry.addData("bottom motor current", intakeSubsystem.verticalSlideMotorBottom.motorEx.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("top motor current", verticalSlideSubsystem.verticalSlideMotorTop.motorEx.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("bottom motor current", verticalSlideSubsystem.verticalSlideMotorBottom.motorEx.getCurrent(CurrentUnit.AMPS));
 //
-            telemetry.addData("Top motor power", intakeSubsystem.verticalSlideMotorTop.get());
-            telemetry.addData("Bottom motor negative power", -intakeSubsystem.verticalSlideMotorBottom.get());
+            telemetry.addData("Top motor power", verticalSlideSubsystem.verticalSlideMotorTop.get());
+            telemetry.addData("Bottom motor negative power", -verticalSlideSubsystem.verticalSlideMotorBottom.get());
             telemetry.addData("status: ", "running");
 
             telemetry.update();
