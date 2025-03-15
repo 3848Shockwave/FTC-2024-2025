@@ -16,10 +16,11 @@ import static org.firstinspires.ftc.teamcode.constants.ServoMaxes.AXON_SERVO_MAX
 public class ArmSubsystem extends SubsystemBase {
 
     private Telemetry telemetry;
-    private ServoEx wristPitchServoL, wristPitchServoR;
+    public ServoEx wristPitchServoL, wristPitchServoR;
     private ServoEx clawPitchServo;
     private ServoEx clawRollServo;
     private ServoEx clawGripServo;
+    private Type type;
 
 
     public enum Type {
@@ -40,6 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Type type) {
         this.telemetry = telemetry;
+        this.type = type;
 
         wristPitchServoL = new SimpleServo(hardwareMap, type.getName() + "ArmRotL", 0, AXON_SERVO_MAX_DEGREE);
         wristPitchServoR = new SimpleServo(hardwareMap, type.getName() + "ArmRotR", 0, AXON_SERVO_MAX_DEGREE);
@@ -47,16 +49,17 @@ public class ArmSubsystem extends SubsystemBase {
 
         clawPitchServo = new SimpleServo(hardwareMap, type.getName() + "ClawRot", 0, AXON_SERVO_MAX_DEGREE);
         clawGripServo = new SimpleServo(hardwareMap, type.getName() + "ClawGrip", 0, AGFRC_SERVO_MAX_DEGREE);
+        clawGripServo.setInverted(true);
         clawRollServo = new SimpleServo(hardwareMap, type.getName() + "ClawPiv", 0, AGFRC_SERVO_MAX_DEGREE);
 
     }
 
     @Override
     public void periodic() {
-        telemetry.addData("wrist Pitch L", wristPitchServoL.getAngle());
-        telemetry.addData("claw pitch", clawPitchServo.getAngle());
-        telemetry.addData("claw roll", clawRollServo.getAngle());
-        telemetry.addData("claw grip", clawGripServo.getAngle());
+        telemetry.addData(type + " " + "wrist pitch L", wristPitchServoL.getAngle());
+        telemetry.addData(type + " " + "claw pitch", clawPitchServo.getAngle());
+        telemetry.addData(type + " " + "claw roll", clawRollServo.getAngle());
+        telemetry.addData(type + " " + "claw grip", clawGripServo.getAngle());
     }
 
 
@@ -73,7 +76,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setWristPitch(double degrees) {
-        wristPitchServoL.turnToAngle(180 - degrees);
+        wristPitchServoL.turnToAngle(degrees);
         wristPitchServoR.turnToAngle(degrees);
     }
 

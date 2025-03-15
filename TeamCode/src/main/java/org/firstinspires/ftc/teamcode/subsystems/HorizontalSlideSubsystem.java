@@ -30,7 +30,7 @@ public class HorizontalSlideSubsystem extends SubsystemBase {
         // slides
         horizontalSlideServoL = new SimpleServo(hardwareMap, "horzExtL", 0, AXON_SERVO_MAX_DEGREE);
         horizontalSlideServoR = new SimpleServo(hardwareMap, "horzExtR", 0, AXON_SERVO_MAX_DEGREE);
-        horizontalSlideServoL.setInverted(true);
+        horizontalSlideServoR.setInverted(true);
 
     }
 

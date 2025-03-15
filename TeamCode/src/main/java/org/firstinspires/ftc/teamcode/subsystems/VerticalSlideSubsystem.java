@@ -44,19 +44,19 @@ public class VerticalSlideSubsystem extends SubsystemBase {
         verticalSlideMotorBottom.set(Constants.VERTICAL_SLIDE_MOTOR_SPEED_FAST);
 
 
-        telemetry.addData("top motor position ", verticalSlideMotorTop.getCurrentPosition());
-        telemetry.addData("bottom motor position ", verticalSlideMotorBottom.getCurrentPosition());
-//
-//        telemetry.addData("top motor at position", verticalSlideMotorTop.atTargetPosition());
-//        telemetry.addData("bottom motor at position", verticalSlideMotorBottom.atTargetPosition());
-//
-//        telemetry.addData("target position ", getVerticalSlideMotorsTargetPosition());
-//
-        telemetry.addData("top motor current", verticalSlideMotorTop.motorEx.getCurrent(CurrentUnit.AMPS));
-        telemetry.addData("bottom motor current", verticalSlideMotorBottom.motorEx.getCurrent(CurrentUnit.AMPS));
-//
-        telemetry.addData("Top motor power", verticalSlideMotorTop.get());
-        telemetry.addData("Bottom motor negative power", -verticalSlideMotorBottom.get());
+//        telemetry.addData("top motor position ", verticalSlideMotorTop.getCurrentPosition());
+//        telemetry.addData("bottom motor position ", verticalSlideMotorBottom.getCurrentPosition());
+////
+////        telemetry.addData("top motor at position", verticalSlideMotorTop.atTargetPosition());
+////        telemetry.addData("bottom motor at position", verticalSlideMotorBottom.atTargetPosition());
+////
+////        telemetry.addData("target position ", getVerticalSlideMotorsTargetPosition());
+////
+//        telemetry.addData("top motor current", verticalSlideMotorTop.motorEx.getCurrent(CurrentUnit.AMPS));
+//        telemetry.addData("bottom motor current", verticalSlideMotorBottom.motorEx.getCurrent(CurrentUnit.AMPS));
+////
+//        telemetry.addData("Top motor power", verticalSlideMotorTop.get());
+//        telemetry.addData("Bottom motor negative power", -verticalSlideMotorBottom.get());
 
     }
 

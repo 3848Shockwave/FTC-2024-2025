@@ -33,7 +33,6 @@ public class CommandTeleOp extends CommandOpMode {
     private ArmSubsystem verticalArmSubsystem, horizontalArmSubsystem;
     private DriveCommand driveCommand;
     private GamepadEx driverGamepad;
-    private GamepadEx auxiliaryGamepad;
 
     private Telemetry currentTelemetry;
 
@@ -47,7 +46,6 @@ public class CommandTeleOp extends CommandOpMode {
         currentTelemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
         driverGamepad = new GamepadEx(gamepad1);
-        auxiliaryGamepad = new GamepadEx(gamepad2);
 
 
         driveSubsystem = new DriveSubsystem(hardwareMap, currentTelemetry);

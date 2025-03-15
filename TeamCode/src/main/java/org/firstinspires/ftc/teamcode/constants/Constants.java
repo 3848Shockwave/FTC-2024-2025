@@ -8,39 +8,39 @@ public final class Constants {
     public static boolean IS_FIELD_CENTRIC = true;
     // horizontal
     // claw
-    public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 50;
-    public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 130;
+    public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 70;
+    public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 170;
     // slide
-    public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = 85;
-    public static double HORIZONTAL_SLIDE_MAX_POSITION = 170;
-    public static double HORIZONTAL_SLIDE_MIDDLE_POSITION = 135;
-    public static double HORIZONTAL_SLIDE_MIN_POSITION = 75;
-    public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = 82;
-    public static int HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION = 23;
-    public static int HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION = 83;
+    public static double HORIZONTAL_SLIDE_MAX_POSITION = 240;
+    public static double HORIZONTAL_SLIDE_MIDDLE_POSITION = 190;
+    public static double HORIZONTAL_SLIDE_MIN_POSITION = 155;
+    public static double HORIZONTAL_SLIDE_TRANSFER_POSITION = HORIZONTAL_SLIDE_MIN_POSITION;
+    public static int HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION = 3;
+    public static int HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION = 105;
+    public static double HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION = HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION;
     // claw roll speed for manually aligning it with the samples
     public static double HORIZONTAL_CLAW_ROLL_SPEED = 1;
     //
-    public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 0;
-    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 90;
+    public static double HORIZONTAL_CLAW_PITCH_INTAKE_POSITION = 315;
+    public static double HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION = 130;
     //    public static double HORIZONTAL_CLAW_PITCH_VERTICAL_POSITION = 70;
-    public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 180;
-    public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 60;
+    public static double HORIZONTAL_WRIST_PITCH_INTAKE_POSITION = 35;
+    public static double HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION = 190;
     public static double HORIZONTAL_WRIST_PITCH_VERTICAL_POSITION = 90;
     // hovers
-    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 160;
+    public static double HORIZONTAL_WRIST_PITCH_HOVER_POSITION = 55;
     public static double HORIZONTAL_WRIST_PITCH_PICKUP_POSITION = 135;
-    public static double HORIZONTAL_CLAW_PITCH_HOVER_POSITION = 0;
+    public static double HORIZONTAL_CLAW_PITCH_HOVER_POSITION = 315;
     public static double HORIZONTAL_CLAW_PITCH_PICKUP_POSITION = 40;
     // SPECIMEN
-    public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 89;
-    public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 92;
-    public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 60;
+    public static int HORIZONTAL_SLIDE_SPECIMEN_TRANSFER_POSITION = 155;
+    public static int HORIZONTAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 130;;
+    public static int HORIZONTAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 190;
     // vertical
     //claw
-    public static double VERTICAL_CLAW_GRIP_OPEN_POSITION = 75;
-    public static double VERTICAL_CLAW_GRIP_CLOSED_POSITION = 130;
-    public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = -10;
+    public static double VERTICAL_CLAW_GRIP_OPEN_POSITION = 70;
+    public static double VERTICAL_CLAW_GRIP_CLOSED_POSITION = 170;
+    public static int VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION = 10;
     public static int VERTICAL_SLIDE_MOTOR_BOTTOM_BASKET_POSITION = 600;
     public static int VERTICAL_SLIDE_MOTOR_TOUCH_BAR_POSITION = 100;
     public static int VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION = 1520;
