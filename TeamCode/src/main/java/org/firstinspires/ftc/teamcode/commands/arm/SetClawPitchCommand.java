@@ -11,7 +11,6 @@ public class SetClawPitchCommand extends CommandBase {
     public SetClawPitchCommand(ArmSubsystem armSubsystem, double angle) {
         this.armSubsystem = armSubsystem;
         this.angle = angle;
-        addRequirements(armSubsystem);
     }
 
     @Override

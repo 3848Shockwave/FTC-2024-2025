@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 @Config
 public class DropAndResetToIntakeCommandSequence extends SequentialCommandGroup {
 
-    public static int WAIT0 = 500;
+    public static int WAIT0 = 250;
     public static int WAIT1 = 250;
 
     public DropAndResetToIntakeCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, HorizontalSlideSubsystem horizontalSlideSubsystem, VerticalSlideSubsystem verticalSlideSubsystem) {
@@ -27,17 +27,22 @@ public class DropAndResetToIntakeCommandSequence extends SequentialCommandGroup 
                 // open horizontal claw
                 new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION),
 
-                new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_HOVER_POSITION),
 
                 new WaitCommand(WAIT0),
                 // set horizontal arm to transfer position
-                new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION),
-                new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION),
-                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION),
+                new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION),
+                new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_HOVER_POSITION),
+                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION),
                 new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION),
 
                 new WaitCommand(WAIT1),
-                new SetVerticalSlidePositionCommand(verticalSlideSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION)
+                new SetVerticalSlidePositionCommand(verticalSlideSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION),
+
+                // set vertical arm to transfer position
+                new SetClawPitchCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION),
+                new SetWristPitchCommand(verticalArmSubsystem, Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION),
+                new SetClawRollCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION),
+                new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION)
         );
         addRequirements(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem);
     }

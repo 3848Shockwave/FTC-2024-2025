@@ -11,7 +11,6 @@ public class SetClawRollCommand extends CommandBase {
     public SetClawRollCommand(ArmSubsystem armSubsystem, double angle) {
         this.armSubsystem = armSubsystem;
         this.angle = angle;
-        addRequirements(armSubsystem);
     }
 
     @Override

@@ -31,8 +31,8 @@ public class TestOpMode extends CommandOpMode {
     private DriveSubsystem driveSubsystem;
     private HorizontalSlideSubsystem horizontalSlideSubsystem;
     private VerticalSlideSubsystem verticalSlideSubsystem;
-    private ArmSubsystem /*verticalArmSubsystem,*/ horizontalArmSubsystem;
-    private DriveCommand driveCommand;
+    private ArmSubsystem verticalArmSubsystem, horizontalArmSubsystem;
+    //    private DriveCommand driveCommand;
     private GamepadEx driverGamepad;
 
     private Telemetry currentTelemetry;
@@ -49,70 +49,51 @@ public class TestOpMode extends CommandOpMode {
         driverGamepad = new GamepadEx(gamepad1);
 
 
-        driveSubsystem = new DriveSubsystem(hardwareMap, currentTelemetry);
+//        driveSubsystem = new DriveSubsystem(hardwareMap, currentTelemetry);
 
         horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, currentTelemetry);
         verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap, currentTelemetry);
 
-//        verticalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.VERTICAL);
+        verticalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.VERTICAL);
         horizontalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.HORIZONTAL);
 
 //        driveCommand = new DriveCommand(driveSubsystem, driverGamepad::getLeftX, driverGamepad::getLeftY, driverGamepad::getRightX, () -> Constants.IS_FIELD_CENTRIC);
 
         // good practice to register the subsystem before setting default command
-        register(/*driveSubsystem, */horizontalSlideSubsystem, verticalSlideSubsystem, /*verticalArmSubsystem,*/ horizontalArmSubsystem);
+        register(/*driveSubsystem, */horizontalSlideSubsystem, verticalSlideSubsystem, verticalArmSubsystem, horizontalArmSubsystem);
 
         // "always be runnin this thing"
 //        driveSubsystem.setDefaultCommand(driveCommand);
 
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-//                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION)
-//        );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION)
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                new TriggerSampleIntakeCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem)
         );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION)
+//
+        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                new TriggerSamplePickupAndTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem)
         );
+
+        // horizontal slide min extension
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
+                new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_CLOSED_POSITION)
+//                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION)
+        );
+        // horizontal slide middle extension
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
+                new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION)
+//                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIDDLE_POSITION)
+        );
+        // horizontal slide max extension
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
+                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MAX_POSITION)
+        );
+
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
                 new SetVerticalSlidePositionCommand(verticalSlideSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION)
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new SetVerticalSlidePositionCommand(verticalSlideSubsystem, Constants.VERTICAL_SLIDE_MOTOR_DEPOSIT_POSITION)
-        );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
-                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION)
-        );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
-                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIDDLE_POSITION)
-        );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
-                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MAX_POSITION)
-        );
-
-        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                new SequentialCommandGroup(
-                        new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION),
-                        new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION),
-                        new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION),
-                        new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION)
-                )
-        );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                new SequentialCommandGroup(
-                        new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION),
-                        new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_HOVER_POSITION),
-                        new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION),
-                        new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION)
-                )
-        );
-        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new SequentialCommandGroup(
-                        new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION),
-                        new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION),
-                        new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION),
-                        new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION)
-                )
         );
 
 
@@ -125,11 +106,19 @@ public class TestOpMode extends CommandOpMode {
 //                    }
 //                }),
 
-//                // immediately set horizontal arm to hover
-//                // TODO: assess
-//                new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_HOVER_POSITION),
-//                new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION),
-//
+                // immediately set horizontal arm to hover
+                // TODO: assess
+                new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_HOVER_POSITION),
+                new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION),
+
+                // immediately set vertical arm to transfer
+                // TODO: assess
+                new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION),
+                // set vertical arm to transfer position
+                new SetClawPitchCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION),
+                new SetWristPitchCommand(verticalArmSubsystem, Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION),
+                new SetClawRollCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION),
+
 //                // immediately set vertical slide position
 ////        intakeSubsystem.setVerticalSlideMotorsTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);
 //                new SetVerticalSlidePositionCommand(verticalSlideSubsystem, Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION),

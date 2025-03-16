@@ -66,10 +66,10 @@ public class CommandTeleOp extends CommandOpMode {
 
         // control claw roll
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_PERPENDICULAR_POSITION)
+                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_UP_POSITION)
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_PARALLEL_POSITION)
+                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_FLAT_POSITION)
         );
 
         // DRIVER GAMEPAD!!!!!!!!!
@@ -94,11 +94,13 @@ public class CommandTeleOp extends CommandOpMode {
 
 
         // horizontal arm to intake position
+        // NOW: horizontal arm to pick up from wall position
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                new SequentialCommandGroup(
-                        new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION),
-                        new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)
-                )
+                new WallPickupCommandSequence(verticalArmSubsystem)
+//                new SequentialCommandGroup(
+//                        new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION),
+//                        new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)
+//                )
         );
         // horizontal arm to hover over sample
         driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
@@ -177,6 +179,17 @@ public class CommandTeleOp extends CommandOpMode {
                 // TODO: assess
                 new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_HOVER_POSITION),
                 new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION),
+                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION),
+
+                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION),
+
+                // immediately set vertical arm to transfer
+                // TODO: assess
+                new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION),
+                // set vertical arm to transfer position
+                new SetClawPitchCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION),
+                new SetWristPitchCommand(verticalArmSubsystem, Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION),
+                new SetClawRollCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION),
 
                 // immediately set vertical slide position
 //        intakeSubsystem.setVerticalSlideMotorsTargetPosition(Constants.VERTICAL_SLIDE_MOTOR_TRANSFER_POSITION);

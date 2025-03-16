@@ -64,10 +64,7 @@ public class SpecimenAuto {
         Pose2d pickUpSpecimenPose = new Pose2d(
                 -46,
                 46,
-                Math.atan2(
-                        -(placedSpecimenVector.x - (-37)),
-                        -(placedSpecimenVector.y - (41))
-                ) - Math.toRadians(20)
+                Math.toRadians(90)
         );
 
 
@@ -138,7 +135,7 @@ public class SpecimenAuto {
 //                .endTrajectory();
 
         // hang specimens
-        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB0 = middleSampleTAB
+        TrajectoryActionBuilder pickUpFromWallPoseTAB0 = middleSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
                         new Vector2d(
@@ -151,7 +148,7 @@ public class SpecimenAuto {
                 .endTrajectory();
 
 
-        TrajectoryActionBuilder hangSpecimenTAB0 = goToWaitForSpecimenPoseTAB0
+        TrajectoryActionBuilder hangSpecimenTAB0 = pickUpFromWallPoseTAB0
                 .fresh()
                 .setTangent(Math.toRadians(0))
                 .splineToConstantHeading(
@@ -165,7 +162,7 @@ public class SpecimenAuto {
                 .endTrajectory();
 
         // hang specimens
-        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB1 = hangSpecimenTAB0
+        TrajectoryActionBuilder pickUpFromWallPoseTAB1 = hangSpecimenTAB0
                 .fresh()
                 .strafeToLinearHeading(
                         new Vector2d(
@@ -178,7 +175,7 @@ public class SpecimenAuto {
                 .endTrajectory();
 
 
-        TrajectoryActionBuilder hangSpecimenTAB1 = goToWaitForSpecimenPoseTAB1
+        TrajectoryActionBuilder hangSpecimenTAB1 = pickUpFromWallPoseTAB1
                 .fresh()
                 .setTangent(Math.toRadians(0))
                 .splineToConstantHeading(
@@ -191,7 +188,7 @@ public class SpecimenAuto {
                 )
                 .endTrajectory();
         // hang specimens
-        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB2 = hangSpecimenTAB1
+        TrajectoryActionBuilder pickUpFromWallPoseTAB2 = hangSpecimenTAB1
                 .fresh()
                 .strafeToLinearHeading(
                         new Vector2d(
@@ -204,7 +201,7 @@ public class SpecimenAuto {
                 .endTrajectory();
 
 
-        TrajectoryActionBuilder hangSpecimenTAB2 = goToWaitForSpecimenPoseTAB2
+        TrajectoryActionBuilder hangSpecimenTAB2 = pickUpFromWallPoseTAB2
                 .fresh()
                 .setTangent(Math.toRadians(0))
                 .splineToConstantHeading(
@@ -251,15 +248,15 @@ public class SpecimenAuto {
 
 
                 // intake to pickup position
-                goToWaitForSpecimenPoseTAB0.build(),
+                pickUpFromWallPoseTAB0.build(),
                 // pick up specimen
                 // transfer specimen
                 hangSpecimenTAB0.build(),
 
-                goToWaitForSpecimenPoseTAB1.build(),
+                pickUpFromWallPoseTAB1.build(),
                 hangSpecimenTAB1.build(),
 
-                goToWaitForSpecimenPoseTAB2.build(),
+                pickUpFromWallPoseTAB2.build(),
                 hangSpecimenTAB2.build(),
 
                 // hang specimen

@@ -21,14 +21,14 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
 
 
     // waits are in milliseconds
-    public static int CLOSE_CLAW_WAIT = 100;
-    public static int HORIZONTAL_SLIDE_RETRACT_WAIT = 300;
-    public static int HORIZONTAL_SLIDE_RETRACT_OFFSET = 20;
+    public static int CLOSE_CLAW_WAIT = 200;
+//    public static int HORIZONTAL_SLIDE_RETRACT_WAIT = 500;
+//    public static int HORIZONTAL_SLIDE_RETRACT_OFFSET = 500;
     public static int WAIT0 = 200;
-    public static int WAIT1 = 150;
+    public static int WAIT1 = 250;
     public static int WAIT2 = 200;
-    public static int WAIT3 = 100;
-    public static int WAIT4 = 300;
+    public static int WAIT3 = 0;
+    public static int WAIT4 = 200;
 
     public SampleTransferCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, HorizontalSlideSubsystem horizontalSlideSubsystem, VerticalSlideSubsystem verticalSlideSubsystem) {
         addCommands(
@@ -36,25 +36,26 @@ public class SampleTransferCommandSequence extends SequentialCommandGroup {
                 new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_CLOSED_POSITION),
                 // open vertical arm claw to pick up the sample
                 new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION),
-//                // (wait until ^ done)
-                new WaitCommand(CLOSE_CLAW_WAIT),
+
                 // set vertical arm to transfer position
                 new SetClawPitchCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION),
                 new SetWristPitchCommand(verticalArmSubsystem, Constants.VERTICAL_WRIST_PITCH_TRANSFER_POSITION),
-                new SetClawRollCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_PITCH_TRANSFER_POSITION),
-//                new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION),
+                new SetClawRollCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_ROLL_TRANSFER_POSITION),
+//                // (wait until ^ done)
+                new WaitCommand(CLOSE_CLAW_WAIT),
 
                 // set horizontal arm to transfer position
                 new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_TRANSFER_POSITION),
                 new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_TRANSFER_POSITION),
+                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION),
 //                // (wait until ^ done)
                 new WaitCommand(WAIT0),
 
-                // do the little slide thingy
-                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION + HORIZONTAL_SLIDE_RETRACT_OFFSET),
-                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION),
-
-                new WaitCommand(HORIZONTAL_SLIDE_RETRACT_WAIT),
+//                // do the little slide thingy
+//                new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION + HORIZONTAL_SLIDE_RETRACT_OFFSET),
+//                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_TRANSFER_POSITION),
+//
+//                new WaitCommand(HORIZONTAL_SLIDE_RETRACT_WAIT),
 
                 // actually put the slides in this time
                 new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_TRANSFER_POSITION),
