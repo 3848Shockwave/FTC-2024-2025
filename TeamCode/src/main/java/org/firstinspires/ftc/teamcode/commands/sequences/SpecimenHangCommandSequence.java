@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 @Config
 public class SpecimenHangCommandSequence extends SequentialCommandGroup {
 
-    public static long WAIT0 = 150;
-    public static long WAIT1 = 50;
+    public static long WAIT0 = 250;
+    public static long WAIT1 = 30;
 
     public SpecimenHangCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, HorizontalSlideSubsystem horizontalSlideSubsystem, VerticalSlideSubsystem verticalSlideSubsystem) {
         addCommands(

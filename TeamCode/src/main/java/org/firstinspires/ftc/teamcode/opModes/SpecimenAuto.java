@@ -32,17 +32,18 @@ public class SpecimenAuto extends CommandOpMode {
 
 //    File headingFile = new File("./savedHeading");
 
-    public static double RIGHT_X = -37;
+    public static double RIGHT_X = -36.5;
     public static double Y = 29;
     public static double RIGHT_SAMPLE_HEADING = 200;
     public static double RIGHT_TURN_HEADING = 100;
-    public static double MIDDLE_X = -47;
+    public static double MIDDLE_X = -47.5;
     public static double MIDDLE_SAMPLE_HEADING = 200;
     public static double MIDDLE_TURN_HEADING = 100;
     public static double LEFT_X = -57;
     public static double LEFT_SAMPLE_HEADING = 200;
-    public static double CLAW_ROLL = 20;
-    public static double VEL_CONSTRAINT = 55;
+    public static double CLAW_ROLL = 105;
+    public static double VERTICAL_CLAW_PITCH_SPECIMEN_HANG= 120;
+    public static double VEL_CONSTRAINT = 70;
 
     public static long THROW_WAIT = 200;
     public static double HORIZONTAL_SLIDE_DROP_EXTENSION = 60;
@@ -57,9 +58,9 @@ public class SpecimenAuto extends CommandOpMode {
     public void initialize() {
 
         currentTelemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-
-        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, currentTelemetry);
         verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap, currentTelemetry);
+        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, currentTelemetry);
+
         verticalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.VERTICAL);
         horizontalArmSubsystem = new ArmSubsystem(hardwareMap, currentTelemetry, ArmSubsystem.Type.HORIZONTAL);
 
@@ -91,14 +92,14 @@ public class SpecimenAuto extends CommandOpMode {
 
         Pose2d hangSpecimenPose = new Pose2d(
                 0,
-                37.5,
+                37,
                 Math.toRadians(90)
         );
 
         Vector2d placedSpecimenVector = new Vector2d(-47, 58);
         Pose2d pickUpSpecimenPose = new Pose2d(
-                -46.3,
-                55,
+                -47.3,
+                57.5,
                 Math.toRadians(-90)
         );
 
@@ -142,8 +143,14 @@ public class SpecimenAuto extends CommandOpMode {
                 .endTrajectory();
         TrajectoryActionBuilder dropRightSampleTAB = rightSampleTAB
                 .fresh()
-                .turnTo(
-                        Math.toRadians(RIGHT_TURN_HEADING)
+
+                .strafeToLinearHeading(
+                        new Vector2d(
+                                pickUpSpecimenPose.component1().x,
+                                pickUpSpecimenPose.component1().y - 5
+                        ),
+                        Math.toRadians(RIGHT_TURN_HEADING),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
         TrajectoryActionBuilder middleSampleTAB = dropRightSampleTAB
@@ -201,8 +208,8 @@ public class SpecimenAuto extends CommandOpMode {
                 .setTangent(Math.toRadians(180))
                 .splineToLinearHeading(
                         new Pose2d(
-                                pickUpSpecimenPose.component1().x,
-                                pickUpSpecimenPose.component1().y - 5,
+                                pickUpSpecimenPose.component1().x+1,
+                                pickUpSpecimenPose.component1().y+1,
                                 pickUpSpecimenPose.heading.toDouble()
                         ),
                         Math.toRadians(90),
@@ -216,7 +223,7 @@ public class SpecimenAuto extends CommandOpMode {
                 .setTangent(Math.toRadians(0))
                 .splineToLinearHeading(
                         new Pose2d(
-                                hangSpecimenPose.component1().x - 6,
+                                hangSpecimenPose.component1().x +3,
                                 hangSpecimenPose.component1().y,
                                 hangSpecimenPose.component2().toDouble()
                         ),
@@ -229,7 +236,11 @@ public class SpecimenAuto extends CommandOpMode {
                 .fresh()
                 .setTangent(Math.toRadians(160))
                 .splineToLinearHeading(
-                        pickUpSpecimenPose,
+                        new Pose2d(
+                                pickUpSpecimenPose.component1().x+1,
+                                pickUpSpecimenPose.component1().y+1,
+                                pickUpSpecimenPose.heading.toDouble()
+                        ),
                         Math.toRadians(90),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
@@ -241,7 +252,7 @@ public class SpecimenAuto extends CommandOpMode {
                 .setTangent(Math.toRadians(0))
                 .splineToLinearHeading(
                         new Pose2d(
-                                hangSpecimenPose.component1().x - 9,
+                                hangSpecimenPose.component1().x +5,
                                 hangSpecimenPose.component1().y,
                                 hangSpecimenPose.component2().toDouble()
                         ),
@@ -265,10 +276,10 @@ public class SpecimenAuto extends CommandOpMode {
 
         // INIT ACTIONS
         CommandScheduler.getInstance().schedule(
+                new SetWristPitchCommand(verticalArmSubsystem, Constants.VERTICAL_WRIST_PITCH_SPECIMEN_DROPOFF_POSITION),
                 new SetHorizontalSlidePosition(horizontalSlideSubsystem, Constants.HORIZONTAL_SLIDE_MIN_POSITION),
                 new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_CLOSED_POSITION),
-                new SetWristPitchCommand(verticalArmSubsystem, Constants.VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION),
-                new SetClawPitchCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION),
+                new SetClawPitchCommand(verticalArmSubsystem, VERTICAL_CLAW_PITCH_SPECIMEN_HANG),
                 new SetClawRollCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_ROLL_SPECIMEN_DROPOFF_POSITION)
         );
 
@@ -326,10 +337,10 @@ public class SpecimenAuto extends CommandOpMode {
 //                        new WaitCommand(100),
                         new TriggerPickUpSampleCommandSequence(horizontalArmSubsystem),
                         new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_PICKUP_POSITION),
-                        new WaitCommand(200),
+                       // new WaitCommand(200),
 
                         new ActionCommand(dropMiddleSampleTAB.build(), new HashSet<>()),
-
+                        new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION),
                         // TODO: PICK UP FROM WALLS AND SCORE
 
 
@@ -351,6 +362,7 @@ public class SpecimenAuto extends CommandOpMode {
                         new VerticalArmWallPickupCommandSequence(verticalArmSubsystem),
                         // go to pick up from wall
                         new ActionCommand(pickUpFromWallPoseTAB1.build(), new HashSet<>()),
+                        new WaitCommand(150),
 
                         new WallPickupGoUpCommandSequence(verticalArmSubsystem, verticalSlideSubsystem),
                         // go to hang position

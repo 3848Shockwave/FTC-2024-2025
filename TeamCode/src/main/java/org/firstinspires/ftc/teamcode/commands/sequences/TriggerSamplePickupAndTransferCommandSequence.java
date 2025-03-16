@@ -17,7 +17,7 @@ public class TriggerSamplePickupAndTransferCommandSequence extends SequentialCom
         SAMPLE,
         SPECIMEN
     }
-    public static int DROP_CLOSE_WAIT = 100;
+    public static int DROP_CLOSE_WAIT = 120;
     public TriggerSamplePickupAndTransferCommandSequence(ArmSubsystem horizontalArmSubsystem, ArmSubsystem verticalArmSubsystem, HorizontalSlideSubsystem horizontalSlideSubsystem, VerticalSlideSubsystem verticalSlideSubsystem) {
         addCommands(
                 // set horizontal arm to intake position

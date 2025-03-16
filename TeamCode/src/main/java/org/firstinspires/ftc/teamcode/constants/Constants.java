@@ -8,8 +8,8 @@ public final class Constants {
     public static boolean IS_FIELD_CENTRIC = true;
     // horizontal
     // claw
-    public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 160;
-    public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 70;
+    public static double HORIZONTAL_CLAW_GRIP_OPEN_POSITION = 180;
+    public static double HORIZONTAL_CLAW_GRIP_CLOSED_POSITION = 125;
     // slide
     public static double HORIZONTAL_SLIDE_MAX_POSITION = 250;
     public static double HORIZONTAL_SLIDE_MIDDLE_POSITION = 210;
@@ -58,7 +58,7 @@ public final class Constants {
     // SPECIMEN
     public static double VERTICAL_CLAW_PITCH_SPECIMEN_TRANSFER_POSITION = 34;
     public static double VERTICAL_WRIST_PITCH_SPECIMEN_TRANSFER_POSITION = 0;
-    public static double VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION = 160;
+    public static double VERTICAL_CLAW_PITCH_SPECIMEN_DROPOFF_POSITION = 140;
     public static double VERTICAL_CLAW_ROLL_SPECIMEN_DROPOFF_POSITION = VERTICAL_CLAW_ROLL_TRANSFER_POSITION;
     public static double VERTICAL_WRIST_PITCH_SPECIMEN_DROPOFF_POSITION = 180;
     public static int VERTICAL_SLIDE_MOTOR_SPECIMEN_UP_POSITION = 460;
