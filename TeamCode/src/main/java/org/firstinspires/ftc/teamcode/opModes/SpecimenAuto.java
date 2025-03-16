@@ -12,11 +12,8 @@ import org.firstinspires.ftc.teamcode.commands.arm.SetClawGripCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawPitchCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetClawRollCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SetWristPitchCommand;
+import org.firstinspires.ftc.teamcode.commands.sequences.*;
 import org.firstinspires.ftc.teamcode.commands.slides.SetHorizontalSlidePosition;
-import org.firstinspires.ftc.teamcode.commands.sequences.SpecimenHangCommandSequence;
-import org.firstinspires.ftc.teamcode.commands.sequences.SpecimenTransferCommandSequence;
-import org.firstinspires.ftc.teamcode.commands.sequences.TriggerPickUpSampleCommandSequence;
-import org.firstinspires.ftc.teamcode.commands.sequences.VerticalArmToSpecimenDropoffCommandSequence;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.PinpointDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
@@ -70,6 +67,7 @@ public class SpecimenAuto extends CommandOpMode {
         register(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem);
 
         // TABS go here
+        // copy from here
         Pose2d bucketStartPose = new Pose2d(
                 11.5,
                 62,
@@ -93,19 +91,15 @@ public class SpecimenAuto extends CommandOpMode {
 
         Pose2d hangSpecimenPose = new Pose2d(
                 0,
-                37,
+                37.5,
                 Math.toRadians(90)
         );
 
-
-        Vector2d rightColoredSampleVector = new Vector2d(-48, 27);
-        Vector2d middleColoredSampleVector = new Vector2d(-58, 27);
-        Vector2d leftColoredSampleVector = new Vector2d(-68, 27);
         Vector2d placedSpecimenVector = new Vector2d(-47, 58);
         Pose2d pickUpSpecimenPose = new Pose2d(
-                -48,
-                PICK_UP_SPECIMEN_Y,
-                Math.toRadians(90)
+                -46.3,
+                55,
+                Math.toRadians(-90)
         );
 
         // CREATE DRIVE
@@ -141,9 +135,7 @@ public class SpecimenAuto extends CommandOpMode {
                         new Pose2d(
                                 RIGHT_X,
                                 Y,
-                                Math.toRadians(RIGHT_SAMPLE_HEADING)
-                        ),
-
+                                Math.toRadians(RIGHT_SAMPLE_HEADING)),
                         Math.toRadians(180 + 40),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
@@ -160,110 +152,100 @@ public class SpecimenAuto extends CommandOpMode {
                         new Vector2d(MIDDLE_X, Y),
                         Math.toRadians(MIDDLE_SAMPLE_HEADING),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
-
                 )
                 .endTrajectory();
-//        TrajectoryActionBuilder dropMiddleSampleTAB = middleSampleTAB
-//                .fresh()
-//                .turnTo(
-//                        Math.toRadians(MIDDLE_TURN_HEADING)
-//                )
-//                .endTrajectory();
-//        TrajectoryActionBuilder leftSampleTAB = dropMiddleSampleTAB
-//                .fresh()
-//                .strafeToLinearHeading(
-//                        new Vector2d(LEFT_X, Y),
-//                        Math.toRadians(LEFT_SAMPLE_HEADING),
-//                        new TranslationalVelConstraint(VEL_CONSTRAINT)
-//                )
-//                .endTrajectory();
-
-        // hang specimens
-        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB0 = middleSampleTAB
+        TrajectoryActionBuilder dropMiddleSampleTAB = middleSampleTAB
                 .fresh()
                 .strafeToLinearHeading(
                         new Vector2d(
                                 pickUpSpecimenPose.component1().x,
-                                pickUpSpecimenPose.component1().y
-                        ),
-                        Math.toRadians(90),
-                        new TranslationalVelConstraint(VEL_CONSTRAINT)
-
-                )
-//                .strafeToLinearHeading(
-//                        new Vector2d(
-//                                pickUpSpecimenPose.component1().x,
-//                                pickUpSpecimenPose.component1().y
-//                        ),
-//                        Math.toRadians(90),
-//                        new TranslationalVelConstraint(10)
-//
-//                )
-                .endTrajectory();
-
-
-        TrajectoryActionBuilder hangSpecimenTAB0 = goToWaitForSpecimenPoseTAB0
-                .fresh()
-                .setTangent(Math.toRadians(0))
-                .splineToConstantHeading(
-                        new Vector2d(
-                                hangSpecimenPose.component1().x - 3,
-                                hangSpecimenPose.component1().y
-                        ),
-                        Math.toRadians(-50),
-                        new TranslationalVelConstraint(VEL_CONSTRAINT)
-                )
-                .endTrajectory();
-
-        // hang specimens
-        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB1 = hangSpecimenTAB0
-                .fresh()
-                .strafeToLinearHeading(
-                        new Vector2d(
-                                pickUpSpecimenPose.component1().x,
-                                pickUpSpecimenPose.component1().y
+                                pickUpSpecimenPose.component1().y - 5
                         ),
                         Math.toRadians(90),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
 
-
-        TrajectoryActionBuilder hangSpecimenTAB1 = goToWaitForSpecimenPoseTAB1
-                .fresh()
-                .setTangent(Math.toRadians(0))
-                .splineToConstantHeading(
-                        new Vector2d(
-                                hangSpecimenPose.component1().x - 6,
-                                hangSpecimenPose.component1().y
-                        ),
-                        Math.toRadians(-50),
-                        new TranslationalVelConstraint(VEL_CONSTRAINT)
-                )
-                .endTrajectory();
         // hang specimens
-        TrajectoryActionBuilder goToWaitForSpecimenPoseTAB2 = hangSpecimenTAB1
+        TrajectoryActionBuilder pickUpFromWallPoseTAB0 = dropMiddleSampleTAB
                 .fresh()
+                .turnTo(Math.toRadians(-90))
                 .strafeToLinearHeading(
                         new Vector2d(
                                 pickUpSpecimenPose.component1().x,
                                 pickUpSpecimenPose.component1().y
-                        ),
-                        Math.toRadians(90),
-                        new TranslationalVelConstraint(VEL_CONSTRAINT)
-                )
-                .endTrajectory();
-
-
-        TrajectoryActionBuilder hangSpecimenTAB2 = goToWaitForSpecimenPoseTAB2
-                .fresh()
-                .setTangent(Math.toRadians(0))
-                .splineToConstantHeading(
-                        new Vector2d(
-                                hangSpecimenPose.component1().x - 9,
-                                hangSpecimenPose.component1().y
                         ),
                         Math.toRadians(-90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+
+        TrajectoryActionBuilder hangSpecimenTAB0 = pickUpFromWallPoseTAB0
+                .fresh()
+                .setTangent(Math.toRadians(0))
+                .splineToLinearHeading(
+                        new Pose2d(
+                                hangSpecimenPose.component1().x - 3,
+                                hangSpecimenPose.component1().y,
+                                hangSpecimenPose.component2().toDouble()
+                        ),
+                        Math.toRadians(-50),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+        // hang specimens
+        TrajectoryActionBuilder pickUpFromWallPoseTAB1 = hangSpecimenTAB0
+                .fresh()
+                .setTangent(Math.toRadians(180))
+                .splineToLinearHeading(
+                        new Pose2d(
+                                pickUpSpecimenPose.component1().x,
+                                pickUpSpecimenPose.component1().y - 5,
+                                pickUpSpecimenPose.heading.toDouble()
+                        ),
+                        Math.toRadians(90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+
+        TrajectoryActionBuilder hangSpecimenTAB1 = pickUpFromWallPoseTAB1
+                .fresh()
+                .setTangent(Math.toRadians(0))
+                .splineToLinearHeading(
+                        new Pose2d(
+                                hangSpecimenPose.component1().x - 6,
+                                hangSpecimenPose.component1().y,
+                                hangSpecimenPose.component2().toDouble()
+                        ),
+                        Math.toRadians(-50),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+        // hang specimens
+        TrajectoryActionBuilder pickUpFromWallPoseTAB2 = hangSpecimenTAB1
+                .fresh()
+                .setTangent(Math.toRadians(160))
+                .splineToLinearHeading(
+                        pickUpSpecimenPose,
+                        Math.toRadians(90),
+                        new TranslationalVelConstraint(VEL_CONSTRAINT)
+                )
+                .endTrajectory();
+
+
+        TrajectoryActionBuilder hangSpecimenTAB2 = pickUpFromWallPoseTAB2
+                .fresh()
+                .setTangent(Math.toRadians(0))
+                .splineToLinearHeading(
+                        new Pose2d(
+                                hangSpecimenPose.component1().x - 9,
+                                hangSpecimenPose.component1().y,
+                                hangSpecimenPose.component2().toDouble()
+                        ),
+                        Math.toRadians(-50),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
                 )
                 .endTrajectory();
@@ -274,7 +256,7 @@ public class SpecimenAuto extends CommandOpMode {
                 .strafeToLinearHeading(
                         new Vector2d(
                                 -40,
-                                52
+                                60
                         ),
                         Math.toRadians(-90),
                         new TranslationalVelConstraint(VEL_CONSTRAINT)
@@ -346,22 +328,18 @@ public class SpecimenAuto extends CommandOpMode {
                         new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_PICKUP_POSITION),
                         new WaitCommand(200),
 
-                        // go to wait for specimen pose
-                        new ActionCommand(goToWaitForSpecimenPoseTAB0.build(), new HashSet<>()),
-                        new WaitCommand(25),
-                        // then drop the sample:
-                        // MIDDLE slides this time
-                        // new InstantCommand(() -> intakeSubsystem.setHorizontalSlidePosition(HORIZONTAL_SLIDE_DROP_EXTENSION)),
-                        // wait time increased since it's only dropping it
-                        //new WaitCommand(50),
-                        // drop sample normally
-                        new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION),
-                        new WaitCommand(200),
+                        new ActionCommand(dropMiddleSampleTAB.build(), new HashSet<>()),
 
-                        // TODO: this is when we pick up the specimen from the wall
+                        // TODO: PICK UP FROM WALLS AND SCORE
 
-                        // transfer specimen
-                        new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
+
+                        // get the vertical arm ready to pick up from the wall
+                        new VerticalArmWallPickupCommandSequence(verticalArmSubsystem),
+                        // go to pick up from wall
+                        new ActionCommand(pickUpFromWallPoseTAB0.build(), new HashSet<>()),
+
+                        // go up
+                        new WallPickupGoUpCommandSequence(verticalArmSubsystem, verticalSlideSubsystem),
                         // go to hang position
                         new ActionCommand(hangSpecimenTAB0.build(), new HashSet<>()),
 //                        new WaitCommand(150),
@@ -369,9 +347,12 @@ public class SpecimenAuto extends CommandOpMode {
                         new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
 
                         // cycle 2
-                        // TODO: this is when we pick up the specimen from the wall
-                        // transfer specimen
-                        new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
+                        // get the vertical arm ready to pick up from the wall
+                        new VerticalArmWallPickupCommandSequence(verticalArmSubsystem),
+                        // go to pick up from wall
+                        new ActionCommand(pickUpFromWallPoseTAB1.build(), new HashSet<>()),
+
+                        new WallPickupGoUpCommandSequence(verticalArmSubsystem, verticalSlideSubsystem),
                         // go to hang position
                         new ActionCommand(hangSpecimenTAB1.build(), new HashSet<>()),
                         new WaitCommand(250),
@@ -379,9 +360,13 @@ public class SpecimenAuto extends CommandOpMode {
                         new SpecimenHangCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
 
                         // cycle 3
-                        // TODO: this is when we pick up the specimen from the wall
-                        // transfer specimen
-                        new SpecimenTransferCommandSequence(horizontalArmSubsystem, verticalArmSubsystem, horizontalSlideSubsystem, verticalSlideSubsystem),
+                        // get the vertical arm ready to pick up from the wall
+                        new VerticalArmWallPickupCommandSequence(verticalArmSubsystem),
+
+                        // go to pick up from wall
+                        new ActionCommand(pickUpFromWallPoseTAB2.build(), new HashSet<>()),
+                        // take specimen and go up
+                        new WallPickupGoUpCommandSequence(verticalArmSubsystem, verticalSlideSubsystem),
                         // go to hang position
                         new ActionCommand(hangSpecimenTAB2.build(), new HashSet<>()),
                         // hang specimen

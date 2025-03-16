@@ -66,10 +66,10 @@ public class CommandTeleOp extends CommandOpMode {
 
         // control claw roll
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_UP_POSITION)
+                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_FLAT_POSITION)
         );
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_FLAT_POSITION)
+                new SetClawRollCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_ROLL_UP_POSITION)
         );
 
         // DRIVER GAMEPAD!!!!!!!!!
@@ -95,20 +95,22 @@ public class CommandTeleOp extends CommandOpMode {
 
         // horizontal arm to intake position
         // NOW: horizontal arm to pick up from wall position
-        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                new WallPickupCommandSequence(verticalArmSubsystem)
+        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                new VerticalArmWallPickupCommandSequence(verticalArmSubsystem)
 //                new SequentialCommandGroup(
 //                        new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_INTAKE_POSITION),
 //                        new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_INTAKE_POSITION)
 //                )
         );
         // horizontal arm to hover over sample
-        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                new SequentialCommandGroup(
-                        new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_HOVER_POSITION),
-                        new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION),
-                        new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION)
-                )
+        // NOW: horizontal arm up from wall pickup
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                new WallPickupGoUpCommandSequence(verticalArmSubsystem, verticalSlideSubsystem)
+//                new SequentialCommandGroup(
+//                        new SetWristPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_WRIST_PITCH_HOVER_POSITION),
+//                        new SetClawPitchCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_PITCH_HOVER_POSITION),
+//                        new SetClawGripCommand(horizontalArmSubsystem, Constants.HORIZONTAL_CLAW_GRIP_OPEN_POSITION)
+//                )
         );
         // drop the sample and reset both arms to intake position
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(

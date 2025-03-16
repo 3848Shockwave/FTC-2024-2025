@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.commands.arm.SetWristPitchCommand;
 import org.firstinspires.ftc.teamcode.constants.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 
-public class WallPickupCommandSequence extends SequentialCommandGroup {
-    public WallPickupCommandSequence(ArmSubsystem verticalArmSubsystem) {
+public class VerticalArmWallPickupCommandSequence extends SequentialCommandGroup {
+    public VerticalArmWallPickupCommandSequence(ArmSubsystem verticalArmSubsystem) {
         addCommands(
                 new SetWristPitchCommand(verticalArmSubsystem, Constants.VERTICAL_WRIST_PITCH_WALL_POSITION),
                 new SetClawGripCommand(verticalArmSubsystem, Constants.VERTICAL_CLAW_GRIP_OPEN_POSITION),
